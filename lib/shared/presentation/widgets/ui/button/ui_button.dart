@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
 class UiButton extends StatelessWidget {
-  final VoidCallback onPressed;
+  final Function()? onPressed;
   final String? text;
   final IconData? icon;
   final bool disabled;
   final Color? color;
-  final double width;
-  final double height;
+  final double? width;
+  final double? height;
 
   const UiButton({
     super.key,
-    required this.onPressed,
-    required this.width,
-    required this.height,
+    this.onPressed,
+    this.width,
+    this.height,
     this.text,
     this.icon,
     this.disabled = false,
@@ -38,8 +38,7 @@ class UiButton extends StatelessWidget {
             children: [
               if (icon != null) Icon(icon, color: Colors.white),
               SizedBox(width: icon != null ? 8.0 : 0),
-              if (text != null)
-                Text(text!, style: const TextStyle(color: Colors.white)),
+              if (text != null) Text(text!, style: const TextStyle(color: Colors.white)),
             ],
           ),
         ),

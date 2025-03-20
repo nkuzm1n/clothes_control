@@ -1,4 +1,5 @@
 import 'package:clothes_control/shared/presentation/widgets/ui/image/ui_image.dart';
+import 'package:clothes_control/shared/utils/image.dart';
 import 'package:flutter/material.dart';
 import 'package:clothes_control/shared/domain/entities/cloth.dart';
 
@@ -37,9 +38,7 @@ class ClothesListItem extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: UiImage(
-                        image: clothesItem.imageUrl != null
-                            ? NetworkImage(clothesItem.imageUrl ?? '')
-                            : null,
+                        image: ImageHelper.networkImageOrNull(clothesItem.imageUrl),
                         width: 100,
                         height: 100,
                         fit: BoxFit.cover,
@@ -60,24 +59,26 @@ class ClothesListItem extends StatelessWidget {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        Row(
-                          children: [
-                            const Text("Статус: "),
-                            Text(
-                              clothesItem.status.name,
-                              style: const TextStyle(fontWeight: FontWeight.w500),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Text("Состояние: "),
-                            Text(
-                              clothesItem.condition.name,
-                              style: const TextStyle(fontWeight: FontWeight.w500),
-                            ),
-                          ],
-                        ),
+                        if (clothesItem.status != null)
+                          Row(
+                            children: [
+                              const Text("Статус: "),
+                              Text(
+                                clothesItem.status!.name,
+                                style: const TextStyle(fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
+                        if (clothesItem.condition != null)
+                          Row(
+                            children: [
+                              const Text("Состояние: "),
+                              Text(
+                                clothesItem.condition!.name,
+                                style: const TextStyle(fontWeight: FontWeight.w500),
+                              ),
+                            ],
+                          ),
                       ],
                     ),
                   ),

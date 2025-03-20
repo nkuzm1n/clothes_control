@@ -6,8 +6,8 @@ class Cloth extends Equatable {
   final int id;
   final String name;
   final String? description;
-  final Status status;
-  final Condition condition;
+  final Status? status;
+  final Condition? condition;
   final String? imageUrl;
 
   const Cloth({
@@ -24,8 +24,8 @@ class Cloth extends Equatable {
       'id': id,
       'name': name,
       'description': description,
-      'status_id': status.id, // Сохраняем только ID статуса
-      'condition_id': condition.id, // Сохраняем только ID состояния
+      'status_id': status?.id, // Сохраняем только ID статуса
+      'condition_id': condition?.id, // Сохраняем только ID состояния
       'image_url': imageUrl,
     };
   }

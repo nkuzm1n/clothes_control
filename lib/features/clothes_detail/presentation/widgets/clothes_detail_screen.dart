@@ -1,17 +1,15 @@
 import 'dart:io';
-
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:clothes_control/features/clothes_detail/presentation/widgets/clothes_detail_form.dart';
 import 'package:clothes_control/features/clothes_list/presentation/widgets/clothes_list_screen.dart';
 import 'package:clothes_control/shared/data/local/database_helper.dart';
 import 'package:clothes_control/shared/data/repositories/clothes_repository.dart';
 import 'package:clothes_control/shared/data/repositories/condition_repository.dart';
-import 'package:clothes_control/shared/data/repositories/image_storage.dart';
+import 'package:clothes_control/shared/data/repositories/image_repository.dart';
 import 'package:clothes_control/shared/data/repositories/status_repository.dart';
-import 'package:clothes_control/shared/presentation/widgets/ui/image/ui_image.dart';
 import 'package:clothes_control/shared/presentation/widgets/ui/text/ui_text_no_data.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clothes_control/features/clothes_detail/presentation/bloc/clothes_detail_bloc.dart';
-import 'package:clothes_control/shared/domain/entities/cloth.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ClothesDetailScreen extends StatelessWidget {
@@ -45,7 +43,7 @@ class ClothesDetailScreen extends StatelessWidget {
         clothesRepository: ClothesRepository(databaseHelper: DatabaseHelper()),
         conditionRepository: ConditionRepository(databaseHelper: DatabaseHelper()),
         statusRepository: StatusRepository(databaseHelper: DatabaseHelper()),
-        imageRepository: ImageStorage(),
+        imageRepository: ImageRepository(),
       )..add(LoadClothesDetail(itemId: itemId)),
       child: Scaffold(
         appBar: AppBar(
@@ -76,99 +74,39 @@ class ClothesDetailScreen extends StatelessWidget {
               }
             },
             builder: (context, state) {
-              if (state is ClothesDetailLoading) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (state is ClothesDetailLoaded) {
-                return _buildDetailForm(context, state.clothesItem);
-              } else if (state is ClothesDetailError) {
-                return Center(child: Text(state.message));
-              } else {
-                return const UiTextNoData();
-              }
+              // if (state is ClothesDetailLoading) {
+              //   return const Center(child: CircularProgressIndicator());
+              // } else if (state is ClothesDetailLoaded) {
+              //   return ClothesDetailForm(cloth: state.clothesItem);
+              // } else if (state is ClothesDetailError) {
+              //   return Center(child: Text(state.message));
+              // } else {
+              //   return const UiTextNoData();
+              // }
+              return Stack(
+                children: [
+                  if (state is ClothesDetailLoaded) ClothesDetailForm(cloth: state.clothesItem),
+                  if (state is! ClothesDetailLoading)
+                    if (state is ClothesDetailError)
+                      Center(child: Text(state.message))
+                    else
+                      const UiTextNoData(),
+                  if (state is ClothesDetailLoading)
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: Container(
+                        color: const Color.fromRGBO(0, 0, 0, 0.2),
+                        child: const Center(child: CircularProgressIndicator()),
+                      ),
+                    ),
+                ],
+              );
             },
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildDetailForm(BuildContext context, Cloth clothesItem) {
-    final nameController = TextEditingController(text: clothesItem.name);
-    final descriptionController = TextEditingController(text: clothesItem.description);
-    final statusController = TextEditingController(text: clothesItem.status.name);
-    final conditionController = TextEditingController(text: clothesItem.condition.name);
-
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // if (clothesItem.imageUrl != null)
-          //   Image.network(clothesItem.imageUrl!),
-          TextField(
-            controller: nameController,
-            decoration: const InputDecoration(labelText: 'Наименование'),
-            maxLines: null,
-          ),
-          const SizedBox(height: 8),
-          TextField(
-            controller: descriptionController,
-            decoration: const InputDecoration(labelText: 'Описание'),
-            maxLines: null,
-          ),
-          const SizedBox(height: 8),
-          TextField(
-            controller: statusController,
-            decoration: const InputDecoration(labelText: 'Статус'),
-          ),
-
-          const SizedBox(height: 8),
-          TextField(
-            controller: conditionController,
-            decoration: const InputDecoration(labelText: 'Состояние'),
-          ),
-
-          const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              UiImage(
-                image: clothesItem.imageUrl != null ? NetworkImage(clothesItem.imageUrl!) : null,
-                width: 140,
-                height: 140,
-                fit: BoxFit.cover,
-              ),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () async {
-                    final String? url = await uploadImageAndSaveLocally();
-                    print("URL OF PHOTO IS $url");
-                  },
-                  child: const Text('Загрузить'),
-                ),
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 16),
-          Center(
-            child: ElevatedButton(
-              onPressed: () {
-                // TODO:
-                // final updatedItem = Cloth(
-                //   id: clothesItem.id,
-                //   name: nameController.text,
-                //   description: descriptionController.text,
-                //   condition: conditionController.text,
-                //   status: statusController.text,
-                //   imageUrl: clothesItem.imageUrl,
-                // );
-                // context.read<ClothesDetailBloc>().add(UpdateClothesItem(updatedItem: updatedItem));
-              },
-              child: const Text('Сохранить'),
-            ),
-          ),
-        ],
       ),
     );
   }
