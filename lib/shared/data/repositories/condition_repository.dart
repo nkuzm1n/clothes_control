@@ -1,4 +1,5 @@
 import 'package:clothes_control/shared/data/local/database_helper.dart';
+import 'package:clothes_control/shared/domain/entities/condition.dart';
 import 'package:clothes_control/shared/domain/repositories/condition_repository.dart';
 
 class ConditionRepository implements IConditionRepository {
@@ -7,8 +8,9 @@ class ConditionRepository implements IConditionRepository {
   ConditionRepository({required this.databaseHelper});
 
   @override
-  Future<List<String>> getConditions() async {
-    return await databaseHelper.getConditions();
+  Future<List<Condition>> getConditions() async {
+    final result = await databaseHelper.getConditions();
+    return result.map((item) => Condition.fromMap(item)).toList();
   }
 
   @override

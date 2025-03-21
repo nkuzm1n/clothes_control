@@ -22,7 +22,7 @@ class ClothesListBloc extends Bloc<ClothesListEvent, ClothesListState> {
 
     on<DeleteClothesItem>((event, emit) async {
       try {
-        await clothesRepository.deleteClothesItem(event.itemId);
+        await clothesRepository.deleteCloth(event.itemId);
         emit(ClothesItemDeleted(itemId: event.itemId));
         // После удаления перезагружаем список
         add(const LoadClothesList());

@@ -14,23 +14,23 @@ class ClothesRepository implements IClothesRepository {
   }
 
   @override
-  Future<Cloth> getClothesItemById(int itemId) async {
-    final result = await databaseHelper.getClothesItem(itemId);
+  Future<Cloth> getClothById(int itemId) async {
+    final result = await databaseHelper.getCloth(itemId);
     return Cloth.fromMap(result);
   }
 
   @override
-  Future<void> deleteClothesItem(int itemId) async {
-    await databaseHelper.deleteClothesItem(itemId);
+  Future<void> deleteCloth(int itemId) async {
+    await databaseHelper.deleteCloth(itemId);
   }
 
   @override
-  Future<void> updateClothesItem(Cloth item) async {
-    await databaseHelper.updateClothesItem(item.toMap());
+  Future<void> updateCloth(Cloth item) async {
+    await databaseHelper.updateCloth(item.toMap());
   }
 
   @override
-  Future<void> addClothesItem(Cloth item) async {
-    await databaseHelper.insertClothesItem(item.toMap());
+  Future<void> addCloth(Cloth item) async {
+    await databaseHelper.insertCloth(item.toMap());
   }
 }

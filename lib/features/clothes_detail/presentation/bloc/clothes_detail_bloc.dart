@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:clothes_control/shared/domain/entities/condition.dart';
+import 'package:clothes_control/shared/domain/entities/status.dart';
 import 'package:clothes_control/shared/domain/repositories/condition_repository.dart';
 import 'package:clothes_control/shared/domain/repositories/image_repository.dart';
 import 'package:clothes_control/shared/domain/repositories/status_repository.dart';
@@ -26,8 +28,10 @@ class ClothesDetailBloc extends Bloc<ClothesDetailEvent, ClothesDetailState> {
     on<LoadClothesDetail>((event, emit) async {
       emit(ClothesDetailLoading());
       try {
-        final clothesItem = await clothesRepository.getClothesItemById(event.itemId);
-        emit(ClothesDetailLoaded(clothesItem: clothesItem));
+        final cloth = await clothesRepository.getClothById(event.itemId);
+        final statuses = await statusRepository.getStatuses();
+        final conditions = await conditionRepository.getConditions();
+        emit(ClothesDetailLoaded(cloth: cloth, statuses: statuses, conditions: conditions));
       } catch (e) {
         emit(ClothesDetailError(message: e.toString()));
       }
@@ -36,8 +40,8 @@ class ClothesDetailBloc extends Bloc<ClothesDetailEvent, ClothesDetailState> {
     on<UpdateClothesItem>((event, emit) async {
       emit(ClothesDetailLoading());
       try {
-        await clothesRepository.updateClothesItem(event.updatedItem);
-        emit(ClothesItemUpdated(updatedItem: event.updatedItem));
+        await clothesRepository.updateCloth(event.updatedItem);
+        emit(ClothesItemUpdated(updatedCloth: event.updatedItem));
       } catch (e) {
         emit(ClothesDetailError(message: e.toString()));
       }
@@ -45,7 +49,7 @@ class ClothesDetailBloc extends Bloc<ClothesDetailEvent, ClothesDetailState> {
 
     on<DeleteClothesItem>((event, emit) async {
       try {
-        await clothesRepository.deleteClothesItem(event.itemId);
+        await clothesRepository.deleteCloth(event.itemId);
         emit(ClothesItemDeleted(itemId: event.itemId));
       } catch (e) {
         emit(ClothesDetailError(message: e.toString()));
@@ -57,9 +61,9 @@ class ClothesDetailBloc extends Bloc<ClothesDetailEvent, ClothesDetailState> {
       try {
         final imageFile = await imageRepository.saveImage(event.imageFile);
         final updatedItem = event.clothesItem.copyWith(imageUrl: imageFile.path);
-        await clothesRepository.updateClothesItem(updatedItem);
-        final clothesItem = await clothesRepository.getClothesItemById(event.clothesItem.id);
-        emit(ClothesItemUpdated(updatedItem: clothesItem));
+        await clothesRepository.updateCloth(updatedItem);
+        final clothesItem = await clothesRepository.getClothById(event.clothesItem.id);
+        emit(ClothesItemUpdated(updatedCloth: clothesItem));
       } catch (e) {
         emit(ClothesDetailError(message: e.toString()));
       }

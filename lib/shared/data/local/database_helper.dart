@@ -1,6 +1,8 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
+const String dbName = 'clothes.db';
+
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
   static Database? _database;
@@ -19,7 +21,7 @@ class DatabaseHelper {
 
   Future<Database> _initDatabase() async {
     final dbPath = await getDatabasesPath();
-    final path = join(dbPath, 'clothes.db');
+    final path = join(dbPath, dbName);
 
     return await openDatabase(
       path,
@@ -55,6 +57,19 @@ class DatabaseHelper {
         FOREIGN KEY (condition_id) REFERENCES conditions(id)
       )
     ''');
+
+    await initialSeed();
+  }
+
+  Future<void> initialSeed() async {
+    await insertStatus('Чистая');
+    await insertStatus('На один раз');
+    await insertStatus('Грязная');
+    await insertStatus('В стирке');
+
+    await insertCondition('Новая');
+    await insertCondition('Потрепанная');
+    await insertCondition('Удобная');
   }
 
   Future<List<Map<String, dynamic>>> getClothesList() async {
@@ -64,50 +79,57 @@ class DatabaseHelper {
       clothes.id, 
       clothes.name, 
       clothes.description, 
-      clothes.imagePath,
+      clothes.image_url,
       statuses.id AS status_id,
       statuses.name AS status_name,
       conditions.id AS condition_id,
       conditions.name AS condition_name
     FROM clothes
-    JOIN statuses ON clothes.status_id = statuses.id
-    JOIN conditions ON clothes.condition_id = conditions.id
+    LEFT JOIN statuses ON clothes.status_id = statuses.id
+    LEFT JOIN conditions ON clothes.condition_id = conditions.id
   ''');
   }
 
-  Future<Map<String, dynamic>> getClothesItem(int itemId) async {
+  Future<Map<String, dynamic>> getCloth(int itemId) async {
     final db = await database;
     final result = await db.rawQuery('''
     SELECT 
       clothes.id, 
       clothes.name, 
       clothes.description, 
-      clothes.imagePath,
+      clothes.image_url,
       statuses.id AS status_id,
       statuses.name AS status_name,
       conditions.id AS condition_id,
       conditions.name AS condition_name
     FROM clothes
-    JOIN statuses ON clothes.status_id = statuses.id
-    JOIN conditions ON clothes.condition_id = conditions.id
+    LEFT JOIN statuses ON clothes.status_id = statuses.id
+    LEFT JOIN conditions ON clothes.condition_id = conditions.id
     WHERE clothes.id = ?
+    LIMIT 1
   ''', [itemId]);
     return result.first;
   }
 
-  Future<void> insertClothesItem(Map<String, dynamic> item) async {
+  Future<void> insertCloth(Map<String, dynamic> item) async {
     final db = await database;
     await db.insert('clothes', item, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  Future<void> deleteClothesItem(int itemId) async {
+  Future<void> deleteCloth(int itemId) async {
     final db = await database;
     await db.delete('clothes', where: 'id = ?', whereArgs: [itemId]);
   }
 
-  Future<void> updateClothesItem(Map<String, dynamic> item) async {
+  Future<void> updateCloth(Map<String, dynamic> item) async {
     final db = await database;
     await db.update('clothes', item, where: 'id = ?', whereArgs: [item['id']]);
+  }
+
+  Future<List<Map<String, dynamic>>> getStatuses() async {
+    final db = await database;
+    final data = await db.query('statuses');
+    return data;
   }
 
   Future<void> insertStatus(String status) async {
@@ -115,20 +137,14 @@ class DatabaseHelper {
     await db.insert('statuses', {'name': status}, conflictAlgorithm: ConflictAlgorithm.ignore);
   }
 
-  Future<List<String>> getStatuses() async {
+  Future<List<Map<String, dynamic>>> getConditions() async {
     final db = await database;
-    final data = await db.query('statuses');
-    return data.map((item) => item['name'] as String).toList();
+    final data = await db.query('conditions');
+    return data;
   }
 
   Future<void> insertCondition(String condition) async {
     final db = await database;
     await db.insert('conditions', {'name': condition}, conflictAlgorithm: ConflictAlgorithm.ignore);
-  }
-
-  Future<List<String>> getConditions() async {
-    final db = await database;
-    final data = await db.query('conditions');
-    return data.map((item) => item['name'] as String).toList();
   }
 }

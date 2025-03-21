@@ -14,8 +14,8 @@ class Cloth extends Equatable {
     required this.id,
     required this.name,
     this.description,
-    required this.status,
-    required this.condition,
+    this.status,
+    this.condition,
     this.imageUrl,
   });
 
@@ -24,8 +24,8 @@ class Cloth extends Equatable {
       'id': id,
       'name': name,
       'description': description,
-      'status_id': status?.id, // Сохраняем только ID статуса
-      'condition_id': condition?.id, // Сохраняем только ID состояния
+      'status_id': status?.id,
+      'condition_id': condition?.id,
       'image_url': imageUrl,
     };
   }

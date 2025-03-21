@@ -12,12 +12,18 @@ class ClothesDetailInitial extends ClothesDetailState {}
 class ClothesDetailLoading extends ClothesDetailState {}
 
 class ClothesDetailLoaded extends ClothesDetailState {
-  final Cloth clothesItem;
+  final Cloth cloth;
+  final List<Status> statuses;
+  final List<Condition> conditions;
 
-  const ClothesDetailLoaded({required this.clothesItem});
+  const ClothesDetailLoaded({
+    required this.cloth,
+    required this.statuses,
+    required this.conditions,
+  });
 
   @override
-  List<Object> get props => [clothesItem];
+  List<Object> get props => [cloth, statuses, conditions];
 }
 
 class ClothesDetailError extends ClothesDetailState {
@@ -30,22 +36,22 @@ class ClothesDetailError extends ClothesDetailState {
 }
 
 class ClothesItemUpdated extends ClothesDetailState {
-  final Cloth updatedItem;
+  final Cloth updatedCloth;
 
-  const ClothesItemUpdated({required this.updatedItem});
+  const ClothesItemUpdated({required this.updatedCloth});
 
   @override
-  List<Object> get props => [updatedItem];
+  List<Object> get props => [updatedCloth];
 }
 
 class StatusesUpdated extends ClothesDetailState {
-  final List<String> statuses;
+  final List<Status> statuses;
 
   const StatusesUpdated({required this.statuses});
 }
 
 class ConditionsUpdated extends ClothesDetailState {
-  final List<String> conditions;
+  final List<Condition> conditions;
 
   const ConditionsUpdated({required this.conditions});
 }

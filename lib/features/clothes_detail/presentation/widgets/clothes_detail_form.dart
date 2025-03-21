@@ -13,7 +13,7 @@ class ClothesDetailForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ClothesDetailBloc, ClothesDetailState>(
-      buildWhen: (previous, current) => current is ClothesDetailLoaded,
+      buildWhen: (previous, current) => current is ClothesDetailLoaded && previous != current,
       builder: (context, state) {
         final state = context.read<ClothesDetailBloc>().state;
 

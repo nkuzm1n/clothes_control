@@ -1,4 +1,5 @@
 import 'package:clothes_control/shared/data/local/database_helper.dart';
+import 'package:clothes_control/shared/domain/entities/status.dart';
 import 'package:clothes_control/shared/domain/repositories/status_repository.dart';
 
 class StatusRepository implements IStatusRepository {
@@ -7,8 +8,9 @@ class StatusRepository implements IStatusRepository {
   StatusRepository({required this.databaseHelper});
 
   @override
-  Future<List<String>> getStatuses() async {
-    return await databaseHelper.getStatuses();
+  Future<List<Status>> getStatuses() async {
+    final result = await databaseHelper.getStatuses();
+    return result.map((item) => Status.fromMap(item)).toList();
   }
 
   @override

@@ -85,18 +85,14 @@ class ClothesDetailScreen extends StatelessWidget {
               // }
               return Stack(
                 children: [
-                  if (state is ClothesDetailLoaded) ClothesDetailForm(cloth: state.clothesItem),
+                  if (state is ClothesDetailLoaded) ClothesDetailForm(cloth: state.cloth),
                   if (state is! ClothesDetailLoading)
                     if (state is ClothesDetailError)
                       Center(child: Text(state.message))
                     else
                       const UiTextNoData(),
                   if (state is ClothesDetailLoading)
-                    Positioned(
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      bottom: 0,
+                    Positioned.fill(
                       child: Container(
                         color: const Color.fromRGBO(0, 0, 0, 0.2),
                         child: const Center(child: CircularProgressIndicator()),
