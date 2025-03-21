@@ -40,9 +40,9 @@ class ClothesDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ClothesDetailBloc(
-        clothesRepository: ClothesRepository(databaseHelper: DatabaseHelper()),
-        conditionRepository: ConditionRepository(databaseHelper: DatabaseHelper()),
-        statusRepository: StatusRepository(databaseHelper: DatabaseHelper()),
+        clothesRepository: ClothesRepository(databaseHelper: DatabaseHelper.instance),
+        conditionRepository: ConditionRepository(databaseHelper: DatabaseHelper.instance),
+        statusRepository: StatusRepository(databaseHelper: DatabaseHelper.instance),
         imageRepository: ImageRepository(),
       )..add(LoadClothesDetail(itemId: itemId)),
       child: Scaffold(
@@ -74,15 +74,6 @@ class ClothesDetailScreen extends StatelessWidget {
               }
             },
             builder: (context, state) {
-              // if (state is ClothesDetailLoading) {
-              //   return const Center(child: CircularProgressIndicator());
-              // } else if (state is ClothesDetailLoaded) {
-              //   return ClothesDetailForm(cloth: state.clothesItem);
-              // } else if (state is ClothesDetailError) {
-              //   return Center(child: Text(state.message));
-              // } else {
-              //   return const UiTextNoData();
-              // }
               return Stack(
                 children: [
                   if (state is ClothesDetailLoaded) ClothesDetailForm(cloth: state.cloth),

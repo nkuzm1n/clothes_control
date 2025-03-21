@@ -15,7 +15,7 @@ class ClothesListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ClothesListBloc(
-        clothesRepository: ClothesRepository(databaseHelper: DatabaseHelper()),
+        clothesRepository: ClothesRepository(databaseHelper: DatabaseHelper.instance),
       )..add(const LoadClothesList()),
       child: Scaffold(
         appBar: AppBar(
