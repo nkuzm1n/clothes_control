@@ -14,6 +14,12 @@ class ConditionRepository implements IConditionRepository {
   }
 
   @override
+  Future<Condition?> getConditionById(int id) async {
+    final result = await databaseHelper.getCondition(id);
+    return result.isNotEmpty ? Condition.fromMap(result) : null;
+  }
+
+  @override
   Future<void> addCondition(String condition) async {
     await databaseHelper.insertCondition(condition);
   }

@@ -1,3 +1,5 @@
+import 'package:clothes_control/shared/data/dto/cloth_list_item_dto.dart';
+import 'package:clothes_control/shared/data/dto/new_cloth_dto.dart';
 import 'package:clothes_control/shared/data/local/database_helper.dart';
 import 'package:clothes_control/shared/domain/entities/cloth.dart';
 import 'package:clothes_control/shared/domain/repositories/clothes_repository.dart';
@@ -10,6 +12,7 @@ class ClothesRepository implements IClothesRepository {
   @override
   Future<List<Cloth>> getClothesList() async {
     final result = await databaseHelper.getClothesList();
+    print("results $result");
     return result.map((item) => Cloth.fromMap(item)).toList();
   }
 
@@ -25,12 +28,12 @@ class ClothesRepository implements IClothesRepository {
   }
 
   @override
-  Future<void> updateCloth(Cloth item) async {
-    await databaseHelper.updateCloth(item.toMap());
+  Future<int> updateCloth(Cloth item) async {
+    return await databaseHelper.updateCloth(item.toMap());
   }
 
   @override
-  Future<void> addCloth(Cloth item) async {
-    await databaseHelper.insertCloth(item.toMap());
+  Future<int> addCloth(NewClothDTO item) async {
+    return await databaseHelper.insertCloth(item.toMap());
   }
 }

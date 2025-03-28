@@ -1,19 +1,26 @@
+import 'package:clothes_control/shared/domain/entities/condition.dart';
+import 'package:clothes_control/shared/domain/entities/status.dart';
+import 'package:clothes_control/shared/domain/services/cloth_service.dart';
 import 'package:clothes_control/shared/presentation/widgets/ui/image/ui_image.dart';
 import 'package:clothes_control/shared/utils/image.dart';
 import 'package:flutter/material.dart';
 import 'package:clothes_control/shared/domain/entities/cloth.dart';
 
 class ClothesListItem extends StatelessWidget {
+  final Cloth cloth;
+  final Condition? condition;
+  final Status? status;
+  final Function()? onDelete;
+  final void Function()? onTap;
+
   const ClothesListItem({
     super.key,
-    required this.clothesItem,
+    required this.cloth,
+    this.condition,
+    this.status,
     this.onDelete,
     this.onTap,
   });
-
-  final Cloth clothesItem;
-  final Function()? onDelete;
-  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +45,7 @@ class ClothesListItem extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: UiImage(
-                        image: ImageHelper.networkImageOrNull(clothesItem.imageUrl),
+                        image: ImageHelper.networkImageOrNull(cloth.imageUrl),
                         width: 100,
                         height: 100,
                         fit: BoxFit.cover,
@@ -50,7 +57,7 @@ class ClothesListItem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          clothesItem.name,
+                          cloth.name,
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w700,
@@ -59,22 +66,22 @@ class ClothesListItem extends StatelessWidget {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        if (clothesItem.status != null)
+                        if (status != null)
                           Row(
                             children: [
                               const Text("Статус: "),
                               Text(
-                                clothesItem.status!.name,
+                                status!.name,
                                 style: const TextStyle(fontWeight: FontWeight.w500),
                               ),
                             ],
                           ),
-                        if (clothesItem.condition != null)
+                        if (condition != null)
                           Row(
                             children: [
                               const Text("Состояние: "),
                               Text(
-                                clothesItem.condition!.name,
+                                condition!.name,
                                 style: const TextStyle(fontWeight: FontWeight.w500),
                               ),
                             ],

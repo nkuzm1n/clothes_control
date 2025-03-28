@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 const String dbName = 'clothes.db';
 
 class DatabaseHelper {
+  final randInt = Random.secure().nextDouble();
   static final DatabaseHelper instance = DatabaseHelper._instance();
   static Database? _database;
 
@@ -14,6 +17,7 @@ class DatabaseHelper {
   DatabaseHelper._instance();
 
   Future<Database> get database async {
+    print("return INSTANCE $randInt");
     _database ??= await initDatabase();
     return _database!;
   }
@@ -43,7 +47,7 @@ class DatabaseHelper {
     await db.execute('''
       CREATE TABLE clothes (
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-        name TEXT,
+        name TEXT NOT NULL,
         description TEXT,
         status_id INTEGER,
         condition_id INTEGER,
@@ -110,9 +114,10 @@ class DatabaseHelper {
     return result.first;
   }
 
-  Future<void> insertCloth(Map<String, dynamic> item) async {
+  Future<int> insertCloth(Map<String, dynamic> item) async {
     final db = await instance.database;
-    await db.insert('clothes', item, conflictAlgorithm: ConflictAlgorithm.replace);
+    print("to insert = $item.toString()");
+    return await db.insert('clothes', item, conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   Future<void> deleteCloth(int itemId) async {
@@ -120,15 +125,21 @@ class DatabaseHelper {
     await db.delete('clothes', where: 'id = ?', whereArgs: [itemId]);
   }
 
-  Future<void> updateCloth(Map<String, dynamic> item) async {
+  Future<int> updateCloth(Map<String, dynamic> item) async {
     final db = await instance.database;
-    await db.update('clothes', item, where: 'id = ?', whereArgs: [item['id']]);
+    return await db.update('clothes', item, where: 'id = ?', whereArgs: [item['id']]);
   }
 
   Future<List<Map<String, dynamic>>> getStatuses() async {
     final db = await instance.database;
     final data = await db.query('statuses');
     return data;
+  }
+
+  Future<Map<String, dynamic>> getStatus(int id) async {
+    final db = await instance.database;
+    final data = await db.query('statuses', where: 'id = ?', whereArgs: [id]);
+    return data.first;
   }
 
   Future<void> insertStatus(String status) async {
@@ -140,6 +151,12 @@ class DatabaseHelper {
     final db = await instance.database;
     final data = await db.query('conditions');
     return data;
+  }
+
+  Future<Map<String, dynamic>> getCondition(int id) async {
+    final db = await instance.database;
+    final data = await db.query('conditions', where: 'id = ?', whereArgs: [id]);
+    return data.first;
   }
 
   Future<void> insertCondition(String condition) async {

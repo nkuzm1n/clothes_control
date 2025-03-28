@@ -12,7 +12,7 @@ class ClothesListInitial extends ClothesListState {}
 class ClothesListLoading extends ClothesListState {}
 
 class ClothesListLoaded extends ClothesListState {
-  final List<Cloth> clothesList;
+  final List<ClothListItemDTO> clothesList;
 
   const ClothesListLoaded({required this.clothesList});
 

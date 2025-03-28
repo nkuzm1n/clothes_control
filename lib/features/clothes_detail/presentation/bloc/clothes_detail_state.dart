@@ -26,6 +26,19 @@ class ClothesDetailLoaded extends ClothesDetailState {
   List<Object> get props => [cloth, statuses, conditions];
 }
 
+class ClothesDetailParams4NewDetailLoaded extends ClothesDetailState {
+  final List<Status> statuses;
+  final List<Condition> conditions;
+
+  const ClothesDetailParams4NewDetailLoaded({
+    required this.statuses,
+    required this.conditions,
+  });
+
+  @override
+  List<Object> get props => [statuses, conditions];
+}
+
 class ClothesDetailError extends ClothesDetailState {
   final String message;
 

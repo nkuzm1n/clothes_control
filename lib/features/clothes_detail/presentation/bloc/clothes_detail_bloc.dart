@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:clothes_control/shared/data/dto/new_cloth_dto.dart';
 import 'package:clothes_control/shared/domain/entities/condition.dart';
 import 'package:clothes_control/shared/domain/entities/status.dart';
 import 'package:clothes_control/shared/domain/repositories/condition_repository.dart';
@@ -41,7 +42,31 @@ class ClothesDetailBloc extends Bloc<ClothesDetailEvent, ClothesDetailState> {
       emit(ClothesDetailLoading());
       try {
         await clothesRepository.updateCloth(event.updatedItem);
-        emit(ClothesItemUpdated(updatedCloth: event.updatedItem));
+        add(LoadClothesDetail(itemId: event.updatedItem.id));
+      } catch (e) {
+        emit(ClothesDetailError(message: e.toString()));
+      }
+    });
+
+    on<LoadNewClothesDetailParams>((event, emit) async {
+      emit(ClothesDetailLoading());
+      try {
+        final statuses = await statusRepository.getStatuses();
+        final conditions = await conditionRepository.getConditions();
+        emit(ClothesDetailParams4NewDetailLoaded(statuses: statuses, conditions: conditions));
+      } catch (e) {
+        emit(ClothesDetailError(message: e.toString()));
+      }
+    });
+
+    on<AddNewClothesItem>((event, emit) async {
+      emit(ClothesDetailLoading());
+      try {
+        final id = await clothesRepository.addCloth(event.item);
+        final cloth = await clothesRepository.getClothById(id);
+        final statuses = await statusRepository.getStatuses();
+        final conditions = await conditionRepository.getConditions();
+        emit(ClothesDetailLoaded(cloth: cloth, statuses: statuses, conditions: conditions));
       } catch (e) {
         emit(ClothesDetailError(message: e.toString()));
       }

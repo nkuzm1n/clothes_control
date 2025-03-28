@@ -14,6 +14,12 @@ class StatusRepository implements IStatusRepository {
   }
 
   @override
+  Future<Status?> getStatusById(int id) async {
+    final status = await databaseHelper.getStatus(id);
+    return status.isNotEmpty ? Status.fromMap(status) : null;
+  }
+
+  @override
   Future<void> addStatus(String status) async {
     await databaseHelper.insertStatus(status);
   }

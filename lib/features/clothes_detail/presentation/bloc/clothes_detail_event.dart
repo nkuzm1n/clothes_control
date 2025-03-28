@@ -25,6 +25,22 @@ class UpdateClothesItem extends ClothesDetailEvent {
   List<Object> get props => [updatedItem];
 }
 
+class LoadNewClothesDetailParams extends ClothesDetailEvent {
+  const LoadNewClothesDetailParams();
+
+  @override
+  List<Object> get props => [];
+}
+
+class AddNewClothesItem extends ClothesDetailEvent {
+  final NewClothDTO item;
+
+  const AddNewClothesItem({required this.item});
+
+  @override
+  List<Object> get props => [item];
+}
+
 class DeleteClothesItem extends ClothesDetailEvent {
   final int itemId;
 
