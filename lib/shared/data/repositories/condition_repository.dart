@@ -20,7 +20,7 @@ class ConditionRepository implements IConditionRepository {
   }
 
   @override
-  Future<void> addCondition(String condition) async {
-    await databaseHelper.insertCondition(condition);
+  Future<int> addCondition(String condition) async {
+    return await databaseHelper.insertCondition(condition);
   }
 }

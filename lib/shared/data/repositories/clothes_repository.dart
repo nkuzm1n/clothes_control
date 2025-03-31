@@ -12,7 +12,6 @@ class ClothesRepository implements IClothesRepository {
   @override
   Future<List<Cloth>> getClothesList() async {
     final result = await databaseHelper.getClothesList();
-    print("results $result");
     return result.map((item) => Cloth.fromMap(item)).toList();
   }
 

@@ -51,124 +51,129 @@ class ClothesDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) {
-        final bloc = ClothesDetailBloc(
-          clothesRepository: ClothesRepository(databaseHelper: DatabaseHelper()),
-          conditionRepository: ConditionRepository(databaseHelper: DatabaseHelper()),
-          statusRepository: StatusRepository(databaseHelper: DatabaseHelper()),
-          imageRepository: ImageRepository(),
-        );
-        if (itemId == null) {
-          bloc.add(const LoadNewClothesDetailParams());
-        } else {
-          bloc.add(LoadClothesDetail(itemId: itemId!));
-        }
-        return bloc;
+    return GestureDetector(
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
       },
-      child: BlocListener<ClothesDetailBloc, ClothesDetailState>(
-        listener: (context, state) async {
-          if (itemId == null && state is ClothesDetailLoaded) {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ClothesDetailScreen(itemId: state.cloth.id),
-              ),
-            );
+      child: BlocProvider(
+        create: (context) {
+          final bloc = ClothesDetailBloc(
+            clothesRepository: ClothesRepository(databaseHelper: DatabaseHelper()),
+            conditionRepository: ConditionRepository(databaseHelper: DatabaseHelper()),
+            statusRepository: StatusRepository(databaseHelper: DatabaseHelper()),
+            imageRepository: ImageRepository(),
+          );
+          if (itemId == null) {
+            bloc.add(const InitNewClothesDetail());
+          } else {
+            bloc.add(LoadClothesDetail(itemId: itemId!));
           }
-          if (state is ClothesDetailError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                duration: const Duration(seconds: 3),
-              ),
-            );
-            if (await Vibration.hasVibrator()) {
-              Vibration.vibrate(duration: 100);
-            }
-          }
+          return bloc;
         },
-        child: BlocBuilder<ClothesDetailBloc, ClothesDetailState>(
-          builder: (context, state) {
-            Cloth? cloth;
-            List<Status>? statuses;
-            List<Condition>? conditions;
-            if (state is ClothesDetailLoaded) {
-              cloth = state.cloth;
-              statuses = state.statuses;
-              conditions = state.conditions;
-            }
-            if (state is ClothesDetailParams4NewDetailLoaded) {
-              statuses = state.statuses;
-              conditions = state.conditions;
-            }
-            final title = itemId == null
-                ? 'Новая вещь'
-                : state is ClothesDetailLoaded
-                    ? state.cloth.name
-                    : '';
-            return Scaffold(
-              appBar: AppBar(
-                leading: IconButton(
-                  onPressed: () {
-                    _navigateBack(context);
-                  },
-                  icon: const Icon(Icons.arrow_back),
+        child: BlocListener<ClothesDetailBloc, ClothesDetailState>(
+          listener: (context, state) async {
+            if (itemId == null && state is ClothesDetailLoaded) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ClothesDetailScreen(itemId: state.cloth.id),
                 ),
-                title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
-                actions: [
-                  if (state is ClothesDetailLoaded)
-                    IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        context.read<ClothesDetailBloc>().add(DeleteClothesItem(itemId: itemId!));
-                        _navigateBack(context);
-                      },
-                    ),
-                ],
-              ),
-              body: SingleChildScrollView(
-                child: AbsorbPointer(
-                  absorbing: state is ClothesDetailLoading,
-                  child: Stack(
-                    children: [
-                      ClothesDetailForm(
-                        cloth: cloth,
-                        statuses: statuses,
-                        conditions: conditions,
-                        disabled: state is ClothesDetailLoading,
-                        onSave: (newCloth) {
-                          if (itemId == null) {
-                            final cloth = NewClothDTO.fromMap(newCloth!);
-                            print(cloth.toString());
-                            context.read<ClothesDetailBloc>().add(AddNewClothesItem(item: cloth));
-                          } else {
-                            context.read<ClothesDetailBloc>().add(
-                                  UpdateClothesItem(
-                                    updatedItem: cloth!.copyWith(
-                                      name: newCloth!['name'].toString(),
-                                      description: newCloth['description'].toString(),
-                                      statusId: (newCloth['status_id'] as num?)?.toInt(),
-                                      conditionId: (newCloth['condition_id'] as num?)?.toInt(),
-                                    ),
-                                  ),
-                                );
-                          }
+              );
+            }
+            if (state is ClothesDetailError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  duration: const Duration(seconds: 3),
+                ),
+              );
+              if (await Vibration.hasVibrator()) {
+                Vibration.vibrate(duration: 100);
+              }
+            }
+          },
+          child: BlocBuilder<ClothesDetailBloc, ClothesDetailState>(
+            builder: (context, state) {
+              Cloth? cloth;
+              List<Status>? statuses;
+              List<Condition>? conditions;
+              if (state is ClothesDetailLoaded) {
+                cloth = state.cloth;
+                statuses = state.statuses;
+                conditions = state.conditions;
+              }
+              if (state is InitClothesDetailParamsLoaded) {
+                statuses = state.statuses;
+                conditions = state.conditions;
+              }
+              final title = itemId == null
+                  ? 'Новая вещь'
+                  : state is ClothesDetailLoaded
+                      ? state.cloth.name
+                      : '';
+              return Scaffold(
+                appBar: AppBar(
+                  leading: IconButton(
+                    onPressed: () {
+                      _navigateBack(context);
+                    },
+                    icon: const Icon(Icons.arrow_back),
+                  ),
+                  title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
+                  actions: [
+                    if (state is ClothesDetailLoaded)
+                      IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () {
+                          context.read<ClothesDetailBloc>().add(DeleteClothesItem(itemId: itemId!));
+                          _navigateBack(context);
                         },
                       ),
-                      // if (state is ClothesDetailLoading)
-                      //   ModalBarrier(
-                      //     color: Colors.black.withValues(alpha: 0.5),
-                      //     dismissible: false,
-                      //   ),
-                      // if (state is ClothesDetailLoading)
-                      //   const Center(child: CircularProgressIndicator()),
-                    ],
+                  ],
+                ),
+                body: SingleChildScrollView(
+                  child: AbsorbPointer(
+                    absorbing: state is ClothesDetailLoading,
+                    child: Stack(
+                      children: [
+                        ClothesDetailForm(
+                          cloth: cloth,
+                          statuses: statuses,
+                          conditions: conditions,
+                          disabled: state is ClothesDetailLoading,
+                          onSave: (newCloth) {
+                            if (itemId == null) {
+                              final cloth = NewClothDTO.fromMap(newCloth!);
+                              print(cloth.toString());
+                              context.read<ClothesDetailBloc>().add(AddNewClothesItem(item: cloth));
+                            } else {
+                              context.read<ClothesDetailBloc>().add(
+                                    UpdateClothesItem(
+                                      updatedItem: cloth!.copyWith(
+                                        name: newCloth!['name'].toString(),
+                                        description: newCloth['description'].toString(),
+                                        statusId: (newCloth['status_id'] as num?)?.toInt(),
+                                        conditionId: (newCloth['condition_id'] as num?)?.toInt(),
+                                      ),
+                                    ),
+                                  );
+                            }
+                          },
+                        ),
+                        // if (state is ClothesDetailLoading)
+                        //   ModalBarrier(
+                        //     color: Colors.black.withValues(alpha: 0.5),
+                        //     dismissible: false,
+                        //   ),
+                        // if (state is ClothesDetailLoading)
+                        //   const Center(child: CircularProgressIndicator()),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );

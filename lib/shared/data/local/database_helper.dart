@@ -34,14 +34,14 @@ class DatabaseHelper {
       CREATE TABLE statuses (
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         name TEXT UNIQUE
-      )
+      );
     ''');
 
     await db.execute('''
       CREATE TABLE conditions (
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         name TEXT UNIQUE
-      )
+      );
     ''');
 
     await db.execute('''
@@ -54,7 +54,7 @@ class DatabaseHelper {
         image_url TEXT,
         FOREIGN KEY (status_id) REFERENCES statuses(id),
         FOREIGN KEY (condition_id) REFERENCES conditions(id)
-      )
+      );
     ''');
 
     await initialSeed(db);
@@ -82,14 +82,10 @@ class DatabaseHelper {
       clothes.id, 
       clothes.name, 
       clothes.description, 
-      clothes.image_url,
-      statuses.id AS status_id,
-      statuses.name AS status_name,
-      conditions.id AS condition_id,
-      conditions.name AS condition_name
-    FROM clothes
-    LEFT JOIN statuses ON clothes.status_id = statuses.id
-    LEFT JOIN conditions ON clothes.condition_id = conditions.id
+      clothes.status_id,
+      clothes.condition_id,
+      clothes.image_url
+    FROM clothes;
   ''');
   }
 
@@ -100,16 +96,12 @@ class DatabaseHelper {
       clothes.id, 
       clothes.name, 
       clothes.description, 
-      clothes.image_url,
-      statuses.id AS status_id,
-      statuses.name AS status_name,
-      conditions.id AS condition_id,
-      conditions.name AS condition_name
+      clothes.status_id,
+      clothes.condition_id,
+      clothes.image_url
     FROM clothes
-    LEFT JOIN statuses ON clothes.status_id = statuses.id
-    LEFT JOIN conditions ON clothes.condition_id = conditions.id
     WHERE clothes.id = ?
-    LIMIT 1
+    LIMIT 1;
   ''', [itemId]);
     return result.first;
   }
@@ -117,7 +109,9 @@ class DatabaseHelper {
   Future<int> insertCloth(Map<String, dynamic> item) async {
     final db = await instance.database;
     print("to insert = $item.toString()");
-    return await db.insert('clothes', item, conflictAlgorithm: ConflictAlgorithm.replace);
+    final data = await db.insert('clothes', item, conflictAlgorithm: ConflictAlgorithm.replace);
+    print("insert cloth data:= $data");
+    return data;
   }
 
   Future<void> deleteCloth(int itemId) async {
@@ -127,7 +121,9 @@ class DatabaseHelper {
 
   Future<int> updateCloth(Map<String, dynamic> item) async {
     final db = await instance.database;
-    return await db.update('clothes', item, where: 'id = ?', whereArgs: [item['id']]);
+    final data = await db.update('clothes', item, where: 'id = ?', whereArgs: [item['id']]);
+    print("update cloth data:= $data");
+    return data;
   }
 
   Future<List<Map<String, dynamic>>> getStatuses() async {
@@ -142,9 +138,13 @@ class DatabaseHelper {
     return data.first;
   }
 
-  Future<void> insertStatus(String status) async {
+  Future<int> insertStatus(String status) async {
     final db = await instance.database;
-    await db.insert('statuses', {'name': status}, conflictAlgorithm: ConflictAlgorithm.ignore);
+    return await db.insert(
+      'statuses',
+      {'name': status},
+      conflictAlgorithm: ConflictAlgorithm.ignore,
+    );
   }
 
   Future<List<Map<String, dynamic>>> getConditions() async {
@@ -159,8 +159,12 @@ class DatabaseHelper {
     return data.first;
   }
 
-  Future<void> insertCondition(String condition) async {
+  Future<int> insertCondition(String condition) async {
     final db = await instance.database;
-    await db.insert('conditions', {'name': condition}, conflictAlgorithm: ConflictAlgorithm.ignore);
+    return await db.insert(
+      'conditions',
+      {'name': condition},
+      conflictAlgorithm: ConflictAlgorithm.ignore,
+    );
   }
 }

@@ -22,7 +22,7 @@ class ClothesDetailForm extends StatelessWidget {
     conditions,
     statuses,
     this.disabled = false,
-    this.loading = true,
+    this.loading = false,
     this.onSave,
     this.onImageLoad,
   })  : conditions = conditions ?? const [],
@@ -77,10 +77,8 @@ class ClothesDetailForm extends StatelessWidget {
   Widget build(BuildContext context) {
     final nameController = TextEditingController(text: cloth?.name);
     final descriptionController = TextEditingController(text: cloth?.description);
-    // final statusController = TextEditingController(text: selectedStatus?.name);
-    // final conditionController = TextEditingController(text: selectedCondition?.name);
-    int? selectedStatusId;
-    int? selectedConditionId;
+    int? selectedStatusId = cloth?.statusId;
+    int? selectedConditionId = cloth?.conditionId;
 
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -167,8 +165,6 @@ class ClothesDetailForm extends StatelessWidget {
                   return;
                 }
                 if (onSave != null) {
-                  print("selectedStatusId = $selectedStatusId");
-                  print("selectedConditionId = $selectedConditionId");
                   final newCloth = {
                     'name': nameController.text,
                     'description': descriptionController.text,

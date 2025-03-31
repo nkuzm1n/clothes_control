@@ -6,18 +6,13 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).requestFocus(FocusNode());
-      },
-      child: MaterialApp(
-        title: 'Clothes Control',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          useMaterial3: true,
-        ),
-        home: const ClothesListScreen(),
+    return MaterialApp(
+      title: 'Clothes Control',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        useMaterial3: true,
       ),
+      home: const ClothesListScreen(),
     );
   }
 }

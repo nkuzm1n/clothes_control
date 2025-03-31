@@ -48,12 +48,12 @@ class ClothesDetailBloc extends Bloc<ClothesDetailEvent, ClothesDetailState> {
       }
     });
 
-    on<LoadNewClothesDetailParams>((event, emit) async {
+    on<InitNewClothesDetail>((event, emit) async {
       emit(ClothesDetailLoading());
       try {
         final statuses = await statusRepository.getStatuses();
         final conditions = await conditionRepository.getConditions();
-        emit(ClothesDetailParams4NewDetailLoaded(statuses: statuses, conditions: conditions));
+        emit(InitClothesDetailParamsLoaded(statuses: statuses, conditions: conditions));
       } catch (e) {
         emit(ClothesDetailError(message: e.toString()));
       }

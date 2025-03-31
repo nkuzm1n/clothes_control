@@ -20,7 +20,7 @@ class StatusRepository implements IStatusRepository {
   }
 
   @override
-  Future<void> addStatus(String status) async {
-    await databaseHelper.insertStatus(status);
+  Future<int> addStatus(String status) async {
+    return await databaseHelper.insertStatus(status);
   }
 }
