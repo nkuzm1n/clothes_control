@@ -13,27 +13,39 @@ import 'package:clothes_control/features/clothes_detail/presentation/widgets/clo
 class ClothesListScreen extends StatelessWidget {
   const ClothesListScreen({super.key});
 
+  _openDetailsPage(BuildContext context, {int? itemId}) async {
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ClothesDetailScreen(itemId: itemId),
+      ),
+    );
+    if (context.mounted) {
+      context.read<ClothesListBloc>().add(const LoadClothesList());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ClothesListBloc(
         clothesRepository: ClothesRepository(databaseHelper: DatabaseHelper()),
         conditionRepository: ConditionRepository(databaseHelper: DatabaseHelper()),
-        statusRepository: StatusRepository(databaseHelper: DatabaseHelper()),
+        statusRepository: StatusRepositoryImpl(databaseHelper: DatabaseHelper()),
       )..add(const LoadClothesList()),
       child: BlocBuilder<ClothesListBloc, ClothesListState>(
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
               title: const Text(
-                'Список вещей',
+                'Все вещи',
                 style: TextStyle(fontWeight: FontWeight.w700),
               ),
               actionsPadding: const EdgeInsets.only(right: 18),
               actions: [
                 InkWell(
                   onTap: () {
-                    Navigator.pushReplacement(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => const SettingsScreen(),
@@ -65,12 +77,7 @@ class ClothesListScreen extends StatelessWidget {
                         status: listItem.status,
                         condition: listItem.condition,
                         onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ClothesDetailScreen(itemId: listItem.cloth.id),
-                            ),
-                          );
+                          _openDetailsPage(context, itemId: listItem.cloth.id);
                         },
                         onDelete: () {
                           context
@@ -89,12 +96,7 @@ class ClothesListScreen extends StatelessWidget {
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ClothesDetailScreen(),
-                  ),
-                );
+                _openDetailsPage(context);
               },
               child: const Icon(Icons.add),
             ),

@@ -2,7 +2,7 @@ import 'package:clothes_control/shared/domain/entities/condition.dart';
 import 'package:clothes_control/shared/domain/entities/status.dart';
 import 'package:clothes_control/shared/domain/services/cloth_service.dart';
 import 'package:clothes_control/shared/presentation/widgets/ui/image/ui_image.dart';
-import 'package:clothes_control/shared/utils/image.dart';
+import 'package:clothes_control/shared/utils/helpers/image_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:clothes_control/shared/domain/entities/cloth.dart';
 
@@ -24,6 +24,7 @@ class ClothesListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("IMAGE $cloth )");
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       child: ClipRRect(
@@ -45,9 +46,9 @@ class ClothesListItem extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: UiImage(
-                        image: ImageHelper.networkImageOrNull(cloth.imageUrl),
-                        width: 100,
-                        height: 100,
+                        image: ImageHelper.fileImageOrNull(cloth.imageUrl),
+                        width: 120,
+                        height: 120,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -95,8 +96,8 @@ class ClothesListItem extends StatelessWidget {
                     child: const Padding(
                       padding: EdgeInsets.only(
                         left: 12,
-                        right: 2,
-                        top: 4,
+                        right: 0,
+                        top: 0,
                         bottom: 4,
                       ),
                       child: Icon(Icons.delete),

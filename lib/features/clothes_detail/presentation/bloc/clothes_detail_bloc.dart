@@ -1,6 +1,6 @@
-import 'dart:io';
-
-import 'package:clothes_control/shared/data/dto/new_cloth_dto.dart';
+import 'package:clothes_control/shared/data/dto/condition/new_condition_dto.dart';
+import 'package:clothes_control/shared/data/dto/cloth/new_cloth_dto.dart';
+import 'package:clothes_control/shared/data/dto/status/new_status_dto.dart';
 import 'package:clothes_control/shared/domain/entities/condition.dart';
 import 'package:clothes_control/shared/domain/entities/status.dart';
 import 'package:clothes_control/shared/domain/repositories/condition_repository.dart';
@@ -27,40 +27,54 @@ class ClothesDetailBloc extends Bloc<ClothesDetailEvent, ClothesDetailState> {
     required this.conditionRepository,
   }) : super(ClothesDetailInitial()) {
     on<LoadClothesDetail>((event, emit) async {
-      emit(ClothesDetailLoading());
+      emit(ClothesDetailLoading(
+        cloth: event.cloth,
+        conditions: event.conditions,
+        statuses: event.statuses,
+      ));
       try {
         final cloth = await clothesRepository.getClothById(event.itemId);
         final statuses = await statusRepository.getStatuses();
         final conditions = await conditionRepository.getConditions();
         emit(ClothesDetailLoaded(cloth: cloth, statuses: statuses, conditions: conditions));
       } catch (e) {
-        emit(ClothesDetailError(message: e.toString()));
+        emit(ClothesDetailError(error: e, message: e.toString()));
       }
     });
 
     on<UpdateClothesItem>((event, emit) async {
-      emit(ClothesDetailLoading());
+      emit(ClothesDetailLoading(
+        cloth: event.updatedItem,
+        conditions: event.conditions,
+        statuses: event.statuses,
+      ));
       try {
         await clothesRepository.updateCloth(event.updatedItem);
-        add(LoadClothesDetail(itemId: event.updatedItem.id));
+        emit(ClothesItemUpdated(updatedCloth: event.updatedItem));
+        add(LoadClothesDetail(
+          itemId: event.updatedItem.id,
+          cloth: event.updatedItem,
+          conditions: event.conditions,
+          statuses: event.statuses,
+        ));
       } catch (e) {
-        emit(ClothesDetailError(message: e.toString()));
+        emit(ClothesDetailError(error: e, message: e.toString()));
       }
     });
 
-    on<InitNewClothesDetail>((event, emit) async {
-      emit(ClothesDetailLoading());
+    on<InitEmptyClothesDetail>((event, emit) async {
+      emit(const ClothesDetailLoading());
       try {
         final statuses = await statusRepository.getStatuses();
         final conditions = await conditionRepository.getConditions();
-        emit(InitClothesDetailParamsLoaded(statuses: statuses, conditions: conditions));
+        emit(EmptyClothesDetailLoaded(statuses: statuses, conditions: conditions));
       } catch (e) {
-        emit(ClothesDetailError(message: e.toString()));
+        emit(ClothesDetailError(error: e, message: e.toString()));
       }
     });
 
-    on<AddNewClothesItem>((event, emit) async {
-      emit(ClothesDetailLoading());
+    on<AddNewCloth>((event, emit) async {
+      emit(const ClothesDetailLoading());
       try {
         final id = await clothesRepository.addCloth(event.item);
         final cloth = await clothesRepository.getClothById(id);
@@ -68,7 +82,7 @@ class ClothesDetailBloc extends Bloc<ClothesDetailEvent, ClothesDetailState> {
         final conditions = await conditionRepository.getConditions();
         emit(ClothesDetailLoaded(cloth: cloth, statuses: statuses, conditions: conditions));
       } catch (e) {
-        emit(ClothesDetailError(message: e.toString()));
+        emit(ClothesDetailError(error: e, message: e.toString()));
       }
     });
 
@@ -77,42 +91,29 @@ class ClothesDetailBloc extends Bloc<ClothesDetailEvent, ClothesDetailState> {
         await clothesRepository.deleteCloth(event.itemId);
         emit(ClothesItemDeleted(itemId: event.itemId));
       } catch (e) {
-        emit(ClothesDetailError(message: e.toString()));
-      }
-    });
-
-    on<AddClothesItemImage>((event, emit) async {
-      emit(ClothesDetailLoading());
-      try {
-        final imageFile = await imageRepository.saveImage(event.imageFile);
-        final updatedItem = event.clothesItem.copyWith(imageUrl: imageFile.path);
-        await clothesRepository.updateCloth(updatedItem);
-        final clothesItem = await clothesRepository.getClothById(event.clothesItem.id);
-        emit(ClothesItemUpdated(updatedCloth: clothesItem));
-      } catch (e) {
-        emit(ClothesDetailError(message: e.toString()));
+        emit(ClothesDetailError(error: e, message: e.toString()));
       }
     });
 
     on<AddStatus>((event, emit) async {
-      emit(ClothesDetailLoading());
+      emit(const ClothesDetailLoading());
       try {
         await statusRepository.addStatus(event.status);
         final statuses = await statusRepository.getStatuses();
         emit(StatusesUpdated(statuses: statuses));
       } catch (e) {
-        emit(ClothesDetailError(message: e.toString()));
+        emit(ClothesDetailError(error: e, message: e.toString()));
       }
     });
 
     on<AddCondition>((event, emit) async {
-      emit(ClothesDetailLoading());
+      emit(const ClothesDetailLoading());
       try {
         await conditionRepository.addCondition(event.condition);
         final conditions = await conditionRepository.getConditions();
         emit(ConditionsUpdated(conditions: conditions));
       } catch (e) {
-        emit(ClothesDetailError(message: e.toString()));
+        emit(ClothesDetailError(error: e, message: e.toString()));
       }
     });
   }

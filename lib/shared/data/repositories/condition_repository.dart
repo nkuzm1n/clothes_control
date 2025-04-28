@@ -1,3 +1,4 @@
+import 'package:clothes_control/shared/data/dto/condition/new_condition_dto.dart';
 import 'package:clothes_control/shared/data/local/database_helper.dart';
 import 'package:clothes_control/shared/domain/entities/condition.dart';
 import 'package:clothes_control/shared/domain/repositories/condition_repository.dart';
@@ -20,7 +21,7 @@ class ConditionRepository implements IConditionRepository {
   }
 
   @override
-  Future<int> addCondition(String condition) async {
-    return await databaseHelper.insertCondition(condition);
+  Future<int> addCondition(NewConditionDTO condition) async {
+    return await databaseHelper.insertCondition(condition.toMap());
   }
 }

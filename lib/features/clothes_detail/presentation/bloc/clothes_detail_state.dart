@@ -4,12 +4,25 @@ abstract class ClothesDetailState extends Equatable {
   const ClothesDetailState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class ClothesDetailInitial extends ClothesDetailState {}
 
-class ClothesDetailLoading extends ClothesDetailState {}
+class ClothesDetailLoading extends ClothesDetailState {
+  final Cloth? cloth;
+  final List<Status>? statuses;
+  final List<Condition>? conditions;
+
+  const ClothesDetailLoading({
+    this.cloth,
+    this.statuses,
+    this.conditions,
+  });
+
+  @override
+  List<Object?> get props => [cloth, statuses, conditions];
+}
 
 class ClothesDetailLoaded extends ClothesDetailState {
   final Cloth cloth;
@@ -26,11 +39,11 @@ class ClothesDetailLoaded extends ClothesDetailState {
   List<Object> get props => [cloth, statuses, conditions];
 }
 
-class InitClothesDetailParamsLoaded extends ClothesDetailState {
+class EmptyClothesDetailLoaded extends ClothesDetailState {
   final List<Status> statuses;
   final List<Condition> conditions;
 
-  const InitClothesDetailParamsLoaded({
+  const EmptyClothesDetailLoaded({
     required this.statuses,
     required this.conditions,
   });
@@ -40,12 +53,13 @@ class InitClothesDetailParamsLoaded extends ClothesDetailState {
 }
 
 class ClothesDetailError extends ClothesDetailState {
+  final dynamic error;
   final String message;
 
-  const ClothesDetailError({required this.message});
+  const ClothesDetailError({required this.error, required this.message});
 
   @override
-  List<Object> get props => [message];
+  List<Object?> get props => [error, message];
 }
 
 class ClothesItemUpdated extends ClothesDetailState {

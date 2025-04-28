@@ -17,6 +17,8 @@ class UiImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("UI_IMAGE");
+    print(image);
     return OctoImage(
       image: image ?? const AssetImage("assets/images/placeholder.jpg"),
       width: width,

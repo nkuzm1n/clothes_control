@@ -4,38 +4,52 @@ abstract class ClothesDetailEvent extends Equatable {
   const ClothesDetailEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class LoadClothesDetail extends ClothesDetailEvent {
   final int itemId;
+  final Cloth? cloth;
+  final List<Condition>? conditions;
+  final List<Status>? statuses;
 
-  const LoadClothesDetail({required this.itemId});
+  const LoadClothesDetail({
+    required this.itemId,
+    this.cloth,
+    this.conditions,
+    this.statuses,
+  });
 
   @override
-  List<Object> get props => [itemId];
+  List<Object?> get props => [itemId, cloth, conditions, statuses];
 }
 
 class UpdateClothesItem extends ClothesDetailEvent {
   final Cloth updatedItem;
+  final List<Condition>? conditions;
+  final List<Status>? statuses;
 
-  const UpdateClothesItem({required this.updatedItem});
+  const UpdateClothesItem({
+    required this.updatedItem,
+    this.conditions,
+    this.statuses,
+  });
 
   @override
-  List<Object> get props => [updatedItem];
+  List<Object?> get props => [updatedItem, conditions, statuses];
 }
 
-class InitNewClothesDetail extends ClothesDetailEvent {
-  const InitNewClothesDetail();
+class InitEmptyClothesDetail extends ClothesDetailEvent {
+  const InitEmptyClothesDetail();
 
   @override
   List<Object> get props => [];
 }
 
-class AddNewClothesItem extends ClothesDetailEvent {
+class AddNewCloth extends ClothesDetailEvent {
   final NewClothDTO item;
 
-  const AddNewClothesItem({required this.item});
+  const AddNewCloth({required this.item});
 
   @override
   List<Object> get props => [item];
@@ -50,24 +64,14 @@ class DeleteClothesItem extends ClothesDetailEvent {
   List<Object> get props => [itemId];
 }
 
-class AddClothesItemImage extends ClothesDetailEvent {
-  final Cloth clothesItem;
-  final File imageFile;
-
-  const AddClothesItemImage({required this.clothesItem, required this.imageFile});
-
-  @override
-  List<Object> get props => [clothesItem, imageFile];
-}
-
 class AddStatus extends ClothesDetailEvent {
-  final String status;
+  final NewStatusDTO status;
 
   const AddStatus({required this.status});
 }
 
 class AddCondition extends ClothesDetailEvent {
-  final String condition;
+  final NewConditionDTO condition;
 
   const AddCondition({required this.condition});
 }

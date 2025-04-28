@@ -1,11 +1,12 @@
+import 'package:clothes_control/shared/data/dto/status/new_status_dto.dart';
 import 'package:clothes_control/shared/data/local/database_helper.dart';
 import 'package:clothes_control/shared/domain/entities/status.dart';
 import 'package:clothes_control/shared/domain/repositories/status_repository.dart';
 
-class StatusRepository implements IStatusRepository {
+class StatusRepositoryImpl implements IStatusRepository {
   final DatabaseHelper databaseHelper;
 
-  StatusRepository({required this.databaseHelper});
+  StatusRepositoryImpl({required this.databaseHelper});
 
   @override
   Future<List<Status>> getStatuses() async {
@@ -20,7 +21,7 @@ class StatusRepository implements IStatusRepository {
   }
 
   @override
-  Future<int> addStatus(String status) async {
-    return await databaseHelper.insertStatus(status);
+  Future<int> addStatus(NewStatusDTO status) async {
+    return await databaseHelper.insertStatus(status.toMap());
   }
 }

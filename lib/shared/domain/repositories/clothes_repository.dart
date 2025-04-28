@@ -1,5 +1,5 @@
-import 'package:clothes_control/shared/data/dto/cloth_list_item_dto.dart';
-import 'package:clothes_control/shared/data/dto/new_cloth_dto.dart';
+import 'package:clothes_control/features/clothes_list/data/dto/cloth_list_item_dto.dart';
+import 'package:clothes_control/shared/data/dto/cloth/new_cloth_dto.dart';
 import 'package:clothes_control/shared/domain/entities/cloth.dart';
 
 abstract class IClothesRepository {
