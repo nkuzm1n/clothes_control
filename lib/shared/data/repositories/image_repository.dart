@@ -3,7 +3,7 @@ import 'package:clothes_control/shared/domain/repositories/image_repository.dart
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 
-class ImageRepository implements IImageRepository {
+class ImageRepositoryImpl implements IImageRepository {
   @override
   Future<File> saveImage(File image) async {
     final directory = await getApplicationDocumentsDirectory();

@@ -10,6 +10,7 @@ class App extends StatelessWidget {
       title: 'Clothes Control',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        colorScheme: const ColorScheme.light(),
         useMaterial3: true,
       ),
       home: const ClothesListScreen(),

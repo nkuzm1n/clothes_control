@@ -4,14 +4,12 @@ class NewClothDTO extends Equatable {
   final String name;
   final String? description;
   final int? statusId;
-  final int? conditionId;
   final String? imageUrl;
 
   const NewClothDTO({
     required this.name,
     this.description,
     this.statusId,
-    this.conditionId,
     this.imageUrl,
   });
 
@@ -20,7 +18,6 @@ class NewClothDTO extends Equatable {
       name: map['name'],
       description: map['description'],
       statusId: map['status_id'],
-      conditionId: map['condition_id'],
       imageUrl: map['image_url'],
     );
   }
@@ -30,7 +27,6 @@ class NewClothDTO extends Equatable {
       'name': name,
       'description': description,
       'status_id': statusId,
-      'condition_id': conditionId,
       'image_url': imageUrl,
     };
   }
@@ -40,7 +36,6 @@ class NewClothDTO extends Equatable {
         name,
         description,
         statusId,
-        conditionId,
         imageUrl,
       ];
 }

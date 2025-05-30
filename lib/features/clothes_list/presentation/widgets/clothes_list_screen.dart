@@ -2,7 +2,6 @@ import 'package:clothes_control/features/clothes_list/presentation/widgets/cloth
 import 'package:clothes_control/features/settings/presentation/settings_screen.dart';
 import 'package:clothes_control/shared/data/local/database_helper.dart';
 import 'package:clothes_control/shared/data/repositories/clothes_repository.dart';
-import 'package:clothes_control/shared/data/repositories/condition_repository.dart';
 import 'package:clothes_control/shared/data/repositories/status_repository.dart';
 import 'package:clothes_control/shared/presentation/widgets/ui/text/ui_text_no_data.dart';
 import 'package:flutter/material.dart';
@@ -29,8 +28,7 @@ class ClothesListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ClothesListBloc(
-        clothesRepository: ClothesRepository(databaseHelper: DatabaseHelper()),
-        conditionRepository: ConditionRepository(databaseHelper: DatabaseHelper()),
+        clothesRepository: ClothesRepositoryImpl(databaseHelper: DatabaseHelper()),
         statusRepository: StatusRepositoryImpl(databaseHelper: DatabaseHelper()),
       )..add(const LoadClothesList()),
       child: BlocBuilder<ClothesListBloc, ClothesListState>(
@@ -38,7 +36,7 @@ class ClothesListScreen extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               title: const Text(
-                'Все вещи',
+                'Вся одежда',
                 style: TextStyle(fontWeight: FontWeight.w700),
               ),
               actionsPadding: const EdgeInsets.only(right: 18),
@@ -75,7 +73,6 @@ class ClothesListScreen extends StatelessWidget {
                       return ClothesListItem(
                         cloth: listItem.cloth,
                         status: listItem.status,
-                        condition: listItem.condition,
                         onTap: () {
                           _openDetailsPage(context, itemId: listItem.cloth.id);
                         },

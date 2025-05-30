@@ -12,9 +12,6 @@ class ImageHelper {
   }
 
   static FileImage? fileImageOrNull(String? src) {
-    print("FileImage");
-    print(src);
-    print(src.runtimeType);
     return src != null ? FileImage(File(src)) : null;
   }
 }

@@ -1,12 +1,11 @@
-import 'dart:math';
-
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 const String dbName = 'clothes.db';
 
+const int dbVersion = 1;
+
 class DatabaseHelper {
-  final randInt = Random.secure().nextDouble();
   static final DatabaseHelper instance = DatabaseHelper._instance();
   static Database? _database;
 
@@ -17,7 +16,6 @@ class DatabaseHelper {
   DatabaseHelper._instance();
 
   Future<Database> get database async {
-    print("return INSTANCE $randInt");
     _database ??= await initDatabase();
     return _database!;
   }
@@ -26,7 +24,7 @@ class DatabaseHelper {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, dbName);
 
-    return await openDatabase(path, version: 1, onCreate: _onCreate);
+    return await openDatabase(path, version: dbVersion, onCreate: _onCreate);
   }
 
   Future<void> _onCreate(Database db, int version) async {
@@ -40,26 +38,15 @@ class DatabaseHelper {
     ''');
 
     await db.execute('''
-      CREATE TABLE conditions (
-        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-        name TEXT UNIQUE,
-        created_at TEXT,
-        updated_at TEXT
-      );
-    ''');
-
-    await db.execute('''
       CREATE TABLE clothes (
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
         description TEXT,
         status_id INTEGER,
-        condition_id INTEGER,
         image_url TEXT,
         created_at TEXT,
         updated_at TEXT,
         FOREIGN KEY (status_id) REFERENCES statuses(id),
-        FOREIGN KEY (condition_id) REFERENCES conditions(id)
       );
     ''');
 
@@ -88,14 +75,6 @@ class DatabaseHelper {
     for (var status in statuses) {
       await db.insert('statuses', {'name': status}, conflictAlgorithm: ConflictAlgorithm.ignore);
     }
-    final conditions = ['Новая', 'Поношенная', 'Старая'];
-    for (var condition in conditions) {
-      await db.insert(
-        'conditions',
-        {'name': condition},
-        conflictAlgorithm: ConflictAlgorithm.ignore,
-      );
-    }
   }
 
   Future<List<Map<String, dynamic>>> getClothesList({
@@ -114,7 +93,6 @@ class DatabaseHelper {
       clothes.name, 
       clothes.description, 
       clothes.status_id,
-      clothes.condition_id,
       clothes.image_url,
       clothes.created_at,
       clothes.updated_at
@@ -127,13 +105,11 @@ class DatabaseHelper {
 
   Future<int> insertCloth(Map<String, dynamic> item) async {
     final db = await instance.database;
-    print("to insert = $item.toString()");
     final data = await db.insert(
       'clothes',
       addInsertDates(item),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    print("insert cloth data:= $data");
     return data;
   }
 
@@ -178,37 +154,6 @@ class DatabaseHelper {
     final db = await instance.database;
     return await db.update(
       'statuses',
-      addUpdateDates(item),
-      where: 'id = ?',
-      whereArgs: [item['id']],
-    );
-  }
-
-  Future<List<Map<String, dynamic>>> getConditions() async {
-    final db = await instance.database;
-    final data = await db.query('conditions');
-    return data;
-  }
-
-  Future<Map<String, dynamic>> getCondition(int id) async {
-    final db = await instance.database;
-    final data = await db.query('conditions', where: 'id = ?', whereArgs: [id]);
-    return data.first;
-  }
-
-  Future<int> insertCondition(Map<String, dynamic> item) async {
-    final db = await instance.database;
-    return await db.insert(
-      'conditions',
-      addInsertDates(item),
-      conflictAlgorithm: ConflictAlgorithm.ignore,
-    );
-  }
-
-  Future<int> updateCondition(Map<String, dynamic> item) async {
-    final db = await instance.database;
-    return await db.update(
-      'conditions',
       addUpdateDates(item),
       where: 'id = ?',
       whereArgs: [item['id']],

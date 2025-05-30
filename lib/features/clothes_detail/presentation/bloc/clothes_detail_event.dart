@@ -8,70 +8,64 @@ abstract class ClothesDetailEvent extends Equatable {
 }
 
 class LoadClothesDetail extends ClothesDetailEvent {
-  final int itemId;
-  final Cloth? cloth;
-  final List<Condition>? conditions;
-  final List<Status>? statuses;
+  final int? itemId;
+  final ClothDTO? cloth;
+  final List<StatusDTO>? statuses;
 
   const LoadClothesDetail({
-    required this.itemId,
+    this.itemId,
     this.cloth,
-    this.conditions,
     this.statuses,
   });
 
   @override
-  List<Object?> get props => [itemId, cloth, conditions, statuses];
+  List<Object?> get props => [itemId, cloth, statuses];
 }
 
-class UpdateClothesItem extends ClothesDetailEvent {
-  final Cloth updatedItem;
-  final List<Condition>? conditions;
-  final List<Status>? statuses;
+class UpdateClothesDetail extends ClothesDetailEvent {
+  final ClothDTO cloth;
 
-  const UpdateClothesItem({
-    required this.updatedItem,
-    this.conditions,
+  final List<StatusDTO>? statuses;
+
+  const UpdateClothesDetail({
+    required this.cloth,
     this.statuses,
   });
 
   @override
-  List<Object?> get props => [updatedItem, conditions, statuses];
-}
-
-class InitEmptyClothesDetail extends ClothesDetailEvent {
-  const InitEmptyClothesDetail();
-
-  @override
-  List<Object> get props => [];
+  List<Object?> get props => [cloth, statuses];
 }
 
 class AddNewCloth extends ClothesDetailEvent {
-  final NewClothDTO item;
+  final NewClothDTO cloth;
 
-  const AddNewCloth({required this.item});
+  final List<StatusDTO>? statuses;
+
+  const AddNewCloth({
+    required this.cloth,
+    this.statuses,
+  });
 
   @override
-  List<Object> get props => [item];
+  List<Object?> get props => [cloth, statuses];
 }
 
 class DeleteClothesItem extends ClothesDetailEvent {
-  final int itemId;
+  final ClothDTO cloth;
 
-  const DeleteClothesItem({required this.itemId});
+  final List<StatusDTO>? statuses;
+
+  const DeleteClothesItem({
+    required this.cloth,
+    this.statuses,
+  });
 
   @override
-  List<Object> get props => [itemId];
+  List<Object?> get props => [cloth, statuses];
 }
 
-class AddStatus extends ClothesDetailEvent {
-  final NewStatusDTO status;
+// class AddStatus extends ClothesDetailEvent {
+//   final NewStatusDTO status;
 
-  const AddStatus({required this.status});
-}
-
-class AddCondition extends ClothesDetailEvent {
-  final NewConditionDTO condition;
-
-  const AddCondition({required this.condition});
-}
+//   const AddStatus({required this.status});
+// }

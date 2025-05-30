@@ -1,14 +1,16 @@
 import 'dart:io';
+import 'package:clothes_control/shared/data/dto/cloth/cloth_dto.dart';
 import 'package:clothes_control/shared/data/dto/cloth/new_cloth_dto.dart';
+import 'package:clothes_control/shared/data/dto/status/status_dto.dart';
 import 'package:clothes_control/shared/domain/entities/cloth.dart';
-import 'package:clothes_control/shared/domain/entities/condition.dart';
 import 'package:clothes_control/shared/domain/entities/status.dart';
+import 'package:clothes_control/shared/presentation/widgets/ui/modal/swipeable_modal.dart';
+import 'package:clothes_control/shared/presentation/widgets/ui/snackbar/ui_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clothes_control/features/clothes_detail/presentation/widgets/clothes_detail_form.dart';
 import 'package:clothes_control/shared/data/local/database_helper.dart';
 import 'package:clothes_control/shared/data/repositories/clothes_repository.dart';
-import 'package:clothes_control/shared/data/repositories/condition_repository.dart';
 import 'package:clothes_control/shared/data/repositories/image_repository.dart';
 import 'package:clothes_control/shared/data/repositories/status_repository.dart';
 import 'package:clothes_control/features/clothes_detail/presentation/bloc/clothes_detail_bloc.dart';
@@ -20,6 +22,7 @@ class ClothesDetailScreen extends StatelessWidget {
   const ClothesDetailScreen({super.key, this.itemId});
 
   _navigateBack(BuildContext context) {
+    print("NAVIFGARW BACK");
     Navigator.pop(context);
   }
 
@@ -31,60 +34,45 @@ class ClothesDetailScreen extends StatelessWidget {
       },
       child: BlocProvider(
         create: (context) {
-          final bloc = ClothesDetailBloc(
-            clothesRepository: ClothesRepository(databaseHelper: DatabaseHelper()),
-            conditionRepository: ConditionRepository(databaseHelper: DatabaseHelper()),
+          return ClothesDetailBloc(
+            clothesRepository: ClothesRepositoryImpl(databaseHelper: DatabaseHelper()),
             statusRepository: StatusRepositoryImpl(databaseHelper: DatabaseHelper()),
-            imageRepository: ImageRepository(),
-          );
-          if (itemId == null) {
-            bloc.add(const InitEmptyClothesDetail());
-          } else {
-            bloc.add(LoadClothesDetail(itemId: itemId!));
-          }
-          return bloc;
+            imageRepository: ImageRepositoryImpl(),
+          )..add(LoadClothesDetail(itemId: itemId));
         },
         child: BlocListener<ClothesDetailBloc, ClothesDetailState>(
           listener: (context, state) async {
-            if (state is ClothesItemDeleted || state is ClothesItemUpdated) {
+            if (state is ClothesDetailDeleted ||
+                state is ClothesDetailUpdated ||
+                state is ClothesDetailAdded) {
+              print("STATEWE SI S S SIIISISIS");
               _navigateBack(context);
             }
             if (state is ClothesDetailError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  duration: const Duration(seconds: 3),
-                ),
-              );
-              if (await Vibration.hasVibrator()) {
-                Vibration.vibrate(duration: 100);
-              }
+              await UiSnackbar.show(context, state.message);
             }
           },
           child: BlocBuilder<ClothesDetailBloc, ClothesDetailState>(
             builder: (context, state) {
-              Cloth? cloth;
-              List<Status>? statuses;
-              List<Condition>? conditions;
-              if (state is ClothesDetailLoaded) {
-                cloth = state.cloth;
-                statuses = state.statuses;
-                conditions = state.conditions;
-              }
+              ClothDTO? cloth;
+              List<StatusDTO>? statuses;
               if (state is ClothesDetailLoading) {
                 cloth = state.cloth;
                 statuses = state.statuses;
-                conditions = state.conditions;
               }
-              if (state is EmptyClothesDetailLoaded) {
+              if (state is ClothesDetailLoaded) {
+                cloth = state.cloth;
                 statuses = state.statuses;
-                conditions = state.conditions;
               }
-              final title = itemId == null
-                  ? 'Новая вещь'
-                  : state is ClothesDetailLoaded
-                      ? state.cloth.name
-                      : '';
+              if (state is ClothesDetailUpdated) {
+                cloth = state.cloth;
+                statuses = state.statuses;
+              }
+              if (state is ClothesDetailDeleted) {
+                cloth = state.cloth;
+                statuses = state.statuses;
+              }
+              final title = itemId == null ? 'Новая вещь' : cloth?.name;
               return Scaffold(
                 appBar: AppBar(
                   leading: IconButton(
@@ -93,64 +81,65 @@ class ClothesDetailScreen extends StatelessWidget {
                     },
                     icon: const Icon(Icons.arrow_back),
                   ),
-                  title: Text(title, style: const TextStyle(fontWeight: FontWeight.w700)),
+                  title: Text(title ?? '', style: const TextStyle(fontWeight: FontWeight.w700)),
                   actions: [
-                    if (state is ClothesDetailLoaded)
+                    if (cloth != null && state is ClothesDetailLoaded)
                       IconButton(
                         icon: const Icon(Icons.delete),
                         onPressed: () {
-                          context.read<ClothesDetailBloc>().add(DeleteClothesItem(itemId: itemId!));
-                          _navigateBack(context);
+                          context.read<ClothesDetailBloc>().add(
+                                DeleteClothesItem(cloth: cloth!, statuses: statuses),
+                              );
                         },
                       ),
                   ],
                 ),
-                body: BlocBuilder<ClothesDetailBloc, ClothesDetailState>(
-                  buildWhen: (previous, current) {
-                    return current is ClothesDetailLoading ||
-                        current is ClothesDetailLoaded ||
-                        current is EmptyClothesDetailLoaded;
-                  },
-                  builder: (context, state) {
-                    return SingleChildScrollView(
-                      child: AbsorbPointer(
-                        absorbing: state is ClothesDetailLoading,
-                        child: Stack(
-                          children: [
-                            ClothesDetailForm(
-                              cloth: cloth,
-                              statuses: statuses,
-                              conditions: conditions,
-                              disabled: state is ClothesDetailLoading,
-                              loading: state is ClothesDetailLoading,
-                              onSave: (newCloth) {
-                                if (itemId == null) {
-                                  final cloth = NewClothDTO.fromMap(newCloth!);
-                                  print(cloth.toString());
-                                  context.read<ClothesDetailBloc>().add(AddNewCloth(item: cloth));
-                                } else {
-                                  context.read<ClothesDetailBloc>().add(
-                                        UpdateClothesItem(
-                                          updatedItem: cloth!.copyWith(
-                                            name: newCloth!['name'].toString(),
-                                            description: newCloth['description'].toString(),
-                                            statusId: (newCloth['status_id'] as num?)?.toInt(),
-                                            conditionId:
-                                                (newCloth['condition_id'] as num?)?.toInt(),
-                                            imageUrl: newCloth['image_url'].toString(),
-                                          ),
-                                          conditions: conditions,
-                                          statuses: statuses,
+                body: SingleChildScrollView(
+                  child: AbsorbPointer(
+                    absorbing: state is ClothesDetailLoading,
+                    child: Stack(
+                      children: [
+                        if (statuses != null)
+                          ClothesDetailForm(
+                            cloth: cloth,
+                            statuses: statuses,
+                            disabled: state is ClothesDetailLoading,
+                            loading: state is ClothesDetailLoading,
+                            onSave: (newCloth) {
+                              if (itemId == null) {
+                                final cloth = NewClothDTO.fromMap(newCloth!);
+                                print(cloth.toString());
+                                context.read<ClothesDetailBloc>().add(
+                                      AddNewCloth(
+                                        cloth: cloth,
+                                        statuses: statuses,
+                                      ),
+                                    );
+                              } else {
+                                context.read<ClothesDetailBloc>().add(
+                                      UpdateClothesDetail(
+                                        cloth: ClothDTO(
+                                          id: (newCloth!['id'] as num).toInt(),
+                                          name: newCloth['name'].toString(),
+                                          description: newCloth['description']?.toString(),
+                                          statusId: (newCloth['status_id'] as num?)?.toInt(),
+                                          imageUrl: newCloth['image_url']?.toString(),
                                         ),
-                                      );
-                                }
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
+                                        statuses: statuses,
+                                      ),
+                                    );
+                              }
+                            },
+                            onStatusesPressed: () async {
+                              await UiSnackbar.show(
+                                context,
+                                'Функционал в данный момент в разработке',
+                              );
+                            },
+                          ),
+                      ],
+                    ),
+                  ),
                 ),
               );
             },

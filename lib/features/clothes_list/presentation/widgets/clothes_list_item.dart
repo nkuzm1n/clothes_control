@@ -1,4 +1,5 @@
-import 'package:clothes_control/shared/domain/entities/condition.dart';
+import 'package:clothes_control/shared/data/dto/cloth/cloth_dto.dart';
+import 'package:clothes_control/shared/data/dto/status/status_dto.dart';
 import 'package:clothes_control/shared/domain/entities/status.dart';
 import 'package:clothes_control/shared/domain/services/cloth_service.dart';
 import 'package:clothes_control/shared/presentation/widgets/ui/image/ui_image.dart';
@@ -7,16 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:clothes_control/shared/domain/entities/cloth.dart';
 
 class ClothesListItem extends StatelessWidget {
-  final Cloth cloth;
-  final Condition? condition;
-  final Status? status;
+  final ClothDTO cloth;
+  final StatusDTO? status;
   final Function()? onDelete;
   final void Function()? onTap;
 
   const ClothesListItem({
     super.key,
     required this.cloth,
-    this.condition,
     this.status,
     this.onDelete,
     this.onTap,
@@ -73,16 +72,6 @@ class ClothesListItem extends StatelessWidget {
                               const Text("Статус: "),
                               Text(
                                 status!.name,
-                                style: const TextStyle(fontWeight: FontWeight.w500),
-                              ),
-                            ],
-                          ),
-                        if (condition != null)
-                          Row(
-                            children: [
-                              const Text("Состояние: "),
-                              Text(
-                                condition!.name,
                                 style: const TextStyle(fontWeight: FontWeight.w500),
                               ),
                             ],

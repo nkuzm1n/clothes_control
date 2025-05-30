@@ -6,6 +6,7 @@ class UiImage extends StatelessWidget {
   final double? width;
   final double? height;
   final BoxFit? fit;
+  final bool loading;
 
   const UiImage({
     super.key,
@@ -13,19 +14,24 @@ class UiImage extends StatelessWidget {
     this.width,
     this.height,
     this.fit,
+    this.loading = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    print("UI_IMAGE");
-    print(image);
     return OctoImage(
-      image: image ?? const AssetImage("assets/images/placeholder.jpg"),
+      image: image ?? const AssetImage("assets/images/placeholder.png"),
       width: width,
       height: height,
       fit: fit,
       placeholderBuilder: OctoPlaceholder.circularProgressIndicator(),
       errorBuilder: OctoError.icon(color: Colors.red),
+      // imageBuilder: (context, child) {
+      //   if (loading) {
+      //     return const Center(child: CircularProgressIndicator());
+      //   }
+      //   return child;
+      // },
     );
   }
 }

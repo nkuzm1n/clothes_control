@@ -1,11 +1,10 @@
-import 'package:clothes_control/features/clothes_list/data/dto/cloth_list_item_dto.dart';
+import 'package:clothes_control/shared/data/dto/cloth/cloth_dto.dart';
 import 'package:clothes_control/shared/data/dto/cloth/new_cloth_dto.dart';
-import 'package:clothes_control/shared/domain/entities/cloth.dart';
 
 abstract class IClothesRepository {
-  Future<List<Cloth>> getClothesList();
-  Future<Cloth> getClothById(int itemId);
+  Future<List<ClothDTO>> getClothesList();
+  Future<ClothDTO?> getClothById(int itemId);
   Future<void> deleteCloth(int itemId);
-  Future<int> updateCloth(Cloth item);
+  Future<int> updateCloth(ClothDTO item);
   Future<int> addCloth(NewClothDTO item);
 }

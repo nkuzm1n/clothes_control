@@ -1,24 +1,25 @@
 import 'package:clothes_control/features/clothes_list/data/dto/cloth_list_item_dto.dart';
+import 'package:clothes_control/shared/data/dto/cloth/cloth_dto.dart';
 import 'package:clothes_control/shared/data/dto/cloth/new_cloth_dto.dart';
 import 'package:clothes_control/shared/data/local/database_helper.dart';
 import 'package:clothes_control/shared/domain/entities/cloth.dart';
 import 'package:clothes_control/shared/domain/repositories/clothes_repository.dart';
 
-class ClothesRepository implements IClothesRepository {
+class ClothesRepositoryImpl implements IClothesRepository {
   final DatabaseHelper databaseHelper;
 
-  ClothesRepository({required this.databaseHelper});
+  ClothesRepositoryImpl({required this.databaseHelper});
 
   @override
-  Future<List<Cloth>> getClothesList() async {
+  Future<List<ClothDTO>> getClothesList() async {
     final result = await databaseHelper.getClothesList();
-    return result.map((item) => Cloth.fromMap(item)).toList();
+    return result.map((item) => ClothDTO.fromMap(item)).toList();
   }
 
   @override
-  Future<Cloth> getClothById(int itemId) async {
+  Future<ClothDTO?> getClothById(int itemId) async {
     final result = await databaseHelper.getCloth(itemId);
-    return Cloth.fromMap(result);
+    return result.isNotEmpty ? ClothDTO.fromMap(result) : null;
   }
 
   @override
@@ -27,12 +28,13 @@ class ClothesRepository implements IClothesRepository {
   }
 
   @override
-  Future<int> updateCloth(Cloth item) async {
+  Future<int> updateCloth(ClothDTO item) async {
     return await databaseHelper.updateCloth(item.toMap());
   }
 
   @override
   Future<int> addCloth(NewClothDTO item) async {
+    print("toinsert:::: $item");
     return await databaseHelper.insertCloth(item.toMap());
   }
 }
