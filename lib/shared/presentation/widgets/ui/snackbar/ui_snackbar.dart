@@ -5,12 +5,14 @@ class UiSnackbar {
   static show(
     BuildContext context,
     String text, {
-    duration = 3,
-    withVibration = false,
-    vibrationDuration = 100,
+    double? elevation,
+    int duration = 3,
+    bool withVibration = false,
+    int vibrationDuration = 100,
   }) async {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
+        elevation: elevation,
         content: Text(text),
         duration: Duration(seconds: duration),
       ),

@@ -4,7 +4,7 @@ abstract class ClothesListState extends Equatable {
   const ClothesListState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class ClothesListInitial extends ClothesListState {}
@@ -13,11 +13,12 @@ class ClothesListLoading extends ClothesListState {}
 
 class ClothesListLoaded extends ClothesListState {
   final List<ClothListItemDTO> clothesList;
+  final String? searchString;
 
-  const ClothesListLoaded({required this.clothesList});
+  const ClothesListLoaded({required this.clothesList, this.searchString});
 
   @override
-  List<Object> get props => [clothesList];
+  List<Object?> get props => [clothesList, searchString];
 }
 
 class ClothesItemDeleted extends ClothesListState {

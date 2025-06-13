@@ -81,7 +81,6 @@ class SwipeableModal extends StatelessWidget {
               ),
             ),
           ),
-          // Content
           child,
         ],
       ),

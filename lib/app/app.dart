@@ -13,7 +13,7 @@ class App extends StatelessWidget {
         colorScheme: const ColorScheme.light(),
         useMaterial3: true,
       ),
-      home: const ClothesListScreen(),
+      home: ClothesListScreen(),
     );
   }
 }

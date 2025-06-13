@@ -1,7 +1,10 @@
+import 'package:clothes_control/shared/data/dto/category/category_dto.dart';
 import 'package:clothes_control/shared/data/dto/cloth/cloth_dto.dart';
 import 'package:clothes_control/shared/data/dto/status/status_dto.dart';
 import 'package:clothes_control/shared/presentation/widgets/ui/button/ui_button.dart';
 import 'package:clothes_control/shared/presentation/widgets/ui/image/ui_image.dart';
+import 'package:clothes_control/shared/presentation/widgets/ui/snackbar/ui_snackbar.dart';
+import 'package:clothes_control/shared/utils/extensions/hex_color.dart';
 import 'package:clothes_control/shared/utils/helpers/image_helper.dart';
 import 'package:clothes_control/shared/utils/helpers/image_picker_helper.dart';
 import 'package:flutter/material.dart';
@@ -10,22 +13,26 @@ import 'package:vibration/vibration.dart';
 class ClothesDetailForm extends StatefulWidget {
   final ClothDTO? cloth;
   final List<StatusDTO> statuses;
+  final List<CategoryDTO> categories;
   final bool disabled;
   final bool loading;
   final Function(Map<String, Object?>? newCloth)? onSave;
   final Function(String url)? onImageLoad;
   final Function()? onStatusesPressed;
+  final Function()? onCategoryPressed;
 
   const ClothesDetailForm({
     super.key,
     this.cloth,
-    statuses,
+    this.statuses = const [],
+    this.categories = const [],
     this.disabled = false,
     this.loading = false,
     this.onSave,
     this.onImageLoad,
     this.onStatusesPressed,
-  }) : statuses = statuses ?? const [];
+    this.onCategoryPressed,
+  });
 
   @override
   State<ClothesDetailForm> createState() => _ClothesDetailFormState();
@@ -36,11 +43,13 @@ class _ClothesDetailFormState extends State<ClothesDetailForm> {
   late TextEditingController _descriptionController;
   String? _selectedImageUrl;
   int? _selectedStatusId;
+  int? _selectedCategoryId;
 
   _updateClothFields() {
     _nameController = TextEditingController(text: widget.cloth?.name);
     _descriptionController = TextEditingController(text: widget.cloth?.description);
     _selectedStatusId = widget.cloth?.statusId;
+    _selectedCategoryId = widget.cloth?.categoryId;
   }
 
   @override
@@ -154,14 +163,59 @@ class _ClothesDetailFormState extends State<ClothesDetailForm> {
                   Flexible(
                     child: DropdownButtonFormField<int>(
                       decoration: const InputDecoration(
+                        labelText: 'Категория',
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                      ),
+                      value: widget.cloth?.categoryId,
+                      items: widget.categories.map((value) {
+                        return DropdownMenuItem(
+                          value: value.id,
+                          child: Text(value.name),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedCategoryId = value;
+                        });
+                      },
+                    ),
+                  ),
+                  // const SizedBox(width: 12),
+                  // UiButton(
+                  //   icon: const Icon(Icons.list, color: Colors.white),
+                  //   borderRadius: BorderRadius.circular(1),
+                  //   padding: const EdgeInsets.all(8),
+                  //   width: 40,
+                  //   onPressed: widget.onStatusesPressed,
+                  // ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Flexible(
+                    child: DropdownButtonFormField<int>(
+                      decoration: const InputDecoration(
                         labelText: 'Статус',
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                       ),
                       value: widget.cloth?.statusId,
-                      items: widget.statuses.map((status) {
+                      items: widget.statuses.map((value) {
                         return DropdownMenuItem(
-                          value: status.id,
-                          child: Text(status.name),
+                          value: value.id,
+                          child: Row(
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: ColoredBox(
+                                  color: HexColor.fromHex(value.color),
+                                  child: const SizedBox(width: 20, height: 20),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Text(value.name),
+                            ],
+                          ),
                         );
                       }).toList(),
                       onChanged: (value) {
@@ -171,14 +225,14 @@ class _ClothesDetailFormState extends State<ClothesDetailForm> {
                       },
                     ),
                   ),
-                  const SizedBox(width: 12),
-                  UiButton(
-                    icon: const Icon(Icons.list, color: Colors.white),
-                    borderRadius: BorderRadius.circular(1),
-                    padding: const EdgeInsets.all(8),
-                    width: 40,
-                    onPressed: widget.onStatusesPressed,
-                  ),
+                  // const SizedBox(width: 12),
+                  // UiButton(
+                  //   icon: const Icon(Icons.list, color: Colors.white),
+                  //   borderRadius: BorderRadius.circular(1),
+                  //   padding: const EdgeInsets.all(8),
+                  //   width: 40,
+                  //   onPressed: widget.onStatusesPressed,
+                  // ),
                 ],
               ),
               const SizedBox(height: 16),
@@ -186,15 +240,11 @@ class _ClothesDetailFormState extends State<ClothesDetailForm> {
                 child: ElevatedButton(
                   onPressed: () async {
                     if (_nameController.text.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Поле "Наименование" не может быть пустым'),
-                          duration: Duration(seconds: 3),
-                        ),
+                      UiSnackbar.show(
+                        context,
+                        'Поле "Наименование" не может быть пустым',
+                        withVibration: true,
                       );
-                      if (await Vibration.hasVibrator()) {
-                        Vibration.vibrate(duration: 100);
-                      }
                       return;
                     }
                     if (widget.onSave != null) {
@@ -203,9 +253,9 @@ class _ClothesDetailFormState extends State<ClothesDetailForm> {
                         'name': _nameController.text,
                         'description': _descriptionController.text.trim(),
                         'status_id': _selectedStatusId,
-                        'image_url': _selectedImageUrl ?? widget.cloth?.imageUrl,
+                        'category_id': _selectedCategoryId,
+                        'image_url': _selectedImageUrl,
                       };
-                      print(clothData);
                       widget.onSave!(clothData);
                     }
                   },

@@ -7,65 +7,62 @@ abstract class ClothesDetailEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class LoadClothesDetail extends ClothesDetailEvent {
-  final int? itemId;
+class LoadClothesDetailEvent extends ClothesDetailEvent {
   final ClothDTO? cloth;
-  final List<StatusDTO>? statuses;
+  final List<StatusDTO> statuses;
+  final List<CategoryDTO> categories;
 
-  const LoadClothesDetail({
-    this.itemId,
+  const LoadClothesDetailEvent({
     this.cloth,
-    this.statuses,
+    required this.statuses,
+    required this.categories,
   });
 
   @override
-  List<Object?> get props => [itemId, cloth, statuses];
+  List<Object?> get props => [cloth, statuses, categories];
 }
 
-class UpdateClothesDetail extends ClothesDetailEvent {
+class UpdateClothesDetailEvent extends ClothesDetailEvent {
   final ClothDTO cloth;
+  final List<StatusDTO> statuses;
+  final List<CategoryDTO> categories;
 
-  final List<StatusDTO>? statuses;
-
-  const UpdateClothesDetail({
+  const UpdateClothesDetailEvent({
     required this.cloth,
-    this.statuses,
+    required this.statuses,
+    required this.categories,
   });
 
   @override
-  List<Object?> get props => [cloth, statuses];
+  List<Object> get props => [cloth, statuses, categories];
 }
 
-class AddNewCloth extends ClothesDetailEvent {
-  final NewClothDTO cloth;
+class AddNewClothEvent extends ClothesDetailEvent {
+  final NewClothDTO newCloth;
+  final List<StatusDTO> statuses;
+  final List<CategoryDTO> categories;
 
-  final List<StatusDTO>? statuses;
-
-  const AddNewCloth({
-    required this.cloth,
-    this.statuses,
+  const AddNewClothEvent({
+    required this.newCloth,
+    required this.statuses,
+    required this.categories,
   });
 
   @override
-  List<Object?> get props => [cloth, statuses];
+  List<Object?> get props => [newCloth, statuses, categories];
 }
 
-class DeleteClothesItem extends ClothesDetailEvent {
+class DeleteClothesItemEvent extends ClothesDetailEvent {
   final ClothDTO cloth;
+  final List<StatusDTO> statuses;
+  final List<CategoryDTO> categories;
 
-  final List<StatusDTO>? statuses;
-
-  const DeleteClothesItem({
+  const DeleteClothesItemEvent({
     required this.cloth,
-    this.statuses,
+    required this.statuses,
+    required this.categories,
   });
 
   @override
-  List<Object?> get props => [cloth, statuses];
+  List<Object?> get props => [cloth, statuses, categories];
 }
-
-// class AddStatus extends ClothesDetailEvent {
-//   final NewStatusDTO status;
-
-//   const AddStatus({required this.status});
-// }

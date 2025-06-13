@@ -1,97 +1,82 @@
 part of 'clothes_detail_bloc.dart';
 
-abstract class ClothesDetailState extends Equatable {
-  const ClothesDetailState();
-
-  @override
-  List<Object?> get props => [];
-}
-
-class ClothesDetailInitial extends ClothesDetailState {}
-
-class ClothesDetailLoading extends ClothesDetailState {
+class ClothesDetailState extends Equatable {
   final ClothDTO? cloth;
   final NewClothDTO? newCloth;
-  final List<StatusDTO>? statuses;
+  final List<StatusDTO> statuses;
+  final List<CategoryDTO> categories;
+  final dynamic error;
 
-  const ClothesDetailLoading({
+  const ClothesDetailState({
     this.cloth,
     this.newCloth,
-    this.statuses,
+    this.statuses = const [],
+    this.categories = const [],
+    this.error,
   });
 
-  @override
-  List<Object?> get props => [cloth, newCloth, statuses];
-}
-
-class ClothesDetailLoaded extends ClothesDetailState {
-  final ClothDTO? cloth;
-  final List<StatusDTO> statuses;
-
-  const ClothesDetailLoaded({this.cloth, required this.statuses});
+  String? get clothName => newCloth?.name ?? cloth?.name;
+  String? get clothDescription => newCloth?.description ?? cloth?.description;
+  String? get clothImageUrl => newCloth?.imageUrl ?? cloth?.imageUrl;
+  int? get clothCategoryId => newCloth?.categoryId ?? cloth?.categoryId;
+  int? get clothStatusId => newCloth?.statusId ?? cloth?.statusId;
 
   @override
-  List<Object?> get props => [cloth, statuses];
+  List<Object?> get props => [cloth, newCloth, statuses, categories, error];
 }
 
-class ClothesDetailUpdated extends ClothesDetailState {
+class ClothesDetailLoadingState extends ClothesDetailState {
+  const ClothesDetailLoadingState({
+    super.cloth,
+    super.newCloth,
+    super.statuses,
+    super.categories,
+  });
+}
+
+class ClothesDetailLoadedState extends ClothesDetailState {
+  const ClothesDetailLoadedState({
+    super.cloth,
+    super.statuses,
+    super.categories,
+  });
+}
+
+class ClothesDetailUpdatedState extends ClothesDetailState {
+  @override
   final ClothDTO cloth;
-  final List<StatusDTO> statuses;
 
-  const ClothesDetailUpdated({
+  const ClothesDetailUpdatedState({
     required this.cloth,
-    required this.statuses,
+    super.statuses,
+    super.categories,
   });
-
-  @override
-  List<Object?> get props => [cloth, statuses];
 }
 
-class ClothesDetailAdded extends ClothesDetailState {
+class ClothesDetailAddedState extends ClothesDetailState {
+  @override
   final ClothDTO cloth;
-  final List<StatusDTO> statuses;
 
-  const ClothesDetailAdded({
+  const ClothesDetailAddedState({
     required this.cloth,
-    required this.statuses,
+    super.statuses,
+    super.categories,
   });
-
-  @override
-  List<Object?> get props => [cloth, statuses];
 }
 
-class ClothesDetailDeleted extends ClothesDetailState {
-  final ClothDTO? cloth;
-  final List<StatusDTO> statuses;
-
-  const ClothesDetailDeleted({
-    this.cloth,
-    required this.statuses,
+class ClothesDetailDeletedState extends ClothesDetailState {
+  const ClothesDetailDeletedState({
+    super.statuses,
+    super.categories,
   });
-
-  @override
-  List<Object?> get props => [cloth, statuses];
 }
 
-// class StatusesUpdated extends ClothesDetailState {
-//   final List<StatusDTO> statuses;
-
-//   const StatusesUpdated({required this.statuses});
-// }
-
-class ClothesDetailError extends ClothesDetailState {
-  final dynamic error;
-  final String message;
-  final ClothDTO? cloth;
-  final List<StatusDTO>? statuses;
-
-  const ClothesDetailError({
-    required this.error,
-    required this.message,
-    this.cloth,
-    this.statuses,
+class ClothesDetailErrorState extends ClothesDetailState {
+  const ClothesDetailErrorState({
+    required super.error,
+    super.cloth,
+    super.newCloth,
+    super.statuses,
+    super.categories,
   });
-
-  @override
-  List<Object?> get props => [error, message, cloth, statuses];
 }

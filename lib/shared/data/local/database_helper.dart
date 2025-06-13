@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -32,6 +33,16 @@ class DatabaseHelper {
       CREATE TABLE statuses (
         id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         name TEXT UNIQUE,
+        color TEXT,
+        created_at TEXT,
+        updated_at TEXT
+      );
+    ''');
+
+    await db.execute('''
+      CREATE TABLE categories (
+        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        name TEXT UNIQUE,
         created_at TEXT,
         updated_at TEXT
       );
@@ -43,10 +54,12 @@ class DatabaseHelper {
         name TEXT NOT NULL,
         description TEXT,
         status_id INTEGER,
+        category_id INTEGER,
         image_url TEXT,
         created_at TEXT,
         updated_at TEXT,
         FOREIGN KEY (status_id) REFERENCES statuses(id),
+        FOREIGN KEY (category_id) REFERENCES categories(id)
       );
     ''');
 
@@ -71,36 +84,48 @@ class DatabaseHelper {
   }
 
   Future<void> initialSeed(Database db) async {
-    final statuses = ['Чистая', 'Грязная', 'В стирке'];
+    final statuses = [
+      {'name': 'Чистая', 'color': '#00ff00'},
+      {'name': 'Грязная', 'color': '#ff0000'},
+      {'name': 'В стирке', 'color': '#0000ff'},
+    ];
     for (var status in statuses) {
-      await db.insert('statuses', {'name': status}, conflictAlgorithm: ConflictAlgorithm.ignore);
+      await db.insert(
+        'statuses',
+        {
+          'name': status['name'],
+          'color': status['color'],
+        },
+        conflictAlgorithm: ConflictAlgorithm.ignore,
+      );
+    }
+    final categories = ['Верхняя одежда', 'Нижнее белье'];
+    for (var category in categories) {
+      await db.insert('categories', {'name': category});
     }
   }
 
   Future<List<Map<String, dynamic>>> getClothesList({
-    String? orderBy = 'updated_at',
-    String? direction = 'DESC',
+    String? name,
+    String? orderBy,
+    String? direction,
   }) async {
+    name ??= '';
+    orderBy ??= 'updated_at';
+    direction ??= 'DESC';
     final db = await instance.database;
-    return await db.query('clothes', orderBy: "$orderBy $direction");
+    return await db.query(
+      'clothes',
+      where: "name LIKE ?",
+      whereArgs: ['%$name%'],
+      orderBy: "$orderBy $direction",
+    );
   }
 
-  Future<Map<String, dynamic>> getCloth(int itemId) async {
+  Future<Map<String, dynamic>> getCloth(int id) async {
     final db = await instance.database;
-    final result = await db.rawQuery('''
-    SELECT 
-      clothes.id, 
-      clothes.name, 
-      clothes.description, 
-      clothes.status_id,
-      clothes.image_url,
-      clothes.created_at,
-      clothes.updated_at
-    FROM clothes
-    WHERE clothes.id = ?
-    LIMIT 1;
-  ''', [itemId]);
-    return result.first;
+    final data = await db.query('clothes', where: 'id = ?', whereArgs: [id]);
+    return data.first;
   }
 
   Future<int> insertCloth(Map<String, dynamic> item) async {
@@ -120,18 +145,22 @@ class DatabaseHelper {
 
   Future<int> updateCloth(Map<String, dynamic> item) async {
     final db = await instance.database;
-    final data = await db.update(
+    final result = await db.update(
       'clothes',
       addUpdateDates(item),
       where: 'id = ?',
       whereArgs: [item['id']],
     );
-    return data;
+    return result;
   }
 
-  Future<List<Map<String, dynamic>>> getStatuses() async {
+  Future<List<Map<String, dynamic>>> getStatuses({List<int>? id}) async {
     final db = await instance.database;
-    final data = await db.query('statuses');
+    final data = await db.query(
+      'statuses',
+      whereArgs: id,
+      where: id == null ? null : 'id IN (${List.filled(id.length, '?').join(',')})',
+    );
     return data;
   }
 
@@ -155,6 +184,59 @@ class DatabaseHelper {
     return await db.update(
       'statuses',
       addUpdateDates(item),
+      where: 'id = ?',
+      whereArgs: [item['id']],
+    );
+  }
+
+  Future<int> deleteStatus(Map<String, dynamic> item) async {
+    final db = await instance.database;
+    return await db.delete(
+      'statuses',
+      where: 'id = ?',
+      whereArgs: [item['id']],
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> getCategories({List<int>? id}) async {
+    final db = await instance.database;
+    final data = await db.query(
+      'categories',
+      whereArgs: id,
+      where: id == null ? null : 'id IN (${List.filled(id.length, '?').join(',')})',
+    );
+    return data;
+  }
+
+  Future<Map<String, dynamic>> getCategory(int id) async {
+    final db = await instance.database;
+    final data = await db.query('categories', where: 'id = ?', whereArgs: [id]);
+    return data.first;
+  }
+
+  Future<int> insertCategory(Map<String, dynamic> item) async {
+    final db = await instance.database;
+    return await db.insert(
+      'categories',
+      addInsertDates(item),
+      conflictAlgorithm: ConflictAlgorithm.ignore,
+    );
+  }
+
+  Future<int> updateCategory(Map<String, dynamic> item) async {
+    final db = await instance.database;
+    return await db.update(
+      'categories',
+      addUpdateDates(item),
+      where: 'id = ?',
+      whereArgs: [item['id']],
+    );
+  }
+
+  Future<int> deleteCategory(Map<String, dynamic> item) async {
+    final db = await instance.database;
+    return await db.delete(
+      'categories',
       where: 'id = ?',
       whereArgs: [item['id']],
     );

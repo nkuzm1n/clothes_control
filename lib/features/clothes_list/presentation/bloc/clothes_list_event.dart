@@ -4,17 +4,22 @@ abstract class ClothesListEvent extends Equatable {
   const ClothesListEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
-class LoadClothesList extends ClothesListEvent {
-  const LoadClothesList();
+class LoadClothesListEvent extends ClothesListEvent {
+  final String? search;
+
+  const LoadClothesListEvent({this.search});
+
+  @override
+  List<Object?> get props => [search];
 }
 
-class DeleteClothesItem extends ClothesListEvent {
+class DeleteClothesItemEvent extends ClothesListEvent {
   final int itemId;
 
-  const DeleteClothesItem({required this.itemId});
+  const DeleteClothesItemEvent({required this.itemId});
 
   @override
   List<Object> get props => [itemId];

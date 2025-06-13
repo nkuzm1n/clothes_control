@@ -5,6 +5,7 @@ class Cloth extends Equatable {
   final String name;
   final String? description;
   final int? statusId;
+  final int? categoryId;
   final String? imageUrl;
   final String? createdAt;
   final String? updatedAt;
@@ -14,6 +15,7 @@ class Cloth extends Equatable {
     required this.name,
     this.description,
     this.statusId,
+    this.categoryId,
     this.imageUrl,
     this.createdAt,
     this.updatedAt,
@@ -25,6 +27,7 @@ class Cloth extends Equatable {
       'name': name,
       'description': description,
       'status_id': statusId,
+      'category_id': categoryId,
       'image_url': imageUrl,
       'created_at': createdAt,
       'updated_at': updatedAt,
@@ -37,6 +40,7 @@ class Cloth extends Equatable {
       name: map['name'],
       description: map['description'],
       statusId: map['status_id'],
+      categoryId: map['category_id'],
       imageUrl: map['image_url'],
       createdAt: map['created_at'],
       updatedAt: map['updated_at'],
@@ -48,6 +52,7 @@ class Cloth extends Equatable {
     String? name,
     String? description,
     int? statusId,
+    int? categoryId,
     String? imageUrl,
   }) {
     return Cloth(
@@ -55,6 +60,7 @@ class Cloth extends Equatable {
       name: name ?? this.name,
       description: description ?? this.description,
       statusId: statusId ?? this.statusId,
+      categoryId: categoryId ?? this.categoryId,
       imageUrl: imageUrl ?? imageUrl,
       createdAt: createdAt ?? createdAt,
       updatedAt: updatedAt ?? updatedAt,
@@ -67,6 +73,7 @@ class Cloth extends Equatable {
         name,
         description,
         statusId,
+        categoryId,
         imageUrl,
         createdAt,
         updatedAt,

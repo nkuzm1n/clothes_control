@@ -9,19 +9,31 @@ class StatusRepositoryImpl implements IStatusRepository {
   StatusRepositoryImpl({required this.databaseHelper});
 
   @override
-  Future<List<StatusDTO>> getStatuses() async {
-    final result = await databaseHelper.getStatuses();
+  Future<List<StatusDTO>> getStatuses({List<int>? id}) async {
+    final result = await databaseHelper.getStatuses(id: id);
     return result.map((item) => StatusDTO.fromMap(item)).toList();
   }
 
   @override
   Future<StatusDTO?> getStatusById(int id) async {
-    final status = await databaseHelper.getStatus(id);
-    return status.isNotEmpty ? StatusDTO.fromMap(status) : null;
+    final result = await databaseHelper.getStatus(id);
+    return result.isNotEmpty ? StatusDTO.fromMap(result) : null;
   }
 
   @override
-  Future<int> addStatus(NewStatusDTO status) async {
-    return await databaseHelper.insertStatus(status.toMap());
+  Future<StatusDTO> addStatus(NewStatusDTO status) async {
+    final id = await databaseHelper.insertStatus(status.toMap());
+    final result = await getStatusById(id);
+    return result!;
+  }
+
+  @override
+  Future<int> updateStatus(StatusDTO status) async {
+    return await databaseHelper.updateStatus(status.toMap());
+  }
+
+  @override
+  Future<int> deleteStatus(StatusDTO status) async {
+    return await databaseHelper.deleteStatus(status.toMap());
   }
 }

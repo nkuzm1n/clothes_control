@@ -1,6 +1,8 @@
+import 'package:clothes_control/shared/data/dto/category/category_dto.dart';
 import 'package:clothes_control/shared/data/dto/cloth/cloth_dto.dart';
 import 'package:clothes_control/shared/data/dto/cloth/new_cloth_dto.dart';
 import 'package:clothes_control/shared/data/dto/status/status_dto.dart';
+import 'package:clothes_control/shared/domain/repositories/category_repository.dart';
 import 'package:clothes_control/shared/domain/repositories/image_repository.dart';
 import 'package:clothes_control/shared/domain/repositories/status_repository.dart';
 import 'package:equatable/equatable.dart';
@@ -14,113 +16,106 @@ class ClothesDetailBloc extends Bloc<ClothesDetailEvent, ClothesDetailState> {
   final IClothesRepository clothesRepository;
   final IImageRepository imageRepository;
   final IStatusRepository statusRepository;
+  final ICategoryRepository categoryRepository;
 
   ClothesDetailBloc({
     required this.clothesRepository,
     required this.imageRepository,
     required this.statusRepository,
-  }) : super(ClothesDetailInitial()) {
-    on<LoadClothesDetail>((event, emit) async {
-      emit(ClothesDetailLoading(
+    required this.categoryRepository,
+  }) : super(const ClothesDetailState()) {
+    on<LoadClothesDetailEvent>((event, emit) async {
+      emit(ClothesDetailLoadingState(
         cloth: event.cloth,
         statuses: event.statuses,
+        categories: event.categories,
       ));
       try {
         final cloth =
-            event.itemId != null ? await clothesRepository.getClothById(event.itemId!) : null;
+            event.cloth != null ? await clothesRepository.getClothById(event.cloth!.id) : null;
         final statuses = await statusRepository.getStatuses();
-        emit(ClothesDetailLoaded(cloth: cloth, statuses: statuses));
+        final categories = await categoryRepository.getCategories();
+        emit(
+          ClothesDetailLoadedState(cloth: cloth, statuses: statuses, categories: categories),
+        );
       } catch (e) {
-        emit(ClothesDetailError(
+        emit(ClothesDetailErrorState(
           error: e,
-          message: e.toString(),
           cloth: event.cloth,
           statuses: event.statuses,
+          categories: event.categories,
         ));
       }
     });
 
-    on<UpdateClothesDetail>((event, emit) async {
-      emit(ClothesDetailLoading(
+    on<UpdateClothesDetailEvent>((event, emit) async {
+      emit(ClothesDetailLoadingState(
         cloth: event.cloth,
         statuses: event.statuses,
+        categories: event.categories,
       ));
       try {
         await clothesRepository.updateCloth(event.cloth);
-        emit(ClothesDetailUpdated(
-          cloth: event.cloth,
-          statuses: event.statuses!,
-        ));
-      } catch (e) {
-        emit(ClothesDetailError(
-          error: e,
-          message: e.toString(),
+        emit(ClothesDetailUpdatedState(
           cloth: event.cloth,
           statuses: event.statuses,
+          categories: event.categories,
+        ));
+      } catch (e) {
+        emit(ClothesDetailErrorState(
+          error: e,
+          cloth: event.cloth,
+          statuses: event.statuses,
+          categories: event.categories,
         ));
       }
     });
 
-    on<AddNewCloth>((event, emit) async {
-      emit(ClothesDetailLoading(
-        newCloth: event.cloth,
+    on<AddNewClothEvent>((event, emit) async {
+      emit(ClothesDetailLoadingState(
+        newCloth: event.newCloth,
         statuses: event.statuses,
+        categories: event.categories,
       ));
       try {
-        final id = await clothesRepository.addCloth(event.cloth);
+        print("new cloth ${event.newCloth}");
+        final id = await clothesRepository.addCloth(event.newCloth);
         final cloth = await clothesRepository.getClothById(id);
-        final statuses = await statusRepository.getStatuses();
-        emit(ClothesDetailAdded(
+        emit(ClothesDetailAddedState(
           cloth: cloth!,
-          statuses: statuses,
+          statuses: event.statuses,
+          categories: event.categories,
         ));
       } catch (e) {
-        emit(ClothesDetailError(
+        emit(ClothesDetailErrorState(
           error: e,
-          message: e.toString(),
+          newCloth: event.newCloth,
           statuses: event.statuses,
+          categories: event.categories,
         ));
       }
     });
 
-    on<DeleteClothesItem>((event, emit) async {
-      emit(ClothesDetailLoading(
+    on<DeleteClothesItemEvent>((event, emit) async {
+      emit(ClothesDetailLoadingState(
         cloth: event.cloth,
         statuses: event.statuses,
+        categories: event.categories,
       ));
       try {
         await clothesRepository.deleteCloth(event.cloth.id);
-        emit(ClothesDetailDeleted(
-          cloth: null,
-          statuses: event.statuses!,
+        emit(ClothesDetailDeletedState(
+          statuses: event.statuses,
+          categories: event.categories,
         ));
       } catch (e) {
-        emit(ClothesDetailError(
+        emit(ClothesDetailErrorState(
           error: e,
-          message: e.toString(),
           cloth: event.cloth,
           statuses: event.statuses,
+          categories: event.categories,
         ));
       }
     });
-
-    // on<AddStatus>((event, emit) async {
-    //   emit(const ClothesDetailLoading());
-    //   try {
-    //     await statusRepository.addStatus(event.status);
-    //     final statuses = await statusRepository.getStatuses();
-    //     emit(StatusesUpdated(statuses: statuses));
-    //   } catch (e) {
-    //     emit(ClothesDetailError(
-    //       error: e,
-    //       message: e.toString(),
-    //       cloth: event.cloth,
-    //       statuses: event.statuses,
-    //           //     ));
-    //   }
-    // });
-
-    //   }
-    // });
   }
 }

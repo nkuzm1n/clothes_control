@@ -11,8 +11,16 @@ class ClothesRepositoryImpl implements IClothesRepository {
   ClothesRepositoryImpl({required this.databaseHelper});
 
   @override
-  Future<List<ClothDTO>> getClothesList() async {
-    final result = await databaseHelper.getClothesList();
+  Future<List<ClothDTO>> getClothesList({
+    String? name,
+    String? orderBy,
+    String? direction,
+  }) async {
+    final result = await databaseHelper.getClothesList(
+      name: name,
+      orderBy: orderBy,
+      direction: direction,
+    );
     return result.map((item) => ClothDTO.fromMap(item)).toList();
   }
 
@@ -23,6 +31,11 @@ class ClothesRepositoryImpl implements IClothesRepository {
   }
 
   @override
+  Future<int> addCloth(NewClothDTO item) async {
+    return await databaseHelper.insertCloth(item.toMap());
+  }
+
+  @override
   Future<void> deleteCloth(int itemId) async {
     await databaseHelper.deleteCloth(itemId);
   }
@@ -30,11 +43,5 @@ class ClothesRepositoryImpl implements IClothesRepository {
   @override
   Future<int> updateCloth(ClothDTO item) async {
     return await databaseHelper.updateCloth(item.toMap());
-  }
-
-  @override
-  Future<int> addCloth(NewClothDTO item) async {
-    print("toinsert:::: $item");
-    return await databaseHelper.insertCloth(item.toMap());
   }
 }
