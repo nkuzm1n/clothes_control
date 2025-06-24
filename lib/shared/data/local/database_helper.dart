@@ -58,8 +58,8 @@ class DatabaseHelper {
         image_url TEXT,
         created_at TEXT,
         updated_at TEXT,
-        FOREIGN KEY (status_id) REFERENCES statuses(id),
-        FOREIGN KEY (category_id) REFERENCES categories(id)
+        FOREIGN KEY (status_id) REFERENCES statuses(id) ON DELETE SET NULL,
+        FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE SET NULL
       );
     ''');
 
@@ -107,6 +107,8 @@ class DatabaseHelper {
 
   Future<List<Map<String, dynamic>>> getClothesList({
     String? name,
+    int? statusId,
+    int? categoryId,
     String? orderBy,
     String? direction,
   }) async {
@@ -116,8 +118,16 @@ class DatabaseHelper {
     final db = await instance.database;
     return await db.query(
       'clothes',
-      where: "name LIKE ?",
-      whereArgs: ['%$name%'],
+      where: '''
+        name LIKE ? 
+        ${statusId != null ? " AND status_id = ?" : ""} 
+        ${categoryId != null ? " AND category_id = ?" : ""}
+      ''',
+      whereArgs: [
+        '%$name%',
+        statusId,
+        categoryId,
+      ].whereType<Object>().toList(),
       orderBy: "$orderBy $direction",
     );
   }

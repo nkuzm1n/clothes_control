@@ -1,8 +1,6 @@
-import 'package:clothes_control/features/clothes_list/data/dto/cloth_list_item_dto.dart';
 import 'package:clothes_control/shared/data/dto/cloth/cloth_dto.dart';
 import 'package:clothes_control/shared/data/dto/cloth/new_cloth_dto.dart';
 import 'package:clothes_control/shared/data/local/database_helper.dart';
-import 'package:clothes_control/shared/domain/entities/cloth.dart';
 import 'package:clothes_control/shared/domain/repositories/clothes_repository.dart';
 
 class ClothesRepositoryImpl implements IClothesRepository {
@@ -13,11 +11,15 @@ class ClothesRepositoryImpl implements IClothesRepository {
   @override
   Future<List<ClothDTO>> getClothesList({
     String? name,
+    int? statusId,
+    int? categoryId,
     String? orderBy,
     String? direction,
   }) async {
     final result = await databaseHelper.getClothesList(
       name: name,
+      statusId: statusId,
+      categoryId: categoryId,
       orderBy: orderBy,
       direction: direction,
     );

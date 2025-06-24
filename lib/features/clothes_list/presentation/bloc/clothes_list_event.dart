@@ -8,12 +8,12 @@ abstract class ClothesListEvent extends Equatable {
 }
 
 class LoadClothesListEvent extends ClothesListEvent {
-  final String? search;
+  final ClothesListFiltersDTO filters;
 
-  const LoadClothesListEvent({this.search});
+  const LoadClothesListEvent({this.filters = const ClothesListFiltersDTO()});
 
   @override
-  List<Object?> get props => [search];
+  List<Object?> get props => [filters];
 }
 
 class DeleteClothesItemEvent extends ClothesListEvent {

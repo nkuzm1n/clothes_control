@@ -1,4 +1,7 @@
 import 'package:clothes_control/features/clothes_list/data/dto/cloth_list_item_dto.dart';
+import 'package:clothes_control/features/clothes_list/presentation/dto/clothes_list_filters_dto.dart';
+import 'package:clothes_control/shared/data/dto/category/category_dto.dart';
+import 'package:clothes_control/shared/data/dto/status/status_dto.dart';
 import 'package:clothes_control/shared/domain/repositories/category_repository.dart';
 import 'package:clothes_control/shared/domain/repositories/status_repository.dart';
 import 'package:collection/collection.dart';
@@ -18,39 +21,40 @@ class ClothesListBloc extends Bloc<ClothesListEvent, ClothesListState> {
     required this.clothesRepository,
     required this.statusRepository,
     required this.categoryRepository,
-  }) : super(ClothesListInitial()) {
+  }) : super(const ClothesListState()) {
     on<LoadClothesListEvent>((event, emit) async {
-      emit(ClothesListLoading());
+      emit(state.copyWith(filters: event.filters, loading: true));
       try {
-        final clothes = await clothesRepository.getClothesList(name: event.search);
-        final statusIds = clothes
-            .where((cloth) => cloth.statusId != null)
-            .map((cloth) => cloth.statusId!)
-            .toList();
-        final statuses = await statusRepository.getStatuses(id: statusIds);
-        final categoryIds = clothes
-            .where((cloth) => cloth.categoryId != null)
-            .map((cloth) => cloth.categoryId!)
-            .toList();
-        final categories = await categoryRepository.getCategories(id: categoryIds);
+        final statuses = await statusRepository.getStatuses();
+        final categories = await categoryRepository.getCategories();
+        final clothes = await clothesRepository.getClothesList(
+          name: event.filters.search,
+          statusId: event.filters.statusId,
+          categoryId: event.filters.categoryId,
+        );
         final list = clothes.map((cloth) {
           final status = statuses.firstWhereOrNull((s) => s.id == cloth.statusId);
           final category = categories.firstWhereOrNull((cat) => cat.id == cloth.categoryId);
           return ClothListItemDTO(cloth: cloth, status: status, category: category);
         });
-        emit(ClothesListLoaded(clothesList: list.toList(), searchString: event.search));
+        emit(state.copyWith(
+          clothes: list.toList(),
+          statuses: statuses,
+          categories: categories,
+          loading: false,
+        ));
       } catch (e) {
-        emit(ClothesListError(message: e.toString()));
+        emit(state.copyWith(error: e.toString(), loading: false));
       }
     });
 
     on<DeleteClothesItemEvent>((event, emit) async {
+      emit(state.copyWith(loading: true));
       try {
         await clothesRepository.deleteCloth(event.itemId);
-        emit(ClothesItemDeleted(itemId: event.itemId));
         add(const LoadClothesListEvent());
       } catch (e) {
-        emit(ClothesListError(message: e.toString()));
+        emit(state.copyWith(error: e.toString(), loading: false));
       }
     });
   }
