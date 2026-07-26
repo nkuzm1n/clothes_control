@@ -1,13 +1,13 @@
 import 'package:clothes_control/features/cloth/data/dto/cloth_list_item_dto.dart';
 import 'package:clothes_control/features/cloth/presentation/dto/clothes_list_filters_dto.dart';
-import 'package:clothes_control/core/data/dto/category/category_dto.dart';
-import 'package:clothes_control/core/data/dto/status/status_dto.dart';
-import 'package:clothes_control/core/domain/repositories/category_repository.dart';
-import 'package:clothes_control/core/domain/repositories/status_repository.dart';
+import 'package:clothes_control/data/dto/category/category_dto.dart';
+import 'package:clothes_control/data/dto/status/status_dto.dart';
+import 'package:clothes_control/domain/repositories/category_repository.dart';
+import 'package:clothes_control/domain/repositories/status_repository.dart';
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:clothes_control/core/domain/repositories/clothes_repository.dart';
+import 'package:clothes_control/domain/repositories/clothes_repository.dart';
 
 part 'clothes_list_event.dart';
 part 'clothes_list_state.dart';

@@ -1,5 +1,5 @@
-import 'package:clothes_control/core/data/dto/category/category_dto.dart';
-import 'package:clothes_control/core/data/dto/category/new_category_dto.dart';
+import 'package:clothes_control/data/dto/category/category_dto.dart';
+import 'package:clothes_control/data/dto/category/new_category_dto.dart';
 
 abstract class ICategoryRepository {
   Future<List<CategoryDTO>> getCategories({List<int>? id});

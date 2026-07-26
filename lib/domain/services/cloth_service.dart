@@ -1,5 +1,5 @@
-import 'package:clothes_control/core/domain/entities/cloth.dart';
-import 'package:clothes_control/core/domain/entities/status.dart';
+import 'package:clothes_control/domain/entities/cloth.dart';
+import 'package:clothes_control/domain/entities/status.dart';
 import 'package:collection/collection.dart';
 
 class ClothService {

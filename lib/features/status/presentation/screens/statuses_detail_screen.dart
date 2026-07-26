@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:clothes_control/core/data/dto/status/new_status_dto.dart';
-import 'package:clothes_control/core/data/dto/status/status_dto.dart';
-import 'package:clothes_control/shared/navigation/navigation_bar.dart';
-import 'package:clothes_control/shared/ui/colorpicker/ui_colorpicker.dart';
+import 'package:clothes_control/data/dto/status/new_status_dto.dart';
+import 'package:clothes_control/data/dto/status/status_dto.dart';
+import 'package:clothes_control/shared/widgets/navigation/navigation_bar.dart';
+import 'package:clothes_control/shared/widgets/ui/colorpicker/ui_colorpicker.dart';
 import 'package:clothes_control/core/utils/extensions/hex_color.dart';
 import 'package:clothes_control/core/utils/navigation/navigation.dart';
-import 'package:clothes_control/core/data/bloc/status/status_bloc.dart';
-import 'package:clothes_control/core/data/local/database_helper.dart';
-import 'package:clothes_control/core/data/repositories/status_repository.dart';
+import 'package:clothes_control/data/bloc/status/status_bloc.dart';
+import 'package:clothes_control/data/local/database_helper.dart';
+import 'package:clothes_control/data/repositories/status_repository.dart';
 
 class StatusesDetailScreen extends StatelessWidget {
   final StatusDTO? status;

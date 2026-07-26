@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:clothes_control/core/domain/repositories/image_repository.dart';
+import 'package:clothes_control/domain/repositories/image_repository.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 

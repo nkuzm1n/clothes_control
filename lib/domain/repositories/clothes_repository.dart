@@ -1,5 +1,5 @@
-import 'package:clothes_control/core/data/dto/cloth/cloth_dto.dart';
-import 'package:clothes_control/core/data/dto/cloth/new_cloth_dto.dart';
+import 'package:clothes_control/data/dto/cloth/cloth_dto.dart';
+import 'package:clothes_control/data/dto/cloth/new_cloth_dto.dart';
 
 abstract class IClothesRepository {
   Future<List<ClothDTO>> getClothesList({

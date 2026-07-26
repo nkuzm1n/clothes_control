@@ -1,7 +1,7 @@
-import 'package:clothes_control/core/data/dto/status/new_status_dto.dart';
-import 'package:clothes_control/core/data/dto/status/status_dto.dart';
-import 'package:clothes_control/core/data/local/database_helper.dart';
-import 'package:clothes_control/core/domain/repositories/status_repository.dart';
+import 'package:clothes_control/data/dto/status/new_status_dto.dart';
+import 'package:clothes_control/data/dto/status/status_dto.dart';
+import 'package:clothes_control/data/local/database_helper.dart';
+import 'package:clothes_control/domain/repositories/status_repository.dart';
 
 class StatusRepositoryImpl implements IStatusRepository {
   final DatabaseHelper databaseHelper;

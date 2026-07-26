@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:clothes_control/core/data/dto/category/new_category_dto.dart';
-import 'package:clothes_control/core/data/dto/category/category_dto.dart';
-import 'package:clothes_control/shared/navigation/navigation_bar.dart';
-import 'package:clothes_control/shared/ui/colorpicker/ui_colorpicker.dart';
-import 'package:clothes_control/core/utils/extensions/hex_color.dart';
+import 'package:clothes_control/data/dto/category/new_category_dto.dart';
+import 'package:clothes_control/data/dto/category/category_dto.dart';
+import 'package:clothes_control/shared/widgets/navigation/navigation_bar.dart';
 import 'package:clothes_control/core/utils/navigation/navigation.dart';
-import 'package:clothes_control/core/data/bloc/category/category_bloc.dart';
-import 'package:clothes_control/core/data/local/database_helper.dart';
-import 'package:clothes_control/core/data/repositories/category_repository.dart';
+import 'package:clothes_control/data/bloc/category/category_bloc.dart';
+import 'package:clothes_control/data/local/database_helper.dart';
+import 'package:clothes_control/data/repositories/category_repository.dart';
 
 class CategoriesDetailScreen extends StatelessWidget {
   final CategoryDTO? category;

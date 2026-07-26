@@ -1,14 +1,13 @@
-import 'package:clothes_control/core/data/dto/category/category_dto.dart';
-import 'package:clothes_control/core/data/dto/cloth/cloth_dto.dart';
-import 'package:clothes_control/core/data/dto/status/status_dto.dart';
-import 'package:clothes_control/shared/ui/button/ui_button.dart';
-import 'package:clothes_control/shared/ui/image/ui_image.dart';
-import 'package:clothes_control/shared/ui/snackbar/ui_snackbar.dart';
+import 'package:clothes_control/data/dto/category/category_dto.dart';
+import 'package:clothes_control/data/dto/cloth/cloth_dto.dart';
+import 'package:clothes_control/data/dto/status/status_dto.dart';
+import 'package:clothes_control/shared/widgets/ui/button/ui_button.dart';
+import 'package:clothes_control/shared/widgets/ui/image/ui_image.dart';
+import 'package:clothes_control/shared/widgets/ui/snackbar/ui_snackbar.dart';
 import 'package:clothes_control/core/utils/extensions/hex_color.dart';
 import 'package:clothes_control/core/utils/helpers/image_helper.dart';
 import 'package:clothes_control/core/utils/helpers/image_picker_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:vibration/vibration.dart';
 
 class ClothesDetailForm extends StatefulWidget {
   final ClothDTO? cloth;

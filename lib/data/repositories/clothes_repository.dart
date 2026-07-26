@@ -1,7 +1,7 @@
-import 'package:clothes_control/core/data/dto/cloth/cloth_dto.dart';
-import 'package:clothes_control/core/data/dto/cloth/new_cloth_dto.dart';
-import 'package:clothes_control/core/data/local/database_helper.dart';
-import 'package:clothes_control/core/domain/repositories/clothes_repository.dart';
+import 'package:clothes_control/data/dto/cloth/cloth_dto.dart';
+import 'package:clothes_control/data/dto/cloth/new_cloth_dto.dart';
+import 'package:clothes_control/data/local/database_helper.dart';
+import 'package:clothes_control/domain/repositories/clothes_repository.dart';
 
 class ClothesRepositoryImpl implements IClothesRepository {
   final DatabaseHelper databaseHelper;
