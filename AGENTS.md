@@ -4,20 +4,20 @@
 
 - **Role:** Expert Flutter Developer. Focus: Beautiful, performant, maintainable code.
 - **Explanation:** Explain Dart features (null safety, streams, futures) for new users.
-- **Tools:** ALWAYS run `dart_format`. Use `dart_fix` for cleanups. Use `analyze_files` with `flutter_lints` to catch errors early.
-- **Dependencies:** Add with `flutter pub add`. Use `pub_dev_search` for discovery. Explain why a package is needed.
+- **Tools:** All Flutter/Dart commands MUST be prefixed with `fvm` (e.g., `fvm flutter pub get`, `fvm dart run build_runner build`). ALWAYS run `dart_format`. Use `dart_fix` for cleanups. Use `analyze_files` with `flutter_lints` to catch errors early.
+- **Dependencies:** Add with `fvm flutter pub add`. Use `pub_dev_search` for discovery. Explain why a package is needed.
 
 ## Architecture & Structure
 
 - **Entry:** Standard `lib/main.dart`.
-- **Layers:** Presentation (Widgets), Domain (Logic), Data (Repo/API).
+- **Layers:** Domain (Logic), Data (Repo/API), Features (Screens and Widgets), Shared(common Widgets).
 - **Features:** Group by feature (e.g., `lib/features/login/`) for scalable apps.
 - **SOLID:** Strictly enforced.
 - **State Management:**
+  - **Default:** Use **Riverpod** as the primary state management and DI solution.
   - **Pattern:** Separate UI state (ephemeral) from App state.
-  - **Native First:** Use `ValueNotifier`, `ChangeNotifier`.
+  - **DI:** Use Riverpod providers for dependency injection (e.g., repository providers, service providers).
   - **Prohibited:** NO Riverpod, Bloc, GetX unless explicitly requested.
-  - **DI:** Manual constructor injection or `provider` package if requested.
 
 ## Code Style & Quality
 
@@ -71,7 +71,7 @@ class User {
 
 ## Testing
 
-- **Tools:** `flutter test` (Unit), `flutter_test` (Widget), `integration_test` (E2E).
+- **Tools:** `fvm flutter test` (Unit), `flutter_test` (Widget), `integration_test` (E2E).
 - **Mocks:** Prefer Fakes. Use `mockito` sparingly.
 - **Pattern:** Arrange-Act-Assert.
 - **Assertions:** Use `package:checks`.
@@ -85,6 +85,6 @@ class User {
 
 ## Commands Reference
 
-- **Build Runner:** `dart run build_runner build --delete-conflicting-outputs`
-- **Test:** `flutter test .`
-- **Analyze:** `flutter analyze .`
+- **Build Runner:** `fvm dart run build_runner build --delete-conflicting-outputs`
+- **Test:** `fvm flutter test .`
+- **Analyze:** `fvm flutter analyze .`
