@@ -1,6 +1,6 @@
 import 'package:clothes_control/features/status/presentation/screens/statuses_detail_screen.dart';
 import 'package:clothes_control/data/dto/status/status_dto.dart';
-import 'package:clothes_control/shared/widgets/ui/snackbar/ui_snackbar.dart';
+import 'package:clothes_control/features/_shared/widgets/ui/snackbar/ui_snackbar.dart';
 import 'package:clothes_control/core/utils/extensions/hex_color.dart';
 import 'package:clothes_control/core/utils/navigation/navigation.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clothes_control/data/bloc/status/status_bloc.dart';
 import 'package:clothes_control/data/local/database_helper.dart';
 import 'package:clothes_control/data/repositories/status_repository.dart';
-import 'package:clothes_control/shared/widgets/navigation/navigation_bar.dart';
+import 'package:clothes_control/features/_shared/widgets/navigation/navigation_bar.dart';
 
 class StatusesListScreen extends StatelessWidget {
   const StatusesListScreen({super.key});

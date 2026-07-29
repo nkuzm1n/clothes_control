@@ -9,7 +9,7 @@ class ClothesRepositoryImpl implements IClothesRepository {
   ClothesRepositoryImpl({required this.databaseHelper});
 
   @override
-  Future<List<ClothDTO>> getClothesList({
+  Future<List<ClothDTO>> getManyBy({
     String? name,
     int? statusId,
     int? categoryId,
@@ -27,23 +27,23 @@ class ClothesRepositoryImpl implements IClothesRepository {
   }
 
   @override
-  Future<ClothDTO?> getClothById(int itemId) async {
+  Future<ClothDTO?> getOneById(int itemId) async {
     final result = await databaseHelper.getCloth(itemId);
     return result.isNotEmpty ? ClothDTO.fromMap(result) : null;
   }
 
   @override
-  Future<int> addCloth(NewClothDTO item) async {
+  Future<int> createOne(NewClothDTO item) async {
     return await databaseHelper.insertCloth(item.toMap());
   }
 
   @override
-  Future<void> deleteCloth(int itemId) async {
+  Future<void> deleteOne(int itemId) async {
     await databaseHelper.deleteCloth(itemId);
   }
 
   @override
-  Future<int> updateCloth(ClothDTO item) async {
+  Future<int> updateOne(ClothDTO item) async {
     return await databaseHelper.updateCloth(item.toMap());
   }
 }

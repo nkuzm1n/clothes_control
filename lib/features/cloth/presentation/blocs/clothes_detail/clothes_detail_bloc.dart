@@ -32,9 +32,9 @@ class ClothesDetailBloc extends Bloc<ClothesDetailEvent, ClothesDetailState> {
       ));
       try {
         final cloth =
-            event.cloth != null ? await clothesRepository.getClothById(event.cloth!.id) : null;
-        final statuses = await statusRepository.getStatuses();
-        final categories = await categoryRepository.getCategories();
+            event.cloth != null ? await clothesRepository.getOneById(event.cloth!.id) : null;
+        final statuses = await statusRepository.getManyBy();
+        final categories = await categoryRepository.getManyBy();
         emit(
           ClothesDetailLoadedState(cloth: cloth, statuses: statuses, categories: categories),
         );
@@ -55,7 +55,7 @@ class ClothesDetailBloc extends Bloc<ClothesDetailEvent, ClothesDetailState> {
         categories: event.categories,
       ));
       try {
-        await clothesRepository.updateCloth(event.cloth);
+        await clothesRepository.updateOne(event.cloth);
         emit(ClothesDetailUpdatedState(
           cloth: event.cloth,
           statuses: event.statuses,
@@ -79,8 +79,8 @@ class ClothesDetailBloc extends Bloc<ClothesDetailEvent, ClothesDetailState> {
       ));
       try {
         print("new cloth ${event.newCloth}");
-        final id = await clothesRepository.addCloth(event.newCloth);
-        final cloth = await clothesRepository.getClothById(id);
+        final id = await clothesRepository.createOne(event.newCloth);
+        final cloth = await clothesRepository.getOneById(id);
         emit(ClothesDetailAddedState(
           cloth: cloth!,
           statuses: event.statuses,
@@ -103,7 +103,7 @@ class ClothesDetailBloc extends Bloc<ClothesDetailEvent, ClothesDetailState> {
         categories: event.categories,
       ));
       try {
-        await clothesRepository.deleteCloth(event.cloth.id);
+        await clothesRepository.deleteOne(event.cloth.id);
         emit(ClothesDetailDeletedState(
           statuses: event.statuses,
           categories: event.categories,

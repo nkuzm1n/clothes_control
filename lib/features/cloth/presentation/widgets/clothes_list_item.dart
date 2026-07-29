@@ -1,7 +1,7 @@
 import 'package:clothes_control/data/dto/category/category_dto.dart';
 import 'package:clothes_control/data/dto/cloth/cloth_dto.dart';
 import 'package:clothes_control/data/dto/status/status_dto.dart';
-import 'package:clothes_control/shared/widgets/ui/image/ui_image.dart';
+import 'package:clothes_control/features/_shared/widgets/ui/image/ui_image.dart';
 import 'package:clothes_control/core/utils/extensions/hex_color.dart';
 import 'package:clothes_control/core/utils/helpers/image_helper.dart';
 import 'package:flutter/material.dart';

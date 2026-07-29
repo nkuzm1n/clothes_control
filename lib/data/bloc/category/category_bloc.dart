@@ -16,7 +16,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     on<LoadCategoryListEvent>((event, emit) async {
       emit(LoadingCategoryListState(list: state.list));
       try {
-        final list = await _categoryRepository.getCategories();
+        final list = await _categoryRepository.getManyBy();
         emit(LoadedCategoryListState(list: list));
       } catch (e) {
         emit(CategoryErrorState(error: e));
@@ -26,7 +26,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     on<DeleteCategoryFromListEvent>((event, emit) async {
       emit(LoadingCategoryListState(list: state.list));
       try {
-        await _categoryRepository.deleteCategory(event.category);
+        await _categoryRepository.deleteOne(event.category);
         add(LoadCategoryListEvent());
       } catch (e) {
         emit(CategoryErrorState(error: e));
@@ -36,7 +36,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     on<LoadCategoryEvent>((event, emit) async {
       emit(LoadingCategoryState(category: event.category));
       try {
-        final category = await _categoryRepository.getCategoryById(event.category.id);
+        final category = await _categoryRepository.getOneById(event.category.id);
         emit(LoadedCategoryState(category: category));
       } catch (e) {
         emit(CategoryErrorState(error: e));
@@ -46,7 +46,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     on<UpdateCategoryEvent>((event, emit) async {
       emit(LoadingCategoryState(category: event.category));
       try {
-        await _categoryRepository.updateCategory(event.category);
+        await _categoryRepository.updateOne(event.category);
         emit(UpdatedCategoryState(category: event.category));
       } catch (e) {
         emit(CategoryErrorState(error: e));
@@ -56,7 +56,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     on<AddNewCategoryEvent>((event, emit) async {
       emit(LoadingCategoryState(newCategory: event.newCategory));
       try {
-        final category = await _categoryRepository.addCategory(event.newCategory);
+        final category = await _categoryRepository.createOne(event.newCategory);
         emit(CreatedCategoryState(category: category));
       } catch (e) {
         emit(CategoryErrorState(error: e));

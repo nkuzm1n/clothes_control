@@ -5,7 +5,7 @@ import 'package:path/path.dart';
 
 class ImageRepositoryImpl implements IImageRepository {
   @override
-  Future<File> saveImage(File image) async {
+  Future<File> save(File image) async {
     final directory = await getApplicationDocumentsDirectory();
     final fileName = basename(image.path);
     final savedImage = await image.copy('${directory.path}/$fileName');
@@ -13,7 +13,7 @@ class ImageRepositoryImpl implements IImageRepository {
   }
 
   @override
-  Future<File?> getImage(String path) async {
+  Future<File?> getByPath(String path) async {
     final file = File(path);
     if (await file.exists()) {
       return file;

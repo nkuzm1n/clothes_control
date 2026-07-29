@@ -16,7 +16,7 @@ class StatusBloc extends Bloc<StatusEvent, StatusState> {
     on<LoadStatusListEvent>((event, emit) async {
       emit(LoadingStatusListState(list: state.list));
       try {
-        final list = await _statusRepository.getStatuses();
+        final list = await _statusRepository.getManyBy();
         emit(LoadedStatusListState(list: list));
       } catch (e) {
         emit(StatusErrorState(error: e));
@@ -26,7 +26,7 @@ class StatusBloc extends Bloc<StatusEvent, StatusState> {
     on<DeleteStatusFromListEvent>((event, emit) async {
       emit(LoadingStatusListState(list: state.list));
       try {
-        await _statusRepository.deleteStatus(event.status);
+        await _statusRepository.deleteOne(event.status);
         add(LoadStatusListEvent());
       } catch (e) {
         emit(StatusErrorState(error: e));
@@ -36,7 +36,7 @@ class StatusBloc extends Bloc<StatusEvent, StatusState> {
     on<LoadStatusEvent>((event, emit) async {
       emit(LoadingStatusState(status: event.status));
       try {
-        final status = await _statusRepository.getStatusById(event.status.id);
+        final status = await _statusRepository.getOneById(event.status.id);
         emit(LoadedStatusState(status: status));
       } catch (e) {
         emit(StatusErrorState(error: e));
@@ -46,7 +46,7 @@ class StatusBloc extends Bloc<StatusEvent, StatusState> {
     on<UpdateStatusEvent>((event, emit) async {
       emit(LoadingStatusState(status: event.status));
       try {
-        await _statusRepository.updateStatus(event.status);
+        await _statusRepository.updateOne(event.status);
         emit(UpdatedStatusState(status: event.status));
       } catch (e) {
         emit(StatusErrorState(error: e));
@@ -56,7 +56,7 @@ class StatusBloc extends Bloc<StatusEvent, StatusState> {
     on<AddNewStatusEvent>((event, emit) async {
       emit(LoadingStatusState(newStatus: event.newStatus));
       try {
-        final status = await _statusRepository.addStatus(event.newStatus);
+        final status = await _statusRepository.createOne(event.newStatus);
         emit(CreatedStatusState(status: status));
       } catch (e) {
         emit(StatusErrorState(error: e));

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clothes_control/data/dto/cloth/cloth_dto.dart';
 import 'package:clothes_control/data/dto/cloth/new_cloth_dto.dart';
 import 'package:clothes_control/data/repositories/category_repository.dart';
-import 'package:clothes_control/shared/widgets/ui/snackbar/ui_snackbar.dart';
+import 'package:clothes_control/features/_shared/widgets/ui/snackbar/ui_snackbar.dart';
 import 'package:clothes_control/core/utils/navigation/navigation.dart';
 import 'package:clothes_control/features/cloth/presentation/widgets/clothes_detail_form.dart';
 import 'package:clothes_control/data/local/database_helper.dart';

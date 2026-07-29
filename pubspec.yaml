@@ -1,5 +1,5 @@
 name: clothes_control
-description: "A new Flutter project."
+description: 'A new Flutter project.'
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -31,11 +31,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.8
-  get_it: ^8.0.3
   flutter_bloc: ^9.1.0
   equatable: ^2.0.7
   image_picker: ^1.1.2
@@ -46,6 +41,11 @@ dependencies:
   vibration: ^3.1.3
   collection: ^1.19.1
   flutter_colorpicker: ^1.1.0
+  flutter_riverpod: ^3.3.2
+  riverpod_annotation: ^4.0.3
+  freezed_annotation: ^3.1.0
+  json_annotation: ^4.9.0
+  go_router: ^17.0.0
 
 dev_dependencies:
   flutter_test:
@@ -57,13 +57,15 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
+  build_runner: ^2.5.4
+  freezed: ^3.1.0
+  json_serializable: ^6.9.5
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

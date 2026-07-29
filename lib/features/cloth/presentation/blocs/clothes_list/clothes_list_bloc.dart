@@ -25,9 +25,9 @@ class ClothesListBloc extends Bloc<ClothesListEvent, ClothesListState> {
     on<LoadClothesListEvent>((event, emit) async {
       emit(state.copyWith(filters: event.filters, loading: true));
       try {
-        final statuses = await statusRepository.getStatuses();
-        final categories = await categoryRepository.getCategories();
-        final clothes = await clothesRepository.getClothesList(
+        final statuses = await statusRepository.getManyBy();
+        final categories = await categoryRepository.getManyBy();
+        final clothes = await clothesRepository.getManyBy(
           name: event.filters.search,
           statusId: event.filters.statusId,
           categoryId: event.filters.categoryId,
@@ -51,7 +51,7 @@ class ClothesListBloc extends Bloc<ClothesListEvent, ClothesListState> {
     on<DeleteClothesItemEvent>((event, emit) async {
       emit(state.copyWith(loading: true));
       try {
-        await clothesRepository.deleteCloth(event.itemId);
+        await clothesRepository.deleteOne(event.itemId);
         add(const LoadClothesListEvent());
       } catch (e) {
         emit(state.copyWith(error: e.toString(), loading: false));
