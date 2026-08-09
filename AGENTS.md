@@ -49,14 +49,23 @@ MaterialApp.router(routerConfig: _router);
 
 ## Data (JSON)
 
-Use `json_serializable` with `fieldRename: FieldRename.snake`.
+Use `freezed` with `json_serializable` when needed
 
 ```dart
-@JsonSerializable(fieldRename: FieldRename.snake)
-class User {
-  final String name;
-  User({required this.name});
-  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'person.freezed.dart';
+part 'person.g.dart';
+
+@freezed
+abstract class Person with _$Person {
+  const factory Person({
+    required String firstName,
+    required String lastName,
+    required int age,
+  }) = _Person;
+
+  factory Person.fromJson(Map<String, Object?> json) => _$PersonFromJson(json);
 }
 ```
 
@@ -85,6 +94,6 @@ class User {
 
 ## Commands Reference
 
-- **Build Runner:** `fvm dart run build_runner build --delete-conflicting-outputs`
+- **Build Runner:** `fvm dart run build_runner build -d`
 - **Test:** `fvm flutter test .`
 - **Analyze:** `fvm flutter analyze .`
