@@ -1,36 +1,16 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Category extends Equatable {
-  final int id;
-  final String name;
-  final String? createdAt;
-  final String? updatedAt;
+part 'category.freezed.dart';
+part 'category.g.dart';
 
-  const Category({
-    required this.id,
-    required this.name,
-    this.createdAt,
-    this.updatedAt,
-  });
+@freezed
+abstract class Category with _$Category {
+  const factory Category({
+    required int id,
+    required String name,
+    @JsonKey(name: 'created_at') String? createdAt,
+    @JsonKey(name: 'updated_at') String? updatedAt,
+  }) = _Category;
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'name': name,
-      'updated_at': updatedAt,
-      'created_at': createdAt,
-    };
-  }
-
-  factory Category.fromMap(Map<String, dynamic> map) {
-    return Category(
-      id: map['id'],
-      name: map['name'],
-      createdAt: map['created_at'],
-      updatedAt: map['updated_at'],
-    );
-  }
-
-  @override
-  List<Object?> get props => [id, name, createdAt, updatedAt];
+  factory Category.fromJson(Map<String, Object?> json) => _$CategoryFromJson(json);
 }

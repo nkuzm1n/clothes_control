@@ -1,81 +1,20 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Cloth extends Equatable {
-  final int id;
-  final String name;
-  final String? description;
-  final int? statusId;
-  final int? categoryId;
-  final String? imageUrl;
-  final String? createdAt;
-  final String? updatedAt;
+part 'cloth.freezed.dart';
+part 'cloth.g.dart';
 
-  const Cloth({
-    required this.id,
-    required this.name,
-    this.description,
-    this.statusId,
-    this.categoryId,
-    this.imageUrl,
-    this.createdAt,
-    this.updatedAt,
-  });
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'name': name,
-      'description': description,
-      'status_id': statusId,
-      'category_id': categoryId,
-      'image_url': imageUrl,
-      'created_at': createdAt,
-      'updated_at': updatedAt,
-    };
-  }
-
-  factory Cloth.fromMap(Map<String, dynamic> map) {
-    return Cloth(
-      id: map['id'],
-      name: map['name'],
-      description: map['description'],
-      statusId: map['status_id'],
-      categoryId: map['category_id'],
-      imageUrl: map['image_url'],
-      createdAt: map['created_at'],
-      updatedAt: map['updated_at'],
-    );
-  }
-
-  Cloth copyWith({
-    int? id,
-    String? name,
+@freezed
+abstract class Cloth with _$Cloth {
+  const factory Cloth({
+    required int id,
+    required String name,
     String? description,
-    int? statusId,
-    int? categoryId,
-    String? imageUrl,
-  }) {
-    return Cloth(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      description: description ?? this.description,
-      statusId: statusId ?? this.statusId,
-      categoryId: categoryId ?? this.categoryId,
-      imageUrl: imageUrl ?? imageUrl,
-      createdAt: createdAt ?? createdAt,
-      updatedAt: updatedAt ?? updatedAt,
-    );
-  }
+    @JsonKey(name: 'status_id') int? statusId,
+    @JsonKey(name: 'category_id') int? categoryId,
+    @JsonKey(name: 'image_url') String? imageUrl,
+    @JsonKey(name: 'created_at') String? createdAt,
+    @JsonKey(name: 'updated_at') String? updatedAt,
+  }) = _Cloth;
 
-  @override
-  List<Object?> get props => [
-        id,
-        name,
-        description,
-        statusId,
-        categoryId,
-        imageUrl,
-        createdAt,
-        updatedAt,
-      ];
+  factory Cloth.fromJson(Map<String, Object?> json) => _$ClothFromJson(json);
 }

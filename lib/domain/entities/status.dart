@@ -1,46 +1,17 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Status extends Equatable {
-  final int id;
-  final String name;
-  final String color;
-  final String? createdAt;
-  final String? updatedAt;
+part 'status.freezed.dart';
+part 'status.g.dart';
 
-  const Status({
-    required this.id,
-    required this.name,
-    required this.color,
-    this.createdAt,
-    this.updatedAt,
-  });
+@freezed
+abstract class Status with _$Status {
+  const factory Status({
+    required int id,
+    required String name,
+    required String color,
+    @JsonKey(name: 'created_at') String? createdAt,
+    @JsonKey(name: 'updated_at') String? updatedAt,
+  }) = _Status;
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'name': name,
-      'color': color,
-      'updated_at': updatedAt,
-      'created_at': createdAt,
-    };
-  }
-
-  factory Status.fromMap(Map<String, dynamic> map) {
-    return Status(
-      id: map['id'],
-      name: map['name'],
-      color: map['color'],
-      createdAt: map['created_at'],
-      updatedAt: map['updated_at'],
-    );
-  }
-
-  @override
-  List<Object?> get props => [
-        id,
-        name,
-        color,
-        createdAt,
-        updatedAt,
-      ];
+  factory Status.fromJson(Map<String, Object?> json) => _$StatusFromJson(json);
 }
