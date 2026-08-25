@@ -1,9 +1,9 @@
 part of 'status_bloc.dart';
 
 class StatusState extends Equatable {
-  final List<StatusDTO>? list;
-  final StatusDTO? status;
-  final NewStatusDTO? newStatus;
+  final List<Status>? list;
+  final Status? status;
+  final NewStatusDto? newStatus;
   final dynamic error;
 
   const StatusState({
@@ -27,7 +27,7 @@ class LoadingStatusListState extends StatusState {
 
 class LoadedStatusListState extends StatusState {
   @override
-  final List<StatusDTO> list;
+  final List<Status> list;
 
   const LoadedStatusListState({required this.list, super.error});
 }
@@ -47,14 +47,14 @@ class LoadedStatusState extends StatusState {
 
 class CreatedStatusState extends StatusState {
   @override
-  final StatusDTO status;
+  final Status status;
 
   const CreatedStatusState({required this.status});
 }
 
 class UpdatedStatusState extends StatusState {
   @override
-  final StatusDTO status;
+  final Status status;
 
   const UpdatedStatusState({required this.status});
 }

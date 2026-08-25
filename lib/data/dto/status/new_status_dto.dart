@@ -1,28 +1,14 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class NewStatusDTO extends Equatable {
-  final String name;
-  final String color;
+part 'new_status_dto.freezed.dart';
+part 'new_status_dto.g.dart';
 
-  const NewStatusDTO({
-    required this.name,
-    required this.color,
-  });
+@freezed
+abstract class NewStatusDto with _$NewStatusDto {
+  const factory NewStatusDto({
+    required String name,
+    required String color,
+  }) = _NewStatusDto;
 
-  factory NewStatusDTO.fromMap(Map<String, dynamic> map) {
-    return NewStatusDTO(
-      name: map['name'],
-      color: map['color'],
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'color': color,
-    };
-  }
-
-  @override
-  List<Object?> get props => [name, color];
+  factory NewStatusDto.fromJson(Map<String, Object?> json) => _$NewStatusDtoFromJson(json);
 }

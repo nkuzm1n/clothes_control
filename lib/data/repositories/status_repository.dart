@@ -1,6 +1,6 @@
 import 'package:clothes_control/data/dto/status/new_status_dto.dart';
-import 'package:clothes_control/data/dto/status/status_dto.dart';
 import 'package:clothes_control/data/local/database_helper.dart';
+import 'package:clothes_control/domain/entities/status.dart';
 import 'package:clothes_control/domain/repositories/status_repository.dart';
 
 class StatusRepositoryImpl implements IStatusRepository {
@@ -9,31 +9,31 @@ class StatusRepositoryImpl implements IStatusRepository {
   StatusRepositoryImpl({required this.databaseHelper});
 
   @override
-  Future<List<StatusDTO>> getManyBy({List<int>? id}) async {
+  Future<List<Status>> getManyBy({List<int>? id}) async {
     final result = await databaseHelper.getStatuses(id: id);
-    return result.map((item) => StatusDTO.fromMap(item)).toList();
+    return result.map((item) => Status.fromJson(item)).toList();
   }
 
   @override
-  Future<StatusDTO?> getOneById(int id) async {
+  Future<Status?> getOneById(int id) async {
     final result = await databaseHelper.getStatus(id);
-    return result.isNotEmpty ? StatusDTO.fromMap(result) : null;
+    return result.isNotEmpty ? Status.fromJson(result) : null;
   }
 
   @override
-  Future<StatusDTO> createOne(NewStatusDTO status) async {
-    final id = await databaseHelper.insertStatus(status.toMap());
+  Future<Status> createOne(NewStatusDto status) async {
+    final id = await databaseHelper.insertStatus(status.toJson());
     final result = await getOneById(id);
     return result!;
   }
 
   @override
-  Future<int> updateOne(StatusDTO status) async {
-    return await databaseHelper.updateStatus(status.toMap());
+  Future<int> updateOne(Status status) async {
+    return await databaseHelper.updateStatus(status.toJson());
   }
 
   @override
-  Future<int> deleteOne(StatusDTO status) async {
-    return await databaseHelper.deleteStatus(status.toMap());
+  Future<int> deleteOne(Status status) async {
+    return await databaseHelper.deleteStatus(status.toJson());
   }
 }

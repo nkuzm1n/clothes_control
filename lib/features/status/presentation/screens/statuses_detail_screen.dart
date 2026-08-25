@@ -1,17 +1,17 @@
+import 'package:clothes_control/domain/entities/status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clothes_control/data/dto/status/new_status_dto.dart';
-import 'package:clothes_control/data/dto/status/status_dto.dart';
 import 'package:clothes_control/features/_shared/widgets/navigation/navigation_bar.dart';
 import 'package:clothes_control/features/_shared/widgets/ui/colorpicker/ui_colorpicker.dart';
 import 'package:clothes_control/core/utils/extensions/hex_color.dart';
 import 'package:clothes_control/core/utils/navigation/navigation.dart';
-import 'package:clothes_control/data/bloc/status/status_bloc.dart';
+import 'package:clothes_control/features/_shared/bloc/status/status_bloc.dart';
 import 'package:clothes_control/data/local/database_helper.dart';
 import 'package:clothes_control/data/repositories/status_repository.dart';
 
 class StatusesDetailScreen extends StatelessWidget {
-  final StatusDTO? status;
+  final Status? status;
 
   const StatusesDetailScreen({super.key, this.status});
 
@@ -35,7 +35,7 @@ class StatusesDetailScreen extends StatelessWidget {
 }
 
 class StatusesDetailView extends StatelessWidget {
-  final StatusDTO? status;
+  final Status? status;
 
   const StatusesDetailView({super.key, this.status});
 
@@ -115,7 +115,7 @@ class StatusesDetailView extends StatelessWidget {
                         if (state.status == null) {
                           context.read<StatusBloc>().add(
                                 AddNewStatusEvent(
-                                  newStatus: NewStatusDTO(
+                                  newStatus: NewStatusDto(
                                     name: nameController.text,
                                     color: pickedColor.toHex(),
                                   ),

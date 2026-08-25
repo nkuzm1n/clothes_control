@@ -1,6 +1,6 @@
-import 'package:clothes_control/data/dto/category/category_dto.dart';
 import 'package:clothes_control/data/dto/category/new_category_dto.dart';
 import 'package:clothes_control/data/local/database_helper.dart';
+import 'package:clothes_control/domain/entities/category.dart';
 import 'package:clothes_control/domain/repositories/category_repository.dart';
 
 class CategoryRepositoryImpl implements ICategoryRepository {
@@ -9,31 +9,31 @@ class CategoryRepositoryImpl implements ICategoryRepository {
   CategoryRepositoryImpl({required this.databaseHelper});
 
   @override
-  Future<List<CategoryDTO>> getManyBy({List<int>? id}) async {
+  Future<List<Category>> getManyBy({List<int>? id}) async {
     final result = await databaseHelper.getCategories(id: id);
-    return result.map((item) => CategoryDTO.fromMap(item)).toList();
+    return result.map((item) => Category.fromJson(item)).toList();
   }
 
   @override
-  Future<CategoryDTO?> getOneById(int id) async {
+  Future<Category?> getOneById(int id) async {
     final result = await databaseHelper.getCategory(id);
-    return result.isNotEmpty ? CategoryDTO.fromMap(result) : null;
+    return result.isNotEmpty ? Category.fromJson(result) : null;
   }
 
   @override
-  Future<CategoryDTO> createOne(NewCategoryDTO category) async {
-    final id = await databaseHelper.insertCategory(category.toMap());
+  Future<Category> createOne(NewCategoryDto category) async {
+    final id = await databaseHelper.insertCategory(category.toJson());
     final result = await getOneById(id);
     return result!;
   }
 
   @override
-  Future<int> updateOne(CategoryDTO category) async {
-    return await databaseHelper.updateCategory(category.toMap());
+  Future<int> updateOne(Category category) async {
+    return await databaseHelper.updateCategory(category.toJson());
   }
 
   @override
-  Future<int> deleteOne(CategoryDTO category) async {
-    return await databaseHelper.deleteCategory(category.toMap());
+  Future<int> deleteOne(Category category) async {
+    return await databaseHelper.deleteCategory(category.toJson());
   }
 }

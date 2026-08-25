@@ -8,9 +8,9 @@ abstract class ClothesDetailEvent extends Equatable {
 }
 
 class LoadClothesDetailEvent extends ClothesDetailEvent {
-  final ClothDTO? cloth;
-  final List<StatusDTO> statuses;
-  final List<CategoryDTO> categories;
+  final Cloth? cloth;
+  final List<Status> statuses;
+  final List<Category> categories;
 
   const LoadClothesDetailEvent({
     this.cloth,
@@ -23,9 +23,9 @@ class LoadClothesDetailEvent extends ClothesDetailEvent {
 }
 
 class UpdateClothesDetailEvent extends ClothesDetailEvent {
-  final ClothDTO cloth;
-  final List<StatusDTO> statuses;
-  final List<CategoryDTO> categories;
+  final Cloth cloth;
+  final List<Status> statuses;
+  final List<Category> categories;
 
   const UpdateClothesDetailEvent({
     required this.cloth,
@@ -38,9 +38,9 @@ class UpdateClothesDetailEvent extends ClothesDetailEvent {
 }
 
 class AddNewClothEvent extends ClothesDetailEvent {
-  final NewClothDTO newCloth;
-  final List<StatusDTO> statuses;
-  final List<CategoryDTO> categories;
+  final NewClothDto newCloth;
+  final List<Status> statuses;
+  final List<Category> categories;
 
   const AddNewClothEvent({
     required this.newCloth,
@@ -53,9 +53,9 @@ class AddNewClothEvent extends ClothesDetailEvent {
 }
 
 class DeleteClothesItemEvent extends ClothesDetailEvent {
-  final ClothDTO cloth;
-  final List<StatusDTO> statuses;
-  final List<CategoryDTO> categories;
+  final Cloth cloth;
+  final List<Status> statuses;
+  final List<Category> categories;
 
   const DeleteClothesItemEvent({
     required this.cloth,

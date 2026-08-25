@@ -1,9 +1,9 @@
 part of 'category_bloc.dart';
 
 class CategoryState extends Equatable {
-  final List<CategoryDTO>? list;
-  final CategoryDTO? category;
-  final NewCategoryDTO? newCategory;
+  final List<Category>? list;
+  final Category? category;
+  final NewCategoryDto? newCategory;
   final dynamic error;
 
   const CategoryState({
@@ -25,7 +25,7 @@ class LoadingCategoryListState extends CategoryState {
 
 class LoadedCategoryListState extends CategoryState {
   @override
-  final List<CategoryDTO> list;
+  final List<Category> list;
 
   const LoadedCategoryListState({required this.list, super.error});
 }
@@ -45,14 +45,14 @@ class LoadedCategoryState extends CategoryState {
 
 class CreatedCategoryState extends CategoryState {
   @override
-  final CategoryDTO category;
+  final Category category;
 
   const CreatedCategoryState({required this.category});
 }
 
 class UpdatedCategoryState extends CategoryState {
   @override
-  final CategoryDTO category;
+  final Category category;
 
   const UpdatedCategoryState({required this.category});
 }

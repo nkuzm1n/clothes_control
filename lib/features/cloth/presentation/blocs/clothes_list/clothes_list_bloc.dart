@@ -1,7 +1,7 @@
+import 'package:clothes_control/domain/entities/category.dart';
+import 'package:clothes_control/domain/entities/status.dart';
 import 'package:clothes_control/features/cloth/data/dto/cloth_list_item_dto.dart';
 import 'package:clothes_control/features/cloth/presentation/dto/clothes_list_filters_dto.dart';
-import 'package:clothes_control/data/dto/category/category_dto.dart';
-import 'package:clothes_control/data/dto/status/status_dto.dart';
 import 'package:clothes_control/domain/repositories/category_repository.dart';
 import 'package:clothes_control/domain/repositories/status_repository.dart';
 import 'package:collection/collection.dart';

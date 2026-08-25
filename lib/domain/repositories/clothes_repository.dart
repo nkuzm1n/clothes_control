@@ -1,16 +1,16 @@
-import 'package:clothes_control/data/dto/cloth/cloth_dto.dart';
 import 'package:clothes_control/data/dto/cloth/new_cloth_dto.dart';
+import 'package:clothes_control/domain/entities/cloth.dart';
 
 abstract class IClothesRepository {
-  Future<List<ClothDTO>> getManyBy({
+  Future<List<Cloth>> getManyBy({
     String? name,
     int? statusId,
     int? categoryId,
     String? orderBy,
     String? direction,
   });
-  Future<ClothDTO?> getOneById(int itemId);
+  Future<Cloth?> getOneById(int itemId);
   Future<void> deleteOne(int itemId);
-  Future<int> updateOne(ClothDTO item);
-  Future<int> createOne(NewClothDTO item);
+  Future<int> updateOne(Cloth item);
+  Future<int> createOne(NewClothDto item);
 }

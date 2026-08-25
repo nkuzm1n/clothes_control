@@ -1,12 +1,12 @@
-import 'package:clothes_control/data/dto/category/category_dto.dart';
-import 'package:clothes_control/data/dto/cloth/cloth_dto.dart';
-import 'package:clothes_control/data/dto/status/status_dto.dart';
+import 'package:clothes_control/domain/entities/category.dart';
+import 'package:clothes_control/domain/entities/cloth.dart';
+import 'package:clothes_control/domain/entities/status.dart';
 import 'package:equatable/equatable.dart';
 
 class ClothListItemDTO extends Equatable {
-  final ClothDTO cloth;
-  final StatusDTO? status;
-  final CategoryDTO? category;
+  final Cloth cloth;
+  final Status? status;
+  final Category? category;
 
   const ClothListItemDTO({
     required this.cloth,

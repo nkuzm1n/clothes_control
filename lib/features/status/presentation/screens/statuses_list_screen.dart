@@ -1,11 +1,11 @@
+import 'package:clothes_control/domain/entities/status.dart';
 import 'package:clothes_control/features/status/presentation/screens/statuses_detail_screen.dart';
-import 'package:clothes_control/data/dto/status/status_dto.dart';
 import 'package:clothes_control/features/_shared/widgets/ui/snackbar/ui_snackbar.dart';
 import 'package:clothes_control/core/utils/extensions/hex_color.dart';
 import 'package:clothes_control/core/utils/navigation/navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:clothes_control/data/bloc/status/status_bloc.dart';
+import 'package:clothes_control/features/_shared/bloc/status/status_bloc.dart';
 import 'package:clothes_control/data/local/database_helper.dart';
 import 'package:clothes_control/data/repositories/status_repository.dart';
 import 'package:clothes_control/features/_shared/widgets/navigation/navigation_bar.dart';
@@ -27,14 +27,14 @@ class StatusesListScreen extends StatelessWidget {
 class StatusesListView extends StatelessWidget {
   const StatusesListView({super.key});
 
-  void _navigateToStatusDetailScreen(BuildContext context, {StatusDTO? status}) async {
+  void _navigateToStatusDetailScreen(BuildContext context, {Status? status}) async {
     await AppNavigation.push(context, StatusesDetailScreen(status: status));
     if (context.mounted) {
       context.read<StatusBloc>().add(LoadStatusListEvent());
     }
   }
 
-  void _deleteStatusItem(BuildContext context, StatusDTO status) {
+  void _deleteStatusItem(BuildContext context, Status status) {
     context.read<StatusBloc>().add(DeleteStatusFromListEvent(status: status));
   }
 

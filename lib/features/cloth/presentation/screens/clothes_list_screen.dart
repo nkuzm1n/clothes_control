@@ -1,9 +1,9 @@
 import 'dart:math';
 
+import 'package:clothes_control/domain/entities/cloth.dart';
 import 'package:clothes_control/features/cloth/presentation/dto/clothes_list_filters_dto.dart';
 import 'package:clothes_control/features/cloth/presentation/widgets/clothes_list_item.dart';
 import 'package:clothes_control/features/settings/presentation/screens/settings_screen.dart';
-import 'package:clothes_control/data/dto/cloth/cloth_dto.dart';
 import 'package:clothes_control/data/local/database_helper.dart';
 import 'package:clothes_control/data/repositories/category_repository.dart';
 import 'package:clothes_control/data/repositories/clothes_repository.dart';
@@ -23,7 +23,7 @@ class ClothesListScreen extends StatelessWidget {
 
   final _searchInputController = TextEditingController();
 
-  _openDetailsPage(BuildContext context, {ClothDTO? cloth}) async {
+  _openDetailsPage(BuildContext context, {Cloth? cloth}) async {
     await AppNavigation.push(context, ClothesDetailScreen(cloth: cloth));
     if (context.mounted) {
       context.read<ClothesListBloc>().add(const LoadClothesListEvent());
@@ -57,10 +57,7 @@ class ClothesListScreen extends StatelessWidget {
                       UiDropdownSelect<int>(
                         label: 'Статус',
                         value: state.filters.statusId,
-                        items: [
-                          // StatusDTO(id: -1, name: 'Без статуса', color: Colors.transparent.toHex()),
-                          ...state.statuses
-                        ]
+                        items: state.statuses
                             .map((option) => DropdownMenuItem(
                                   value: option.id,
                                   child: Row(
@@ -94,10 +91,7 @@ class ClothesListScreen extends StatelessWidget {
                       UiDropdownSelect(
                         label: 'Категория',
                         value: state.filters.categoryId,
-                        items: [
-                          // const CategoryDTO(id: -1, name: 'Без категории'),
-                          ...state.categories,
-                        ]
+                        items: state.categories
                             .map((option) => DropdownMenuItem(
                                   value: option.id,
                                   child: Text(option.name),

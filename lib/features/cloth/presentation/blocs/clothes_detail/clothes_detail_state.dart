@@ -1,10 +1,10 @@
 part of 'clothes_detail_bloc.dart';
 
 class ClothesDetailState extends Equatable {
-  final ClothDTO? cloth;
-  final NewClothDTO? newCloth;
-  final List<StatusDTO> statuses;
-  final List<CategoryDTO> categories;
+  final Cloth? cloth;
+  final NewClothDto? newCloth;
+  final List<Status> statuses;
+  final List<Category> categories;
   final dynamic error;
 
   const ClothesDetailState({
@@ -44,7 +44,7 @@ class ClothesDetailLoadedState extends ClothesDetailState {
 
 class ClothesDetailUpdatedState extends ClothesDetailState {
   @override
-  final ClothDTO cloth;
+  final Cloth cloth;
 
   const ClothesDetailUpdatedState({
     required this.cloth,
@@ -55,7 +55,7 @@ class ClothesDetailUpdatedState extends ClothesDetailState {
 
 class ClothesDetailAddedState extends ClothesDetailState {
   @override
-  final ClothDTO cloth;
+  final Cloth cloth;
 
   const ClothesDetailAddedState({
     required this.cloth,

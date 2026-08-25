@@ -1,10 +1,10 @@
 import 'package:clothes_control/data/dto/status/new_status_dto.dart';
-import 'package:clothes_control/data/dto/status/status_dto.dart';
+import 'package:clothes_control/domain/entities/status.dart';
 
 abstract class IStatusRepository {
-  Future<List<StatusDTO>> getManyBy({List<int>? id});
-  Future<StatusDTO?> getOneById(int id);
-  Future<StatusDTO> createOne(NewStatusDTO status);
-  Future<int> updateOne(StatusDTO status);
-  Future<int> deleteOne(StatusDTO status);
+  Future<List<Status>> getManyBy({List<int>? id});
+  Future<Status?> getOneById(int id);
+  Future<Status> createOne(NewStatusDto status);
+  Future<int> updateOne(Status status);
+  Future<int> deleteOne(Status status);
 }

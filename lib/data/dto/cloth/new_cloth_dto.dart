@@ -1,46 +1,19 @@
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class NewClothDTO extends Equatable {
-  final String name;
-  final String? description;
-  final int? statusId;
-  final int? categoryId;
-  final String? imageUrl;
+part 'new_cloth_dto.freezed.dart';
+part 'new_cloth_dto.g.dart';
 
-  const NewClothDTO({
-    required this.name,
-    this.description,
-    this.statusId,
-    this.categoryId,
-    this.imageUrl,
-  });
+@freezed
+abstract class NewClothDto with _$NewClothDto {
+  const factory NewClothDto({
+    required String name,
+    String? description,
+    @JsonKey(name: 'status_id') int? statusId,
+    @JsonKey(name: 'category_id') int? categoryId,
+    @JsonKey(name: 'image_url') String? imageUrl,
+    @JsonKey(name: 'created_at') String? createdAt,
+    @JsonKey(name: 'updated_at') String? updatedAt,
+  }) = _NewClothDto;
 
-  factory NewClothDTO.fromMap(Map<String, dynamic> map) {
-    return NewClothDTO(
-      name: map['name'],
-      description: map['description'],
-      statusId: map['status_id'],
-      categoryId: map['category_id'],
-      imageUrl: map['image_url'],
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'description': description,
-      'status_id': statusId,
-      'category_id': categoryId,
-      'image_url': imageUrl,
-    };
-  }
-
-  @override
-  List<Object?> get props => [
-        name,
-        description,
-        statusId,
-        categoryId,
-        imageUrl,
-      ];
+  factory NewClothDto.fromJson(Map<String, Object?> json) => _$NewClothDtoFromJson(json);
 }

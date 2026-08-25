@@ -1,15 +1,15 @@
+import 'package:clothes_control/domain/entities/category.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clothes_control/data/dto/category/new_category_dto.dart';
-import 'package:clothes_control/data/dto/category/category_dto.dart';
 import 'package:clothes_control/features/_shared/widgets/navigation/navigation_bar.dart';
 import 'package:clothes_control/core/utils/navigation/navigation.dart';
-import 'package:clothes_control/data/bloc/category/category_bloc.dart';
+import 'package:clothes_control/features/_shared/bloc/category/category_bloc.dart';
 import 'package:clothes_control/data/local/database_helper.dart';
 import 'package:clothes_control/data/repositories/category_repository.dart';
 
 class CategoriesDetailScreen extends StatelessWidget {
-  final CategoryDTO? category;
+  final Category? category;
 
   const CategoriesDetailScreen({super.key, this.category});
 
@@ -33,7 +33,7 @@ class CategoriesDetailScreen extends StatelessWidget {
 }
 
 class CategoriesDetailView extends StatelessWidget {
-  final CategoryDTO? category;
+  final Category? category;
 
   const CategoriesDetailView({super.key, this.category});
 
@@ -97,7 +97,7 @@ class CategoriesDetailView extends StatelessWidget {
                         if (state.category == null) {
                           context.read<CategoryBloc>().add(
                                 AddNewCategoryEvent(
-                                  newCategory: NewCategoryDTO(
+                                  newCategory: NewCategoryDto(
                                     name: nameController.text,
                                   ),
                                 ),

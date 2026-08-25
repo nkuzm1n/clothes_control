@@ -10,7 +10,7 @@ sealed class CategoryEvent extends Equatable {
 class LoadCategoryListEvent extends CategoryEvent {}
 
 class DeleteCategoryFromListEvent extends CategoryEvent {
-  final CategoryDTO category;
+  final Category category;
 
   const DeleteCategoryFromListEvent({required this.category});
 
@@ -19,7 +19,7 @@ class DeleteCategoryFromListEvent extends CategoryEvent {
 }
 
 class LoadCategoryEvent extends CategoryEvent {
-  final CategoryDTO category;
+  final Category category;
 
   const LoadCategoryEvent({required this.category});
 
@@ -28,7 +28,7 @@ class LoadCategoryEvent extends CategoryEvent {
 }
 
 class UpdateCategoryEvent extends CategoryEvent {
-  final CategoryDTO category;
+  final Category category;
 
   const UpdateCategoryEvent({required this.category});
 
@@ -37,7 +37,7 @@ class UpdateCategoryEvent extends CategoryEvent {
 }
 
 class AddNewCategoryEvent extends CategoryEvent {
-  final NewCategoryDTO newCategory;
+  final NewCategoryDto newCategory;
 
   const AddNewCategoryEvent({required this.newCategory});
 

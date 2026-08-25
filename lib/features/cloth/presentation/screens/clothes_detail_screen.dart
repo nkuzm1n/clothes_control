@@ -1,6 +1,6 @@
+import 'package:clothes_control/domain/entities/cloth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:clothes_control/data/dto/cloth/cloth_dto.dart';
 import 'package:clothes_control/data/dto/cloth/new_cloth_dto.dart';
 import 'package:clothes_control/data/repositories/category_repository.dart';
 import 'package:clothes_control/features/_shared/widgets/ui/snackbar/ui_snackbar.dart';
@@ -13,7 +13,7 @@ import 'package:clothes_control/data/repositories/status_repository.dart';
 import 'package:clothes_control/features/cloth/presentation/blocs/clothes_detail/clothes_detail_bloc.dart';
 
 class ClothesDetailScreen extends StatelessWidget {
-  final ClothDTO? cloth;
+  final Cloth? cloth;
 
   const ClothesDetailScreen({super.key, this.cloth});
 
@@ -95,7 +95,7 @@ class ClothesDetailScreen extends StatelessWidget {
                           if (cloth == null) {
                             context.read<ClothesDetailBloc>().add(
                                   AddNewClothEvent(
-                                    newCloth: NewClothDTO.fromMap(newCloth!),
+                                    newCloth: NewClothDto.fromJson(newCloth!),
                                     statuses: state.statuses,
                                     categories: state.categories,
                                   ),
@@ -103,7 +103,7 @@ class ClothesDetailScreen extends StatelessWidget {
                           } else {
                             context.read<ClothesDetailBloc>().add(
                                   UpdateClothesDetailEvent(
-                                    cloth: ClothDTO(
+                                    cloth: Cloth(
                                       id: (newCloth!['id'] as num).toInt(),
                                       name: newCloth['name'].toString(),
                                       description: newCloth['description']?.toString(),

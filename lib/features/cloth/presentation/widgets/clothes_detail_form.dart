@@ -1,6 +1,6 @@
-import 'package:clothes_control/data/dto/category/category_dto.dart';
-import 'package:clothes_control/data/dto/cloth/cloth_dto.dart';
-import 'package:clothes_control/data/dto/status/status_dto.dart';
+import 'package:clothes_control/domain/entities/category.dart';
+import 'package:clothes_control/domain/entities/cloth.dart';
+import 'package:clothes_control/domain/entities/status.dart';
 import 'package:clothes_control/features/_shared/widgets/ui/button/ui_button.dart';
 import 'package:clothes_control/features/_shared/widgets/ui/image/ui_image.dart';
 import 'package:clothes_control/features/_shared/widgets/ui/snackbar/ui_snackbar.dart';
@@ -10,9 +10,9 @@ import 'package:clothes_control/core/utils/helpers/image_picker_helper.dart';
 import 'package:flutter/material.dart';
 
 class ClothesDetailForm extends StatefulWidget {
-  final ClothDTO? cloth;
-  final List<StatusDTO> statuses;
-  final List<CategoryDTO> categories;
+  final Cloth? cloth;
+  final List<Status> statuses;
+  final List<Category> categories;
   final bool disabled;
   final bool loading;
   final Function(Map<String, Object?>? newCloth)? onSave;

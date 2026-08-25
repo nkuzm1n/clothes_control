@@ -2,8 +2,8 @@ part of 'clothes_list_bloc.dart';
 
 class ClothesListState extends Equatable {
   final List<ClothListItemDTO> clothes;
-  final List<StatusDTO> statuses;
-  final List<CategoryDTO> categories;
+  final List<Status> statuses;
+  final List<Category> categories;
   final ClothesListFiltersDTO filters;
   final bool loading;
   final String? error;
@@ -27,8 +27,8 @@ class ClothesListState extends Equatable {
   ClothesListState copyWith({
     final List<ClothListItemDTO>? clothes,
     final ClothesListFiltersDTO? filters,
-    final List<StatusDTO>? statuses,
-    final List<CategoryDTO>? categories,
+    final List<Status>? statuses,
+    final List<Category>? categories,
     final bool? loading,
     final String? error,
   }) {

@@ -10,7 +10,7 @@ sealed class StatusEvent extends Equatable {
 class LoadStatusListEvent extends StatusEvent {}
 
 class DeleteStatusFromListEvent extends StatusEvent {
-  final StatusDTO status;
+  final Status status;
 
   const DeleteStatusFromListEvent({required this.status});
 
@@ -19,7 +19,7 @@ class DeleteStatusFromListEvent extends StatusEvent {
 }
 
 class LoadStatusEvent extends StatusEvent {
-  final StatusDTO status;
+  final Status status;
 
   const LoadStatusEvent({required this.status});
 
@@ -28,7 +28,7 @@ class LoadStatusEvent extends StatusEvent {
 }
 
 class UpdateStatusEvent extends StatusEvent {
-  final StatusDTO status;
+  final Status status;
 
   const UpdateStatusEvent({required this.status});
 
@@ -37,7 +37,7 @@ class UpdateStatusEvent extends StatusEvent {
 }
 
 class AddNewStatusEvent extends StatusEvent {
-  final NewStatusDTO newStatus;
+  final NewStatusDto newStatus;
 
   const AddNewStatusEvent({required this.newStatus});
 

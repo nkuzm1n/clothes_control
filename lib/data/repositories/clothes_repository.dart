@@ -1,6 +1,6 @@
-import 'package:clothes_control/data/dto/cloth/cloth_dto.dart';
 import 'package:clothes_control/data/dto/cloth/new_cloth_dto.dart';
 import 'package:clothes_control/data/local/database_helper.dart';
+import 'package:clothes_control/domain/entities/cloth.dart';
 import 'package:clothes_control/domain/repositories/clothes_repository.dart';
 
 class ClothesRepositoryImpl implements IClothesRepository {
@@ -9,7 +9,7 @@ class ClothesRepositoryImpl implements IClothesRepository {
   ClothesRepositoryImpl({required this.databaseHelper});
 
   @override
-  Future<List<ClothDTO>> getManyBy({
+  Future<List<Cloth>> getManyBy({
     String? name,
     int? statusId,
     int? categoryId,
@@ -23,18 +23,18 @@ class ClothesRepositoryImpl implements IClothesRepository {
       orderBy: orderBy,
       direction: direction,
     );
-    return result.map((item) => ClothDTO.fromMap(item)).toList();
+    return result.map((item) => Cloth.fromJson(item)).toList();
   }
 
   @override
-  Future<ClothDTO?> getOneById(int itemId) async {
+  Future<Cloth?> getOneById(int itemId) async {
     final result = await databaseHelper.getCloth(itemId);
-    return result.isNotEmpty ? ClothDTO.fromMap(result) : null;
+    return result.isNotEmpty ? Cloth.fromJson(result) : null;
   }
 
   @override
-  Future<int> createOne(NewClothDTO item) async {
-    return await databaseHelper.insertCloth(item.toMap());
+  Future<int> createOne(NewClothDto item) async {
+    return await databaseHelper.insertCloth(item.toJson());
   }
 
   @override
@@ -43,7 +43,7 @@ class ClothesRepositoryImpl implements IClothesRepository {
   }
 
   @override
-  Future<int> updateOne(ClothDTO item) async {
-    return await databaseHelper.updateCloth(item.toMap());
+  Future<int> updateOne(Cloth item) async {
+    return await databaseHelper.updateCloth(item.toJson());
   }
 }

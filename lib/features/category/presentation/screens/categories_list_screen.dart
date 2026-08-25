@@ -1,6 +1,6 @@
+import 'package:clothes_control/domain/entities/category.dart';
 import 'package:clothes_control/features/category/presentation/screens/categories_detail_screen.dart';
-import 'package:clothes_control/data/bloc/category/category_bloc.dart';
-import 'package:clothes_control/data/dto/category/category_dto.dart';
+import 'package:clothes_control/features/_shared/bloc/category/category_bloc.dart';
 import 'package:clothes_control/data/local/database_helper.dart';
 import 'package:clothes_control/data/repositories/category_repository.dart';
 import 'package:clothes_control/features/_shared/widgets/navigation/navigation_bar.dart';
@@ -26,14 +26,14 @@ class CategoriesListScreen extends StatelessWidget {
 class CategoriesListView extends StatelessWidget {
   const CategoriesListView({super.key});
 
-  void _navigateToCategoryDetailScreen(BuildContext context, {CategoryDTO? category}) async {
+  void _navigateToCategoryDetailScreen(BuildContext context, {Category? category}) async {
     await AppNavigation.push(context, CategoriesDetailScreen(category: category));
     if (context.mounted) {
       context.read<CategoryBloc>().add(LoadCategoryListEvent());
     }
   }
 
-  void _deleteCategoryItem(BuildContext context, CategoryDTO category) {
+  void _deleteCategoryItem(BuildContext context, Category category) {
     context.read<CategoryBloc>().add(DeleteCategoryFromListEvent(category: category));
   }
 

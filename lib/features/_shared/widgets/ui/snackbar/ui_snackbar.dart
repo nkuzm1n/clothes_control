@@ -12,6 +12,7 @@ class UiSnackbar {
   }) async {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
+        behavior: SnackBarBehavior.floating,
         elevation: elevation,
         content: Text(text),
         duration: Duration(seconds: duration),
