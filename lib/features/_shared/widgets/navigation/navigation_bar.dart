@@ -1,7 +1,7 @@
 import 'package:clothes_control/features/category/presentation/screens/categories_list_screen.dart';
 import 'package:clothes_control/features/cloth/presentation/screens/clothes_list_screen.dart';
 import 'package:clothes_control/features/status/presentation/screens/statuses_list_screen.dart';
-import 'package:clothes_control/core/utils/navigation/navigation.dart';
+import 'package:clothes_control/shared/utils/navigation/navigation.dart';
 import 'package:flutter/material.dart';
 
 class AppNavigationBar extends StatelessWidget {

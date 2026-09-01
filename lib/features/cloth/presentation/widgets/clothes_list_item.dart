@@ -2,8 +2,8 @@ import 'package:clothes_control/domain/entities/category.dart';
 import 'package:clothes_control/domain/entities/cloth.dart';
 import 'package:clothes_control/domain/entities/status.dart';
 import 'package:clothes_control/features/_shared/widgets/ui/image/ui_image.dart';
-import 'package:clothes_control/core/utils/extensions/hex_color.dart';
-import 'package:clothes_control/core/utils/helpers/image_helper.dart';
+import 'package:clothes_control/shared/utils/extensions/hex_color.dart';
+import 'package:clothes_control/shared/utils/helpers/image_helper.dart';
 import 'package:flutter/material.dart';
 
 class ClothesListItem extends StatelessWidget {

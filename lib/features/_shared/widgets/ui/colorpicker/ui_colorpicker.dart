@@ -1,4 +1,4 @@
-import 'package:clothes_control/core/utils/navigation/navigation.dart';
+import 'package:clothes_control/shared/utils/navigation/navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 

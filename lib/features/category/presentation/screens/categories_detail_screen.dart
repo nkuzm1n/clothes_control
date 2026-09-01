@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clothes_control/data/dto/category/new_category_dto.dart';
 import 'package:clothes_control/features/_shared/widgets/navigation/navigation_bar.dart';
-import 'package:clothes_control/core/utils/navigation/navigation.dart';
+import 'package:clothes_control/shared/utils/navigation/navigation.dart';
 import 'package:clothes_control/features/_shared/bloc/category/category_bloc.dart';
 import 'package:clothes_control/data/local/database_helper.dart';
 import 'package:clothes_control/data/repositories/category_repository.dart';

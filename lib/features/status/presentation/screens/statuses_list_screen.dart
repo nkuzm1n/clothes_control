@@ -1,8 +1,8 @@
 import 'package:clothes_control/domain/entities/status.dart';
 import 'package:clothes_control/features/status/presentation/screens/statuses_detail_screen.dart';
 import 'package:clothes_control/features/_shared/widgets/ui/snackbar/ui_snackbar.dart';
-import 'package:clothes_control/core/utils/extensions/hex_color.dart';
-import 'package:clothes_control/core/utils/navigation/navigation.dart';
+import 'package:clothes_control/shared/utils/extensions/hex_color.dart';
+import 'package:clothes_control/shared/utils/navigation/navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clothes_control/features/_shared/bloc/status/status_bloc.dart';
