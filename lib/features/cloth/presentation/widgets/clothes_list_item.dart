@@ -10,7 +10,7 @@ class ClothesListItem extends StatelessWidget {
   final Cloth cloth;
   final Status? status;
   final Category? category;
-  final Function()? onDelete;
+  final void Function()? onDelete;
   final void Function()? onTap;
 
   const ClothesListItem({
