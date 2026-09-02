@@ -11,18 +11,18 @@ import 'package:clothes_control/core/di/service_locator.dart';
 
 class ServiceLocator {
   static void setup() {
-    final sqliteDatabase = sl.registerSingleton<SqliteDatabase>(SqliteDatabase());
+    sl.registerLazySingleton<SqliteDatabase>(() => SqliteDatabase());
 
     sl.registerLazySingleton<IClothesRepository>(
-      () => ClothesRepositoryImpl(sqliteDatabase: sqliteDatabase),
+      () => ClothesRepositoryImpl(sqliteDatabase: sl<SqliteDatabase>()),
     );
 
     sl.registerLazySingleton<ICategoryRepository>(
-      () => CategoryRepositoryImpl(sqliteDatabase: sqliteDatabase),
+      () => CategoryRepositoryImpl(sqliteDatabase: sl<SqliteDatabase>()),
     );
 
     sl.registerLazySingleton<IStatusRepository>(
-      () => StatusRepositoryImpl(sqliteDatabase: sqliteDatabase),
+      () => StatusRepositoryImpl(sqliteDatabase: sl<SqliteDatabase>()),
     );
 
     sl.registerLazySingleton<IImageRepository>(
