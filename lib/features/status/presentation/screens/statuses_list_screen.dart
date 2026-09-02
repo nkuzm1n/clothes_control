@@ -1,4 +1,4 @@
-import 'package:clothes_control/core/di/di.dart';
+import 'package:clothes_control/core/di/service_locator.dart';
 import 'package:clothes_control/domain/repositories/status_repository.dart';
 import 'package:clothes_control/features/_shared/widgets/ui/snackbar/ui_snackbar.dart';
 import 'package:clothes_control/core/router/extensions/app_router_navigation.dart';

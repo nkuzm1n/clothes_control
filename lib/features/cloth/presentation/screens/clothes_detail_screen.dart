@@ -1,4 +1,4 @@
-import 'package:clothes_control/core/di/di.dart';
+import 'package:clothes_control/core/di/service_locator.dart';
 import 'package:clothes_control/domain/entities/cloth.dart';
 import 'package:clothes_control/domain/repositories/category_repository.dart';
 import 'package:clothes_control/domain/repositories/clothes_repository.dart';
@@ -7,13 +7,8 @@ import 'package:clothes_control/domain/repositories/status_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clothes_control/data/dto/cloth/new_cloth_dto.dart';
-import 'package:clothes_control/data/repositories/category_repository_impl.dart';
 import 'package:clothes_control/features/_shared/widgets/ui/snackbar/ui_snackbar.dart';
 import 'package:clothes_control/features/cloth/presentation/widgets/clothes_detail_form.dart';
-import 'package:clothes_control/data/database/database_helper.dart';
-import 'package:clothes_control/data/repositories/clothes_repository_impl.dart';
-import 'package:clothes_control/data/repositories/image_repository_impl.dart';
-import 'package:clothes_control/data/repositories/status_repository_impl.dart';
 import 'package:clothes_control/features/cloth/presentation/bloc/clothes_detail/clothes_detail_bloc.dart';
 import 'package:go_router/go_router.dart';
 
