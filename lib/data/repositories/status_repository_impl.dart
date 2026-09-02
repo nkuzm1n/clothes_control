@@ -1,10 +1,10 @@
 import 'package:clothes_control/data/dto/status/new_status_dto.dart';
-import 'package:clothes_control/data/local/database_helper.dart';
+import 'package:clothes_control/data/database/database_helper.dart';
 import 'package:clothes_control/domain/entities/status.dart';
 import 'package:clothes_control/domain/repositories/status_repository.dart';
 
 class StatusRepositoryImpl implements IStatusRepository {
-  final DatabaseHelper databaseHelper;
+  final SqliteDatabase databaseHelper;
 
   StatusRepositoryImpl({required this.databaseHelper});
 
@@ -33,7 +33,7 @@ class StatusRepositoryImpl implements IStatusRepository {
   }
 
   @override
-  Future<int> deleteOne(Status status) async {
-    return await databaseHelper.deleteStatus(status.toJson());
+  Future<int> deleteOne(int id) async {
+    return await databaseHelper.deleteStatus(id);
   }
 }

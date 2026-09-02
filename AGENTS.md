@@ -10,11 +10,11 @@
 ## Architecture & Structure
 
 - **Entry:** Standard `lib/main.dart`.
-- **Layers:** Domain (Logic), Data (Repo/API), Features (Screens and Widgets), Shared(common Widgets).
-- **Features:** Group by feature (e.g., `lib/features/login/`) for scalable apps.
+- **Layers:** App (di, router, theme), Domain (Logic), Data (Repo/API), Features (Screens and Widgets), Shared(common utils).
+- **Features:** Group by feature (screens without domain logic) (e.g., `lib/features/login/`) for scalable apps.
 - **SOLID:** Strictly enforced.
 - **State Management:**
-  - **Default:** Use **Riverpod** as the primary state management and DI solution.
+  - **Default:** Use **Riverpod** as the primary state management and DI solution (for screens).
   - **Pattern:** Separate UI state (ephemeral) from App state.
   - **DI:** Use Riverpod providers for dependency injection (e.g., repository providers, service providers).
   - **Prohibited:** NO Riverpod, Bloc, GetX unless explicitly requested.
@@ -37,15 +37,9 @@
 
 ## Routing (GoRouter)
 
-Use `go_router` exclusively for deep linking and web support.
-
-```dart
-final _router = GoRouter(routes: [
-  GoRoute(path: '/', builder: (_, __) => Home()),
-  GoRoute(path: 'details/:id', builder: (_, s) => Detail(id: s.pathParameters['id']!)),
-]);
-MaterialApp.router(routerConfig: _router);
-```
+- Use `go_router` exclusively for deep linking and web support.
+- Used `StatefulShellRoute.indexedStack` with `StatefulShellBranch` as branches inside.
+- All routes are builded inside `RootLayout` with `BottomNavigationBar`
 
 ## Data (JSON)
 

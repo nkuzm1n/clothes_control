@@ -26,7 +26,7 @@ class StatusBloc extends Bloc<StatusEvent, StatusState> {
     on<DeleteStatusFromListEvent>((event, emit) async {
       emit(LoadingStatusListState(list: state.list));
       try {
-        await _statusRepository.deleteOne(event.status);
+        await _statusRepository.deleteOne(event.id);
         add(LoadStatusListEvent());
       } catch (e) {
         emit(StatusErrorState(error: e));
@@ -34,9 +34,9 @@ class StatusBloc extends Bloc<StatusEvent, StatusState> {
     });
 
     on<LoadStatusEvent>((event, emit) async {
-      emit(LoadingStatusState(status: event.status));
+      emit(LoadingStatusState(status: state.status));
       try {
-        final status = await _statusRepository.getOneById(event.status.id);
+        final status = await _statusRepository.getOneById(event.id);
         emit(LoadedStatusState(status: status));
       } catch (e) {
         emit(StatusErrorState(error: e));

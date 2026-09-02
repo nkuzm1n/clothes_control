@@ -1,19 +1,17 @@
-import 'package:clothes_control/domain/entities/status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clothes_control/data/dto/status/new_status_dto.dart';
-import 'package:clothes_control/features/_shared/widgets/navigation/navigation_bar.dart';
 import 'package:clothes_control/features/_shared/widgets/ui/colorpicker/ui_colorpicker.dart';
 import 'package:clothes_control/shared/utils/extensions/hex_color.dart';
-import 'package:clothes_control/shared/utils/navigation/navigation.dart';
 import 'package:clothes_control/features/_shared/bloc/status/status_bloc.dart';
-import 'package:clothes_control/data/local/database_helper.dart';
-import 'package:clothes_control/data/repositories/status_repository.dart';
+import 'package:clothes_control/data/database/database_helper.dart';
+import 'package:clothes_control/data/repositories/status_repository_impl.dart';
+import 'package:go_router/go_router.dart';
 
 class StatusesDetailScreen extends StatelessWidget {
-  final Status? status;
+  final int? id;
 
-  const StatusesDetailScreen({super.key, this.status});
+  const StatusesDetailScreen({super.key, this.id});
 
   @override
   Widget build(BuildContext context) {
@@ -21,30 +19,30 @@ class StatusesDetailScreen extends StatelessWidget {
       create: (context) {
         final bloc = StatusBloc(
           statusRepository: StatusRepositoryImpl(
-            databaseHelper: DatabaseHelper(),
+            databaseHelper: SqliteDatabase(),
           ),
         );
-        if (status != null) {
-          bloc.add(LoadStatusEvent(status: status!));
+        if (id != null) {
+          bloc.add(LoadStatusEvent(id: id!));
         }
         return bloc;
       },
-      child: StatusesDetailView(status: status),
+      child: StatusesDetailView(id: id),
     );
   }
 }
 
 class StatusesDetailView extends StatelessWidget {
-  final Status? status;
+  final int? id;
 
-  const StatusesDetailView({super.key, this.status});
+  const StatusesDetailView({super.key, this.id});
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<StatusBloc, StatusState>(
       listener: (context, state) {
         if (state is CreatedStatusState || state is UpdatedStatusState) {
-          return AppNavigation.pop(context);
+          context.pop();
         }
       },
       builder: (context, state) {
@@ -59,86 +57,83 @@ class StatusesDetailView extends StatelessWidget {
           onTap: () {
             FocusManager.instance.primaryFocus?.unfocus();
           },
-          child: Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                onPressed: () => AppNavigation.pop(context),
-                icon: const Icon(Icons.arrow_back),
-              ),
-              title: Text(
-                state.statusName == null ? 'Новый статус' : state.statusName!,
-                style: const TextStyle(fontWeight: FontWeight.w700),
-              ),
-            ),
-            body: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Form(
-                    key: formKey,
-                    child: Column(
-                      children: <Widget>[
-                        TextFormField(
-                          controller: nameController,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Заполните поле';
-                            }
-                            return null;
-                          },
-                          decoration: const InputDecoration(
-                            labelText: 'Наименование *',
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                AppBar(
+                  leading: IconButton(
+                    onPressed: () => context.pop(),
+                    icon: const Icon(Icons.arrow_back),
+                  ),
+                  title: Text(
+                    state.statusName == null ? 'Новый статус' : state.statusName!,
+                    style: const TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                ),
+                Form(
+                  key: formKey,
+                  child: Column(
+                    children: <Widget>[
+                      TextFormField(
+                        controller: nameController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Заполните поле';
+                          }
+                          return null;
+                        },
+                        decoration: const InputDecoration(
+                          labelText: 'Наименование *',
+                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                        ),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 24),
+                      Row(
+                        children: [
+                          const Text('Цвет:'),
+                          const SizedBox(width: 24),
+                          UiColorpicker(
+                            currentColor: pickedColor,
+                            onColorChanged: (color) {
+                              pickedColor = color;
+                            },
                           ),
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 24),
-                        Row(
-                          children: [
-                            const Text('Цвет:'),
-                            const SizedBox(width: 24),
-                            UiColorpicker(
-                              currentColor: pickedColor,
-                              onColorChanged: (color) {
-                                pickedColor = color;
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
+                    ],
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        if (state.status == null) {
-                          context.read<StatusBloc>().add(
-                                AddNewStatusEvent(
-                                  newStatus: NewStatusDto(
-                                    name: nameController.text,
-                                    color: pickedColor.toHex(),
-                                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      if (state.status == null) {
+                        context.read<StatusBloc>().add(
+                              AddNewStatusEvent(
+                                newStatus: NewStatusDto(
+                                  name: nameController.text,
+                                  color: pickedColor.toHex(),
                                 ),
-                              );
-                        } else {
-                          context.read<StatusBloc>().add(
-                                UpdateStatusEvent(
-                                  status: status!.copyWith(
-                                    name: nameController.text,
-                                    color: pickedColor.toHex(),
-                                  ),
+                              ),
+                            );
+                      } else {
+                        context.read<StatusBloc>().add(
+                              UpdateStatusEvent(
+                                status: state.status!.copyWith(
+                                  name: nameController.text,
+                                  color: pickedColor.toHex(),
                                 ),
-                              );
-                        }
+                              ),
+                            );
                       }
-                    },
-                    child: const Text('Сохранить'),
-                  ),
-                ],
-              ),
+                    }
+                  },
+                  child: const Text('Сохранить'),
+                ),
+              ],
             ),
-            bottomNavigationBar: AppNavigationBar(currentIndex: 2),
           ),
         );
       },

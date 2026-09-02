@@ -26,13 +26,12 @@ class ClothesDetailBloc extends Bloc<ClothesDetailEvent, ClothesDetailState> {
   }) : super(const ClothesDetailState()) {
     on<LoadClothesDetailEvent>((event, emit) async {
       emit(ClothesDetailLoadingState(
-        cloth: event.cloth,
+        cloth: state.cloth,
         statuses: event.statuses,
         categories: event.categories,
       ));
       try {
-        final cloth =
-            event.cloth != null ? await clothesRepository.getOneById(event.cloth!.id) : null;
+        final cloth = event.id != null ? await clothesRepository.getOneById(event.id!) : null;
         final statuses = await statusRepository.getManyBy();
         final categories = await categoryRepository.getManyBy();
         emit(
@@ -41,7 +40,7 @@ class ClothesDetailBloc extends Bloc<ClothesDetailEvent, ClothesDetailState> {
       } catch (e) {
         emit(ClothesDetailErrorState(
           error: e,
-          cloth: event.cloth,
+          cloth: state.cloth,
           statuses: event.statuses,
           categories: event.categories,
         ));
@@ -98,12 +97,12 @@ class ClothesDetailBloc extends Bloc<ClothesDetailEvent, ClothesDetailState> {
 
     on<DeleteClothesItemEvent>((event, emit) async {
       emit(ClothesDetailLoadingState(
-        cloth: event.cloth,
+        cloth: state.cloth,
         statuses: event.statuses,
         categories: event.categories,
       ));
       try {
-        await clothesRepository.deleteOne(event.cloth.id);
+        await clothesRepository.deleteOne(event.id);
         emit(ClothesDetailDeletedState(
           statuses: event.statuses,
           categories: event.categories,
@@ -111,7 +110,7 @@ class ClothesDetailBloc extends Bloc<ClothesDetailEvent, ClothesDetailState> {
       } catch (e) {
         emit(ClothesDetailErrorState(
           error: e,
-          cloth: event.cloth,
+          cloth: state.cloth,
           statuses: event.statuses,
           categories: event.categories,
         ));

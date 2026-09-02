@@ -3,20 +3,18 @@ import 'dart:math';
 import 'package:clothes_control/domain/entities/cloth.dart';
 import 'package:clothes_control/features/cloth/presentation/dto/clothes_list_filters_dto.dart';
 import 'package:clothes_control/features/cloth/presentation/widgets/clothes_list_item.dart';
-import 'package:clothes_control/features/settings/presentation/screens/settings_screen.dart';
-import 'package:clothes_control/data/local/database_helper.dart';
-import 'package:clothes_control/data/repositories/category_repository.dart';
-import 'package:clothes_control/data/repositories/clothes_repository.dart';
-import 'package:clothes_control/data/repositories/status_repository.dart';
-import 'package:clothes_control/features/_shared/widgets/navigation/navigation_bar.dart';
+import 'package:clothes_control/data/database/database_helper.dart';
+import 'package:clothes_control/data/repositories/category_repository_impl.dart';
+import 'package:clothes_control/data/repositories/clothes_repository_impl.dart';
+import 'package:clothes_control/data/repositories/status_repository_impl.dart';
 import 'package:clothes_control/features/_shared/widgets/ui/dropdown_select/ui_dropdown_select.dart';
 import 'package:clothes_control/features/_shared/widgets/ui/text/ui_text_no_data.dart';
+import 'package:clothes_control/shared/router/extensions/app_router_navigation.dart';
+import 'package:clothes_control/shared/router/route_names.dart';
 import 'package:clothes_control/shared/utils/extensions/hex_color.dart';
-import 'package:clothes_control/shared/utils/navigation/navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:clothes_control/features/cloth/presentation/blocs/clothes_list/clothes_list_bloc.dart';
-import 'package:clothes_control/features/cloth/presentation/screens/clothes_detail_screen.dart';
+import 'package:clothes_control/features/cloth/presentation/bloc/clothes_list/clothes_list_bloc.dart';
 
 class ClothesListScreen extends StatelessWidget {
   ClothesListScreen({super.key});
@@ -24,7 +22,10 @@ class ClothesListScreen extends StatelessWidget {
   final _searchInputController = TextEditingController();
 
   _openDetailsPage(BuildContext context, {Cloth? cloth}) async {
-    await AppNavigation.push(context, ClothesDetailScreen(cloth: cloth));
+    await context.pushNamedAppRoute(
+      RouteNames.clothesDetail,
+      pathParameters: {'id': cloth?.id.toString() ?? 'new'},
+    );
     if (context.mounted) {
       context.read<ClothesListBloc>().add(const LoadClothesListEvent());
     }
@@ -230,7 +231,6 @@ class ClothesListScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              AppNavigationBar(currentIndex: 0),
             ],
           );
         },
@@ -242,41 +242,40 @@ class ClothesListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ClothesListBloc(
-        clothesRepository: ClothesRepositoryImpl(databaseHelper: DatabaseHelper()),
-        statusRepository: StatusRepositoryImpl(databaseHelper: DatabaseHelper()),
-        categoryRepository: CategoryRepositoryImpl(databaseHelper: DatabaseHelper()),
+        clothesRepository: ClothesRepositoryImpl(databaseHelper: SqliteDatabase()),
+        statusRepository: StatusRepositoryImpl(databaseHelper: SqliteDatabase()),
+        categoryRepository: CategoryRepositoryImpl(sqliteDatabase: SqliteDatabase()),
       )..add(const LoadClothesListEvent()),
       child: BlocBuilder<ClothesListBloc, ClothesListState>(
         builder: (context, state) {
-          return Scaffold(
-            appBar: AppBar(
-              scrolledUnderElevation: 0,
-              title: const Text(
-                'Мой гардероб',
-                style: TextStyle(fontWeight: FontWeight.w700),
-              ),
-              actionsPadding: const EdgeInsets.only(right: 18),
-              actions: [
-                InkWell(
-                  onTap: () {
-                    AppNavigation.push(context, const SettingsScreen());
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.all(2),
-                    child: Icon(Icons.settings),
+          return BlocBuilder<ClothesListBloc, ClothesListState>(
+            builder: (context, state) {
+              if (state.loading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (state.clothes.isNotEmpty) {
+                return Stack(children: [
+                  AppBar(
+                    scrolledUnderElevation: 0,
+                    title: const Text(
+                      'Мой гардероб',
+                      style: TextStyle(fontWeight: FontWeight.w700),
+                    ),
+                    actionsPadding: const EdgeInsets.only(right: 18),
+                    actions: [
+                      InkWell(
+                        onTap: () {
+                          context.pushNamedAppRoute(RouteNames.settings);
+                        },
+                        child: const Padding(
+                          padding: EdgeInsets.all(2),
+                          child: Icon(Icons.settings),
+                        ),
+                      ),
+                    ],
+                    // backgroundColor: Colors.green.shade200,
                   ),
-                ),
-              ],
-              // backgroundColor: Colors.green.shade200,
-            ),
-            // backgroundColor: Colors.green.shade200,
-            body: BlocBuilder<ClothesListBloc, ClothesListState>(
-              builder: (context, state) {
-                if (state.loading) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                if (state.clothes.isNotEmpty) {
-                  return ListView.builder(
+                  ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     itemCount: state.clothes.length,
                     itemBuilder: (context, index) {
@@ -295,21 +294,25 @@ class ClothesListScreen extends StatelessWidget {
                         },
                       );
                     },
-                  );
-                }
-                if (state.error != null) {
-                  return Center(child: Text(state.error!));
-                }
-                return const UiTextNoData();
-              },
-            ),
-            bottomNavigationBar: _buildBottomNavBar(context),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                _openDetailsPage(context);
-              },
-              child: const Icon(Icons.add),
-            ),
+                  ),
+                  Positioned(
+                    bottom: 20,
+                    right: 20,
+                    child: FloatingActionButton(
+                      onPressed: () {
+                        _openDetailsPage(context);
+                      },
+                      child: const Icon(Icons.add),
+                    ),
+                  ),
+                  _buildBottomNavBar(context),
+                ]);
+              }
+              if (state.error != null) {
+                return Center(child: Text(state.error!));
+              }
+              return const UiTextNoData();
+            },
           );
         },
       ),

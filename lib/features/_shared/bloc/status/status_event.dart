@@ -10,21 +10,21 @@ sealed class StatusEvent extends Equatable {
 class LoadStatusListEvent extends StatusEvent {}
 
 class DeleteStatusFromListEvent extends StatusEvent {
-  final Status status;
+  final int id;
 
-  const DeleteStatusFromListEvent({required this.status});
+  const DeleteStatusFromListEvent({required this.id});
 
   @override
-  List<Object> get props => [status];
+  List<Object> get props => [id];
 }
 
 class LoadStatusEvent extends StatusEvent {
-  final Status status;
+  final int id;
 
-  const LoadStatusEvent({required this.status});
+  const LoadStatusEvent({required this.id});
 
   @override
-  List<Object> get props => [status];
+  List<Object> get props => [id];
 }
 
 class UpdateStatusEvent extends StatusEvent {

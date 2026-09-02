@@ -26,7 +26,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     on<DeleteCategoryFromListEvent>((event, emit) async {
       emit(LoadingCategoryListState(list: state.list));
       try {
-        await _categoryRepository.deleteOne(event.category);
+        await _categoryRepository.deleteOne(event.id);
         add(LoadCategoryListEvent());
       } catch (e) {
         emit(CategoryErrorState(error: e));
@@ -34,9 +34,9 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     });
 
     on<LoadCategoryEvent>((event, emit) async {
-      emit(LoadingCategoryState(category: event.category));
+      emit(LoadingCategoryState(category: state.category));
       try {
-        final category = await _categoryRepository.getOneById(event.category.id);
+        final category = await _categoryRepository.getOneById(event.id);
         emit(LoadedCategoryState(category: category));
       } catch (e) {
         emit(CategoryErrorState(error: e));

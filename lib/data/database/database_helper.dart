@@ -5,15 +5,15 @@ const String dbName = 'clothes.db';
 
 const int dbVersion = 1;
 
-class DatabaseHelper {
-  static final DatabaseHelper instance = DatabaseHelper._instance();
+class SqliteDatabase {
+  static final SqliteDatabase instance = SqliteDatabase._instance();
   static Database? _database;
 
-  factory DatabaseHelper() {
+  factory SqliteDatabase() {
     return instance;
   }
 
-  DatabaseHelper._instance();
+  SqliteDatabase._instance();
 
   Future<Database> get database async {
     _database ??= await initDatabase();
@@ -198,12 +198,12 @@ class DatabaseHelper {
     );
   }
 
-  Future<int> deleteStatus(Map<String, dynamic> item) async {
+  Future<int> deleteStatus(int id) async {
     final db = await instance.database;
     return await db.delete(
       'statuses',
       where: 'id = ?',
-      whereArgs: [item['id']],
+      whereArgs: [id],
     );
   }
 
@@ -242,12 +242,12 @@ class DatabaseHelper {
     );
   }
 
-  Future<int> deleteCategory(Map<String, dynamic> item) async {
+  Future<int> deleteCategory(int id) async {
     final db = await instance.database;
     return await db.delete(
       'categories',
       where: 'id = ?',
-      whereArgs: [item['id']],
+      whereArgs: [id],
     );
   }
 }

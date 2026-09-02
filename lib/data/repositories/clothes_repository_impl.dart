@@ -1,10 +1,10 @@
 import 'package:clothes_control/data/dto/cloth/new_cloth_dto.dart';
-import 'package:clothes_control/data/local/database_helper.dart';
+import 'package:clothes_control/data/database/database_helper.dart';
 import 'package:clothes_control/domain/entities/cloth.dart';
 import 'package:clothes_control/domain/repositories/clothes_repository.dart';
 
 class ClothesRepositoryImpl implements IClothesRepository {
-  final DatabaseHelper databaseHelper;
+  final SqliteDatabase databaseHelper;
 
   ClothesRepositoryImpl({required this.databaseHelper});
 

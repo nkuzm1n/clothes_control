@@ -1,6 +1,6 @@
-import 'package:clothes_control/shared/utils/navigation/navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:go_router/go_router.dart';
 
 const List<Color> _defaultColors = [
   Colors.red,
@@ -64,7 +64,7 @@ class _UiColorpickerState extends State<UiColorpicker> {
               if (widget.onColorChanged != null) {
                 widget.onColorChanged!(value);
               }
-              AppNavigation.pop(context);
+              context.pop();
             },
           ),
         ),

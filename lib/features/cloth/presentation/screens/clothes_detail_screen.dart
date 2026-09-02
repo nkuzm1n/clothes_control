@@ -2,23 +2,23 @@ import 'package:clothes_control/domain/entities/cloth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clothes_control/data/dto/cloth/new_cloth_dto.dart';
-import 'package:clothes_control/data/repositories/category_repository.dart';
+import 'package:clothes_control/data/repositories/category_repository_impl.dart';
 import 'package:clothes_control/features/_shared/widgets/ui/snackbar/ui_snackbar.dart';
-import 'package:clothes_control/shared/utils/navigation/navigation.dart';
 import 'package:clothes_control/features/cloth/presentation/widgets/clothes_detail_form.dart';
-import 'package:clothes_control/data/local/database_helper.dart';
-import 'package:clothes_control/data/repositories/clothes_repository.dart';
-import 'package:clothes_control/data/repositories/image_repository.dart';
-import 'package:clothes_control/data/repositories/status_repository.dart';
-import 'package:clothes_control/features/cloth/presentation/blocs/clothes_detail/clothes_detail_bloc.dart';
+import 'package:clothes_control/data/database/database_helper.dart';
+import 'package:clothes_control/data/repositories/clothes_repository_impl.dart';
+import 'package:clothes_control/data/repositories/image_repository_impl.dart';
+import 'package:clothes_control/data/repositories/status_repository_impl.dart';
+import 'package:clothes_control/features/cloth/presentation/bloc/clothes_detail/clothes_detail_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class ClothesDetailScreen extends StatelessWidget {
-  final Cloth? cloth;
+  final int? id;
 
-  const ClothesDetailScreen({super.key, this.cloth});
+  const ClothesDetailScreen({super.key, this.id});
 
   _navigateBack(BuildContext context) {
-    AppNavigation.pop(context);
+    context.pop();
   }
 
   @override
@@ -30,13 +30,13 @@ class ClothesDetailScreen extends StatelessWidget {
       child: BlocProvider(
         create: (context) {
           final bloc = ClothesDetailBloc(
-            clothesRepository: ClothesRepositoryImpl(databaseHelper: DatabaseHelper()),
-            statusRepository: StatusRepositoryImpl(databaseHelper: DatabaseHelper()),
-            categoryRepository: CategoryRepositoryImpl(databaseHelper: DatabaseHelper()),
+            clothesRepository: ClothesRepositoryImpl(databaseHelper: SqliteDatabase()),
+            statusRepository: StatusRepositoryImpl(databaseHelper: SqliteDatabase()),
+            categoryRepository: CategoryRepositoryImpl(sqliteDatabase: SqliteDatabase()),
             imageRepository: ImageRepositoryImpl(),
           );
           bloc.add(
-            LoadClothesDetailEvent(cloth: cloth, statuses: const [], categories: const []),
+            LoadClothesDetailEvent(id: id, statuses: const [], categories: const []),
           );
           return bloc;
         },
@@ -71,7 +71,7 @@ class ClothesDetailScreen extends StatelessWidget {
                       onPressed: () {
                         context.read<ClothesDetailBloc>().add(
                               DeleteClothesItemEvent(
-                                cloth: cloth!,
+                                id: id!,
                                 statuses: state.statuses,
                                 categories: state.categories,
                               ),
@@ -86,13 +86,13 @@ class ClothesDetailScreen extends StatelessWidget {
                   child: Stack(
                     children: [
                       ClothesDetailForm(
-                        cloth: cloth,
+                        cloth: state.cloth,
                         statuses: state.statuses,
                         categories: state.categories,
                         disabled: state is ClothesDetailLoadingState,
                         loading: state is ClothesDetailLoadingState,
                         onSave: (newCloth) {
-                          if (cloth == null) {
+                          if (id == null) {
                             context.read<ClothesDetailBloc>().add(
                                   AddNewClothEvent(
                                     newCloth: NewClothDto.fromJson(newCloth!),

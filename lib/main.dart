@@ -1,5 +1,5 @@
+import 'package:clothes_control/app/router/router.dart';
 import 'package:flutter/material.dart';
-import 'package:clothes_control/features/cloth/presentation/screens/clothes_list_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,14 +11,14 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Clothes Control',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         colorScheme: const ColorScheme.light(),
         useMaterial3: true,
       ),
-      home: ClothesListScreen(),
+      routerConfig: AppRouter.router,
     );
   }
 }

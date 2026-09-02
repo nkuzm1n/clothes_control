@@ -6,5 +6,5 @@ abstract class ICategoryRepository {
   Future<Category?> getOneById(int id);
   Future<Category> createOne(NewCategoryDto category);
   Future<int> updateOne(Category category);
-  Future<int> deleteOne(Category category);
+  Future<int> deleteOne(int category);
 }

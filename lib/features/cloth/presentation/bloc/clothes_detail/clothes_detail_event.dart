@@ -8,18 +8,18 @@ abstract class ClothesDetailEvent extends Equatable {
 }
 
 class LoadClothesDetailEvent extends ClothesDetailEvent {
-  final Cloth? cloth;
+  final int? id;
   final List<Status> statuses;
   final List<Category> categories;
 
   const LoadClothesDetailEvent({
-    this.cloth,
+    this.id,
     required this.statuses,
     required this.categories,
   });
 
   @override
-  List<Object?> get props => [cloth, statuses, categories];
+  List<Object?> get props => [id, statuses, categories];
 }
 
 class UpdateClothesDetailEvent extends ClothesDetailEvent {
@@ -53,16 +53,16 @@ class AddNewClothEvent extends ClothesDetailEvent {
 }
 
 class DeleteClothesItemEvent extends ClothesDetailEvent {
-  final Cloth cloth;
+  final int id;
   final List<Status> statuses;
   final List<Category> categories;
 
   const DeleteClothesItemEvent({
-    required this.cloth,
+    required this.id,
     required this.statuses,
     required this.categories,
   });
 
   @override
-  List<Object?> get props => [cloth, statuses, categories];
+  List<Object?> get props => [id, statuses, categories];
 }

@@ -6,5 +6,5 @@ abstract class IStatusRepository {
   Future<Status?> getOneById(int id);
   Future<Status> createOne(NewStatusDto status);
   Future<int> updateOne(Status status);
-  Future<int> deleteOne(Status status);
+  Future<int> deleteOne(int id);
 }
