@@ -1,12 +1,12 @@
+import 'package:clothes_control/core/di/di.dart';
+import 'package:clothes_control/domain/repositories/status_repository.dart';
 import 'package:clothes_control/features/_shared/widgets/ui/snackbar/ui_snackbar.dart';
-import 'package:clothes_control/shared/router/extensions/app_router_navigation.dart';
-import 'package:clothes_control/shared/router/route_names.dart';
-import 'package:clothes_control/shared/utils/extensions/hex_color.dart';
+import 'package:clothes_control/core/router/extensions/app_router_navigation.dart';
+import 'package:clothes_control/core/router/route_names.dart';
+import 'package:clothes_control/core/utils/extensions/hex_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clothes_control/features/_shared/bloc/status/status_bloc.dart';
-import 'package:clothes_control/data/database/database_helper.dart';
-import 'package:clothes_control/data/repositories/status_repository_impl.dart';
 
 class StatusesListScreen extends StatelessWidget {
   const StatusesListScreen({super.key});
@@ -15,7 +15,7 @@ class StatusesListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => StatusBloc(
-        statusRepository: StatusRepositoryImpl(databaseHelper: SqliteDatabase()),
+        statusRepository: sl<IStatusRepository>(),
       )..add(LoadStatusListEvent()),
       child: const StatusesListView(),
     );

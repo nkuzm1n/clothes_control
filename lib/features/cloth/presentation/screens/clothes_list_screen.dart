@@ -1,6 +1,10 @@
 import 'dart:math';
 
+import 'package:clothes_control/core/di/di.dart';
 import 'package:clothes_control/domain/entities/cloth.dart';
+import 'package:clothes_control/domain/repositories/category_repository.dart';
+import 'package:clothes_control/domain/repositories/clothes_repository.dart';
+import 'package:clothes_control/domain/repositories/status_repository.dart';
 import 'package:clothes_control/features/cloth/presentation/dto/clothes_list_filters_dto.dart';
 import 'package:clothes_control/features/cloth/presentation/widgets/clothes_list_item.dart';
 import 'package:clothes_control/data/database/database_helper.dart';
@@ -9,9 +13,9 @@ import 'package:clothes_control/data/repositories/clothes_repository_impl.dart';
 import 'package:clothes_control/data/repositories/status_repository_impl.dart';
 import 'package:clothes_control/features/_shared/widgets/ui/dropdown_select/ui_dropdown_select.dart';
 import 'package:clothes_control/features/_shared/widgets/ui/text/ui_text_no_data.dart';
-import 'package:clothes_control/shared/router/extensions/app_router_navigation.dart';
-import 'package:clothes_control/shared/router/route_names.dart';
-import 'package:clothes_control/shared/utils/extensions/hex_color.dart';
+import 'package:clothes_control/core/router/extensions/app_router_navigation.dart';
+import 'package:clothes_control/core/router/route_names.dart';
+import 'package:clothes_control/core/utils/extensions/hex_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clothes_control/features/cloth/presentation/bloc/clothes_list/clothes_list_bloc.dart';
@@ -242,9 +246,9 @@ class ClothesListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => ClothesListBloc(
-        clothesRepository: ClothesRepositoryImpl(databaseHelper: SqliteDatabase()),
-        statusRepository: StatusRepositoryImpl(databaseHelper: SqliteDatabase()),
-        categoryRepository: CategoryRepositoryImpl(sqliteDatabase: SqliteDatabase()),
+        clothesRepository: sl<IClothesRepository>(),
+        statusRepository: sl<IStatusRepository>(),
+        categoryRepository: sl<ICategoryRepository>(),
       )..add(const LoadClothesListEvent()),
       child: BlocBuilder<ClothesListBloc, ClothesListState>(
         builder: (context, state) {

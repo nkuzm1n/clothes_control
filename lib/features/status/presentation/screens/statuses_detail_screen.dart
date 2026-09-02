@@ -1,11 +1,11 @@
+import 'package:clothes_control/core/di/di.dart';
+import 'package:clothes_control/domain/repositories/status_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clothes_control/data/dto/status/new_status_dto.dart';
 import 'package:clothes_control/features/_shared/widgets/ui/colorpicker/ui_colorpicker.dart';
-import 'package:clothes_control/shared/utils/extensions/hex_color.dart';
+import 'package:clothes_control/core/utils/extensions/hex_color.dart';
 import 'package:clothes_control/features/_shared/bloc/status/status_bloc.dart';
-import 'package:clothes_control/data/database/database_helper.dart';
-import 'package:clothes_control/data/repositories/status_repository_impl.dart';
 import 'package:go_router/go_router.dart';
 
 class StatusesDetailScreen extends StatelessWidget {
@@ -17,11 +17,7 @@ class StatusesDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        final bloc = StatusBloc(
-          statusRepository: StatusRepositoryImpl(
-            databaseHelper: SqliteDatabase(),
-          ),
-        );
+        final bloc = StatusBloc(statusRepository: sl<IStatusRepository>());
         if (id != null) {
           bloc.add(LoadStatusEvent(id: id!));
         }

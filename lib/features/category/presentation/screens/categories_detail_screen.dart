@@ -1,9 +1,9 @@
+import 'package:clothes_control/core/di/di.dart';
+import 'package:clothes_control/domain/repositories/category_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clothes_control/data/dto/category/new_category_dto.dart';
 import 'package:clothes_control/features/_shared/bloc/category/category_bloc.dart';
-import 'package:clothes_control/data/database/database_helper.dart';
-import 'package:clothes_control/data/repositories/category_repository_impl.dart';
 import 'package:go_router/go_router.dart';
 
 class CategoriesDetailScreen extends StatelessWidget {
@@ -15,11 +15,7 @@ class CategoriesDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) {
-        final bloc = CategoryBloc(
-          categoryRepository: CategoryRepositoryImpl(
-            sqliteDatabase: SqliteDatabase(),
-          ),
-        );
+        final bloc = CategoryBloc(categoryRepository: sl<ICategoryRepository>());
         if (id != null) {
           bloc.add(LoadCategoryEvent(id: id!));
         }

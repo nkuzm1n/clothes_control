@@ -4,36 +4,36 @@ import 'package:clothes_control/domain/entities/status.dart';
 import 'package:clothes_control/domain/repositories/status_repository.dart';
 
 class StatusRepositoryImpl implements IStatusRepository {
-  final SqliteDatabase databaseHelper;
+  final SqliteDatabase sqliteDatabase;
 
-  StatusRepositoryImpl({required this.databaseHelper});
+  StatusRepositoryImpl({required this.sqliteDatabase});
 
   @override
   Future<List<Status>> getManyBy({List<int>? id}) async {
-    final result = await databaseHelper.getStatuses(id: id);
+    final result = await sqliteDatabase.getStatuses(id: id);
     return result.map((item) => Status.fromJson(item)).toList();
   }
 
   @override
   Future<Status?> getOneById(int id) async {
-    final result = await databaseHelper.getStatus(id);
+    final result = await sqliteDatabase.getStatus(id);
     return result.isNotEmpty ? Status.fromJson(result) : null;
   }
 
   @override
   Future<Status> createOne(NewStatusDto status) async {
-    final id = await databaseHelper.insertStatus(status.toJson());
+    final id = await sqliteDatabase.insertStatus(status.toJson());
     final result = await getOneById(id);
     return result!;
   }
 
   @override
   Future<int> updateOne(Status status) async {
-    return await databaseHelper.updateStatus(status.toJson());
+    return await sqliteDatabase.updateStatus(status.toJson());
   }
 
   @override
   Future<int> deleteOne(int id) async {
-    return await databaseHelper.deleteStatus(id);
+    return await sqliteDatabase.deleteStatus(id);
   }
 }

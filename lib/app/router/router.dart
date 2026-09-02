@@ -1,5 +1,5 @@
 import 'package:clothes_control/features/settings/presentation/screens/settings_screen.dart';
-import 'package:clothes_control/shared/router/route_names.dart';
+import 'package:clothes_control/core/router/route_names.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:clothes_control/features/category/presentation/screens/categories_detail_screen.dart';

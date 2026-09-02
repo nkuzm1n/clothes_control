@@ -1,8 +1,10 @@
 import 'package:clothes_control/app/router/router.dart';
+import 'package:clothes_control/app/di/di_config.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  initRepositories();
   runApp(const App());
 }
 

@@ -1,4 +1,9 @@
+import 'package:clothes_control/core/di/di.dart';
 import 'package:clothes_control/domain/entities/cloth.dart';
+import 'package:clothes_control/domain/repositories/category_repository.dart';
+import 'package:clothes_control/domain/repositories/clothes_repository.dart';
+import 'package:clothes_control/domain/repositories/image_repository.dart';
+import 'package:clothes_control/domain/repositories/status_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clothes_control/data/dto/cloth/new_cloth_dto.dart';
@@ -30,10 +35,10 @@ class ClothesDetailScreen extends StatelessWidget {
       child: BlocProvider(
         create: (context) {
           final bloc = ClothesDetailBloc(
-            clothesRepository: ClothesRepositoryImpl(databaseHelper: SqliteDatabase()),
-            statusRepository: StatusRepositoryImpl(databaseHelper: SqliteDatabase()),
-            categoryRepository: CategoryRepositoryImpl(sqliteDatabase: SqliteDatabase()),
-            imageRepository: ImageRepositoryImpl(),
+            clothesRepository: sl<IClothesRepository>(),
+            statusRepository: sl<IStatusRepository>(),
+            categoryRepository: sl<ICategoryRepository>(),
+            imageRepository: sl<IImageRepository>(),
           );
           bloc.add(
             LoadClothesDetailEvent(id: id, statuses: const [], categories: const []),

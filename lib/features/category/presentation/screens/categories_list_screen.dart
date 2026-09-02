@@ -1,9 +1,11 @@
+import 'package:clothes_control/core/di/di.dart';
+import 'package:clothes_control/domain/repositories/category_repository.dart';
 import 'package:clothes_control/features/_shared/bloc/category/category_bloc.dart';
 import 'package:clothes_control/data/database/database_helper.dart';
 import 'package:clothes_control/data/repositories/category_repository_impl.dart';
 import 'package:clothes_control/features/_shared/widgets/ui/snackbar/ui_snackbar.dart';
-import 'package:clothes_control/shared/router/extensions/app_router_navigation.dart';
-import 'package:clothes_control/shared/router/route_names.dart';
+import 'package:clothes_control/core/router/extensions/app_router_navigation.dart';
+import 'package:clothes_control/core/router/route_names.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,7 +16,7 @@ class CategoriesListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => CategoryBloc(
-        categoryRepository: CategoryRepositoryImpl(sqliteDatabase: SqliteDatabase()),
+        categoryRepository: sl<ICategoryRepository>(),
       )..add(LoadCategoryListEvent()),
       child: const CategoriesListView(),
     );

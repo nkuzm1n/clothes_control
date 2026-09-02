@@ -4,9 +4,9 @@ import 'package:clothes_control/domain/entities/cloth.dart';
 import 'package:clothes_control/domain/repositories/clothes_repository.dart';
 
 class ClothesRepositoryImpl implements IClothesRepository {
-  final SqliteDatabase databaseHelper;
+  final SqliteDatabase sqliteDatabase;
 
-  ClothesRepositoryImpl({required this.databaseHelper});
+  ClothesRepositoryImpl({required this.sqliteDatabase});
 
   @override
   Future<List<Cloth>> getManyBy({
@@ -16,7 +16,7 @@ class ClothesRepositoryImpl implements IClothesRepository {
     String? orderBy,
     String? direction,
   }) async {
-    final result = await databaseHelper.getClothesList(
+    final result = await sqliteDatabase.getClothesList(
       name: name,
       statusId: statusId,
       categoryId: categoryId,
@@ -28,22 +28,22 @@ class ClothesRepositoryImpl implements IClothesRepository {
 
   @override
   Future<Cloth?> getOneById(int itemId) async {
-    final result = await databaseHelper.getCloth(itemId);
+    final result = await sqliteDatabase.getCloth(itemId);
     return result.isNotEmpty ? Cloth.fromJson(result) : null;
   }
 
   @override
   Future<int> createOne(NewClothDto item) async {
-    return await databaseHelper.insertCloth(item.toJson());
+    return await sqliteDatabase.insertCloth(item.toJson());
   }
 
   @override
   Future<void> deleteOne(int itemId) async {
-    await databaseHelper.deleteCloth(itemId);
+    await sqliteDatabase.deleteCloth(itemId);
   }
 
   @override
   Future<int> updateOne(Cloth item) async {
-    return await databaseHelper.updateCloth(item.toJson());
+    return await sqliteDatabase.updateCloth(item.toJson());
   }
 }
