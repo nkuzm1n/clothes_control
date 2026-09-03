@@ -54,8 +54,8 @@ class _UiImagePickerState extends State<UiImagePicker> {
           onPressed: () => _pickImageFromCamera(),
           child: const Text('Pick from Camera'),
         ),
-        Image.file(widget.image ?? (_imageFile ?? File('path/to/default/image.jpg')),
-            height: 200, width: 200),
+        if (widget.image != null || _imageFile != null)
+          Image.file(widget.image ?? _imageFile!, height: 200, width: 200),
       ],
     );
   }

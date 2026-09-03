@@ -78,7 +78,6 @@ class ClothesDetailBloc extends Bloc<ClothesDetailEvent, ClothesDetailState> {
         categories: event.categories,
       ));
       try {
-        print("new cloth ${event.newCloth}");
         final id = await clothesRepository.createOne(event.newCloth);
         final cloth = await clothesRepository.getOneById(id);
         emit(ClothesDetailAddedState(

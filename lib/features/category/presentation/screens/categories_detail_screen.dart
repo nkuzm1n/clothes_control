@@ -6,113 +6,123 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clothes_control/features/_shared/bloc/category/category_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class CategoriesDetailScreen extends StatelessWidget {
+class CategoriesDetailScreen extends StatefulWidget {
   final int? id;
 
   const CategoriesDetailScreen({super.key, this.id});
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) {
-        final bloc = CategoryBloc(categoryRepository: sl<ICategoryRepository>());
-        if (id != null) {
-          bloc.add(LoadCategoryEvent(id: id!));
-        }
-        return bloc;
-      },
-      child: CategoriesDetailView(id: id),
-    );
-  }
+  State<CategoriesDetailScreen> createState() => _CategoriesDetailScreenState();
 }
 
-class CategoriesDetailView extends StatelessWidget {
-  final int? id;
+class _CategoriesDetailScreenState extends State<CategoriesDetailScreen> {
+  late TextEditingController _nameController;
+  late CategoryBloc bloc;
+  final formKey = GlobalKey<FormState>();
 
-  const CategoriesDetailView({super.key, this.id});
+  @override
+  void initState() {
+    super.initState();
+    bloc = CategoryBloc(categoryRepository: sl<ICategoryRepository>());
+    if (widget.id != null) {
+      bloc.add(LoadCategoryEvent(id: widget.id!));
+    }
+    _nameController = TextEditingController(text: '');
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    bloc.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CategoryBloc, CategoryState>(
-      listener: (context, state) {
-        if (state is CreatedCategoryState || state is UpdatedCategoryState) {
-          context.pop();
-        }
-      },
-      builder: (context, state) {
-        final formKey = GlobalKey<FormState>();
-        final nameController = TextEditingController(
-          text: state.categoryName,
-        );
-        return GestureDetector(
-          onTap: () {
-            FocusManager.instance.primaryFocus?.unfocus();
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                AppBar(
-                  leading: IconButton(
-                    onPressed: () => context.pop(),
-                    icon: const Icon(Icons.arrow_back),
+    return BlocProvider.value(
+      value: bloc,
+      child: BlocConsumer<CategoryBloc, CategoryState>(
+        listener: (context, state) {
+          if (state is CreatedCategoryState || state is UpdatedCategoryState) {
+            context.pop();
+          }
+          if (state is CategoryErrorState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.error?.toString() ?? 'Ошибка')),
+            );
+          }
+        },
+        builder: (context, state) {
+          return GestureDetector(
+            onTap: () {
+              FocusManager.instance.primaryFocus?.unfocus();
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  AppBar(
+                    leading: IconButton(
+                      onPressed: () => context.pop(),
+                      icon: const Icon(Icons.arrow_back),
+                    ),
+                    title: Text(
+                      state.categoryName ?? 'Новая категория',
+                      style: const TextStyle(fontWeight: FontWeight.w700),
+                    ),
                   ),
-                  title: Text(
-                    state.categoryName == null ? 'Новая категория' : state.categoryName!,
-                    style: const TextStyle(fontWeight: FontWeight.w700),
-                  ),
-                ),
-                Form(
-                  key: formKey,
-                  child: Column(
-                    children: <Widget>[
-                      TextFormField(
-                        controller: nameController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Заполните поле';
-                          }
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                          labelText: 'Наименование *',
-                          floatingLabelBehavior: FloatingLabelBehavior.always,
+                  Form(
+                    key: formKey,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          controller: _nameController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Заполните поле';
+                            }
+                            return null;
+                          },
+                          decoration: const InputDecoration(
+                            labelText: 'Наименование *',
+                            floatingLabelBehavior: FloatingLabelBehavior.always,
+                          ),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {
-                      if (state.category == null) {
-                        context.read<CategoryBloc>().add(
-                              AddNewCategoryEvent(
-                                newCategory: CreateCategoryParams(
-                                  name: nameController.text,
-                                ),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (formKey.currentState?.validate() ?? false) {
+                        if (state.category == null) {
+                          bloc.add(
+                            AddNewCategoryEvent(
+                              newCategory: CreateCategoryParams(
+                                name: _nameController.text,
                               ),
-                            );
-                      } else {
-                        context.read<CategoryBloc>().add(
-                              UpdateCategoryEvent(
-                                category: state.category!.copyWith(
-                                  name: nameController.text,
-                                ),
+                            ),
+                          );
+                        } else {
+                          bloc.add(
+                            UpdateCategoryEvent(
+                              category: state.category!.copyWith(
+                                name: _nameController.text,
                               ),
-                            );
+                            ),
+                          );
+                        }
                       }
-                    }
-                  },
-                  child: const Text('Сохранить'),
-                ),
-              ],
+                    },
+                    child: const Text('Сохранить'),
+                  ),
+                ],
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
