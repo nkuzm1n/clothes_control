@@ -1,8 +1,8 @@
 import 'package:clothes_control/core/di/service_locator.dart';
+import 'package:clothes_control/domain/repositories/params/category/create_category_params.dart';
 import 'package:clothes_control/domain/repositories/category_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:clothes_control/data/dto/category/new_category_dto.dart';
 import 'package:clothes_control/features/_shared/bloc/category/category_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -90,7 +90,7 @@ class CategoriesDetailView extends StatelessWidget {
                       if (state.category == null) {
                         context.read<CategoryBloc>().add(
                               AddNewCategoryEvent(
-                                newCategory: NewCategoryDto(
+                                newCategory: CreateCategoryParams(
                                   name: nameController.text,
                                 ),
                               ),

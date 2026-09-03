@@ -1,4 +1,5 @@
-import 'package:clothes_control/data/dto/category/new_category_dto.dart';
+import 'package:clothes_control/domain/repositories/params/category/create_category_params.dart';
+import 'package:clothes_control/domain/repositories/params/category/create_category_params.dart';
 import 'package:clothes_control/domain/entities/category.dart';
 import 'package:clothes_control/domain/repositories/category_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -44,10 +45,11 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     });
 
     on<UpdateCategoryEvent>((event, emit) async {
-      emit(LoadingCategoryState(category: event.category));
+      emit(LoadingCategoryState(category: state.category));
       try {
         await _categoryRepository.updateOne(event.category);
-        emit(UpdatedCategoryState(category: event.category));
+        final category = await _categoryRepository.getOneById(state.category!.id);
+        emit(UpdatedCategoryState(category: category!));
       } catch (e) {
         emit(CategoryErrorState(error: e));
       }

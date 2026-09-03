@@ -1,4 +1,4 @@
-import 'package:clothes_control/data/dto/cloth/new_cloth_dto.dart';
+import 'package:clothes_control/domain/repositories/params/cloth/create_cloth_params.dart';
 import 'package:clothes_control/domain/entities/category.dart';
 import 'package:clothes_control/domain/entities/cloth.dart';
 import 'package:clothes_control/domain/entities/status.dart';
@@ -55,8 +55,9 @@ class ClothesDetailBloc extends Bloc<ClothesDetailEvent, ClothesDetailState> {
       ));
       try {
         await clothesRepository.updateOne(event.cloth);
+        final cloth = await clothesRepository.getOneById(event.cloth.id);
         emit(ClothesDetailUpdatedState(
-          cloth: event.cloth,
+          cloth: cloth!,
           statuses: event.statuses,
           categories: event.categories,
         ));

@@ -3,7 +3,7 @@ part of 'category_bloc.dart';
 class CategoryState extends Equatable {
   final List<Category>? list;
   final Category? category;
-  final NewCategoryDto? newCategory;
+  final CreateCategoryParams? newCategory;
   final dynamic error;
 
   const CategoryState({

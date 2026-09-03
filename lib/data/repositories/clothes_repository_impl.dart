@@ -1,5 +1,6 @@
-import 'package:clothes_control/data/dto/cloth/new_cloth_dto.dart';
+import 'package:clothes_control/domain/repositories/params/cloth/create_cloth_params.dart';
 import 'package:clothes_control/data/database/database_helper.dart';
+import 'package:clothes_control/data/mappers/cloth_mapper.dart';
 import 'package:clothes_control/domain/entities/cloth.dart';
 import 'package:clothes_control/domain/repositories/clothes_repository.dart';
 
@@ -23,27 +24,27 @@ class ClothesRepositoryImpl implements IClothesRepository {
       orderBy: orderBy,
       direction: direction,
     );
-    return result.map((item) => Cloth.fromJson(item)).toList();
+    return result.map((item) => ClothMapper.fromModel(item)).toList();
   }
 
   @override
   Future<Cloth?> getOneById(int itemId) async {
     final result = await sqliteDatabase.getCloth(itemId);
-    return result.isNotEmpty ? Cloth.fromJson(result) : null;
+    return result != null ? ClothMapper.fromModel(result) : null;
   }
 
   @override
-  Future<int> createOne(NewClothDto item) async {
-    return await sqliteDatabase.insertCloth(item.toJson());
+  Future<int> createOne(CreateClothParams createParams) async {
+    return await sqliteDatabase.insertCloth(ClothMapper.createParamsToModel(createParams));
   }
 
   @override
   Future<void> deleteOne(int itemId) async {
-    await sqliteDatabase.deleteCloth(itemId);
+    await sqliteDatabase.deleteClothById(itemId);
   }
 
   @override
-  Future<int> updateOne(Cloth item) async {
-    return await sqliteDatabase.updateCloth(item.toJson());
+  Future<int> updateOne(Cloth cloth) async {
+    return await sqliteDatabase.updateCloth(ClothMapper.toModel(cloth));
   }
 }

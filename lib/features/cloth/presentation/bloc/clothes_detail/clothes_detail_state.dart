@@ -2,7 +2,7 @@ part of 'clothes_detail_bloc.dart';
 
 class ClothesDetailState extends Equatable {
   final Cloth? cloth;
-  final NewClothDto? newCloth;
+  final CreateClothParams? newCloth;
   final List<Status> statuses;
   final List<Category> categories;
   final dynamic error;

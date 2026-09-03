@@ -1,4 +1,4 @@
-import 'package:clothes_control/data/dto/status/new_status_dto.dart';
+import 'package:clothes_control/domain/repositories/params/status/create_status_params.dart';
 import 'package:clothes_control/domain/entities/status.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clothes_control/domain/repositories/status_repository.dart';
@@ -44,10 +44,11 @@ class StatusBloc extends Bloc<StatusEvent, StatusState> {
     });
 
     on<UpdateStatusEvent>((event, emit) async {
-      emit(LoadingStatusState(status: event.status));
+      emit(LoadingStatusState(status: state.status));
       try {
         await _statusRepository.updateOne(event.status);
-        emit(UpdatedStatusState(status: event.status));
+        final status = await _statusRepository.getOneById(event.status.id);
+        emit(UpdatedStatusState(status: status!));
       } catch (e) {
         emit(StatusErrorState(error: e));
       }

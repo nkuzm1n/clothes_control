@@ -1,4 +1,4 @@
-import 'package:clothes_control/data/dto/cloth/new_cloth_dto.dart';
+import 'package:clothes_control/domain/repositories/params/cloth/create_cloth_params.dart';
 import 'package:clothes_control/domain/entities/cloth.dart';
 
 abstract class IClothesRepository {
@@ -11,6 +11,6 @@ abstract class IClothesRepository {
   });
   Future<Cloth?> getOneById(int itemId);
   Future<void> deleteOne(int itemId);
-  Future<int> updateOne(Cloth item);
-  Future<int> createOne(NewClothDto item);
+  Future<int> updateOne(Cloth cloth);
+  Future<int> createOne(CreateClothParams createParams);
 }

@@ -37,7 +37,7 @@ class UpdateStatusEvent extends StatusEvent {
 }
 
 class AddNewStatusEvent extends StatusEvent {
-  final NewStatusDto newStatus;
+  final CreateStatusParams newStatus;
 
   const AddNewStatusEvent({required this.newStatus});
 

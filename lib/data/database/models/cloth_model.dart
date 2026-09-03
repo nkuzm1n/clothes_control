@@ -1,11 +1,12 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'new_cloth_dto.freezed.dart';
-part 'new_cloth_dto.g.dart';
+part 'cloth_model.freezed.dart';
+part 'cloth_model.g.dart';
 
 @freezed
-abstract class NewClothDto with _$NewClothDto {
-  const factory NewClothDto({
+abstract class ClothModel with _$ClothModel {
+  const factory ClothModel({
+    int? id,
     required String name,
     String? description,
     @JsonKey(name: 'status_id') int? statusId,
@@ -13,7 +14,7 @@ abstract class NewClothDto with _$NewClothDto {
     @JsonKey(name: 'image_url') String? imageUrl,
     @JsonKey(name: 'created_at') String? createdAt,
     @JsonKey(name: 'updated_at') String? updatedAt,
-  }) = _NewClothDto;
+  }) = _ClothModel;
 
-  factory NewClothDto.fromJson(Map<String, Object?> json) => _$NewClothDtoFromJson(json);
+  factory ClothModel.fromJson(Map<String, Object?> json) => _$ClothModelFromJson(json);
 }

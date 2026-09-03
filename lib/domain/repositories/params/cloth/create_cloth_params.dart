@@ -1,17 +1,14 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'cloth.freezed.dart';
+part 'create_cloth_params.freezed.dart';
 
 @freezed
-abstract class Cloth with _$Cloth {
-  const factory Cloth({
-    required int id,
+abstract class CreateClothParams with _$CreateClothParams {
+  const factory CreateClothParams({
     required String name,
     String? description,
     int? statusId,
     int? categoryId,
     String? imageUrl,
-    String? createdAt,
-    String? updatedAt,
-  }) = _Cloth;
+  }) = _CreateClothParams;
 }

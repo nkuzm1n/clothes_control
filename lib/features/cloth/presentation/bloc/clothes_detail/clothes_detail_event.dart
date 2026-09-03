@@ -38,7 +38,7 @@ class UpdateClothesDetailEvent extends ClothesDetailEvent {
 }
 
 class AddNewClothEvent extends ClothesDetailEvent {
-  final NewClothDto newCloth;
+  final CreateClothParams newCloth;
   final List<Status> statuses;
   final List<Category> categories;
 

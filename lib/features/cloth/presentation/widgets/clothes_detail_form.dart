@@ -1,6 +1,7 @@
 import 'package:clothes_control/domain/entities/category.dart';
 import 'package:clothes_control/domain/entities/cloth.dart';
 import 'package:clothes_control/domain/entities/status.dart';
+import 'package:clothes_control/domain/repositories/params/cloth/create_cloth_params.dart';
 import 'package:clothes_control/features/_shared/widgets/ui/button/ui_button.dart';
 import 'package:clothes_control/features/_shared/widgets/ui/image/ui_image.dart';
 import 'package:clothes_control/features/_shared/widgets/ui/snackbar/ui_snackbar.dart';
@@ -15,7 +16,7 @@ class ClothesDetailForm extends StatefulWidget {
   final List<Category> categories;
   final bool disabled;
   final bool loading;
-  final Function(Map<String, Object?>? newCloth)? onSave;
+  final Function(CreateClothParams newCloth)? onSave;
   final Function(String url)? onImageLoad;
   final Function()? onStatusesPressed;
   final Function()? onCategoryPressed;
@@ -247,15 +248,14 @@ class _ClothesDetailFormState extends State<ClothesDetailForm> {
                       return;
                     }
                     if (widget.onSave != null) {
-                      final clothData = {
-                        'id': widget.cloth?.id,
-                        'name': _nameController.text,
-                        'description': _descriptionController.text.trim(),
-                        'status_id': _selectedStatusId,
-                        'category_id': _selectedCategoryId,
-                        'image_url': _selectedImageUrl,
-                      };
-                      widget.onSave!(clothData);
+                      final newClothData = CreateClothParams(
+                        name: _nameController.text,
+                        description: _descriptionController.text.trim(),
+                        statusId: _selectedStatusId,
+                        categoryId: _selectedCategoryId,
+                        imageUrl: _selectedImageUrl,
+                      );
+                      widget.onSave!(newClothData);
                     }
                   },
                   child: const Text('Сохранить'),

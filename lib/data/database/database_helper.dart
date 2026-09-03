@@ -1,3 +1,6 @@
+import 'package:clothes_control/data/database/models/category_model.dart';
+import 'package:clothes_control/data/database/models/cloth_model.dart';
+import 'package:clothes_control/data/database/models/status_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -104,7 +107,7 @@ class SqliteDatabase {
     }
   }
 
-  Future<List<Map<String, dynamic>>> getClothesList({
+  Future<List<ClothModel>> getClothesList({
     String? name,
     int? statusId,
     int? categoryId,
@@ -115,7 +118,7 @@ class SqliteDatabase {
     orderBy ??= 'updated_at';
     direction ??= 'DESC';
     final db = await instance.database;
-    return await db.query(
+    final result = await db.query(
       'clothes',
       where: '''
         name LIKE ? 
@@ -129,72 +132,77 @@ class SqliteDatabase {
       ].whereType<Object>().toList(),
       orderBy: "$orderBy $direction",
     );
+    return result.map((json) => ClothModel.fromJson(json)).toList();
   }
 
-  Future<Map<String, dynamic>> getCloth(int id) async {
+  Future<ClothModel?> getCloth(int id) async {
     final db = await instance.database;
     final data = await db.query('clothes', where: 'id = ?', whereArgs: [id]);
-    return data.first;
+    return data.first.isNotEmpty ? ClothModel.fromJson(data.first) : null;
   }
 
-  Future<int> insertCloth(Map<String, dynamic> item) async {
+  Future<int> insertCloth(ClothModel clothModel) async {
+    final json = clothModel.toJson();
     final db = await instance.database;
     final data = await db.insert(
       'clothes',
-      addInsertDates(item),
+      addInsertDates(json),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
     return data;
   }
 
-  Future<void> deleteCloth(int itemId) async {
+  Future<void> deleteClothById(int id) async {
     final db = await instance.database;
-    await db.delete('clothes', where: 'id = ?', whereArgs: [itemId]);
+    await db.delete('clothes', where: 'id = ?', whereArgs: [id]);
   }
 
-  Future<int> updateCloth(Map<String, dynamic> item) async {
+  Future<int> updateCloth(ClothModel cloth) async {
+    final json = cloth.toJson();
     final db = await instance.database;
     final result = await db.update(
       'clothes',
-      addUpdateDates(item),
+      addUpdateDates(json),
       where: 'id = ?',
-      whereArgs: [item['id']],
+      whereArgs: [json['id']],
     );
     return result;
   }
 
-  Future<List<Map<String, dynamic>>> getStatuses({List<int>? id}) async {
+  Future<List<StatusModel>> getStatuses({List<int>? id}) async {
     final db = await instance.database;
-    final data = await db.query(
+    final rawData = await db.query(
       'statuses',
       whereArgs: id,
       where: id == null ? null : 'id IN (${List.filled(id.length, '?').join(',')})',
     );
-    return data;
+    return rawData.map((json) => StatusModel.fromJson(json)).toList();
   }
 
-  Future<Map<String, dynamic>> getStatus(int id) async {
+  Future<StatusModel?> getStatus(int id) async {
     final db = await instance.database;
-    final data = await db.query('statuses', where: 'id = ?', whereArgs: [id]);
-    return data.first;
+    final rawData = await db.query('statuses', where: 'id = ?', whereArgs: [id]);
+    return rawData.first.isNotEmpty ? StatusModel.fromJson(rawData.first) : null;
   }
 
-  Future<int> insertStatus(Map<String, dynamic> item) async {
+  Future<int> insertStatus(StatusModel statusModel) async {
+    final json = statusModel.toJson();
     final db = await instance.database;
     return await db.insert(
       'statuses',
-      addInsertDates(item),
+      addInsertDates(json),
       conflictAlgorithm: ConflictAlgorithm.ignore,
     );
   }
 
-  Future<int> updateStatus(Map<String, dynamic> item) async {
+  Future<int> updateStatus(StatusModel statusModel) async {
+    final json = statusModel.toJson();
     final db = await instance.database;
     return await db.update(
       'statuses',
-      addUpdateDates(item),
+      addUpdateDates(json),
       where: 'id = ?',
-      whereArgs: [item['id']],
+      whereArgs: [json['id']],
     );
   }
 
@@ -207,23 +215,24 @@ class SqliteDatabase {
     );
   }
 
-  Future<List<Map<String, dynamic>>> getCategories({List<int>? id}) async {
+  Future<List<CategoryModel>> getCategories({List<int>? id}) async {
     final db = await instance.database;
     final data = await db.query(
       'categories',
       whereArgs: id,
       where: id == null ? null : 'id IN (${List.filled(id.length, '?').join(',')})',
     );
-    return data;
+    return data.map((json) => CategoryModel.fromJson(json)).toList();
   }
 
-  Future<Map<String, dynamic>> getCategory(int id) async {
+  Future<CategoryModel?> getCategory(int id) async {
     final db = await instance.database;
     final data = await db.query('categories', where: 'id = ?', whereArgs: [id]);
-    return data.first;
+    return data.first.isNotEmpty ? CategoryModel.fromJson(data.first) : null;
   }
 
-  Future<int> insertCategory(Map<String, dynamic> item) async {
+  Future<int> insertCategory(CategoryModel categoryModel) async {
+    final item = categoryModel.toJson();
     final db = await instance.database;
     return await db.insert(
       'categories',
@@ -232,7 +241,8 @@ class SqliteDatabase {
     );
   }
 
-  Future<int> updateCategory(Map<String, dynamic> item) async {
+  Future<int> updateCategory(CategoryModel categoryModel) async {
+    final item = categoryModel.toJson();
     final db = await instance.database;
     return await db.update(
       'categories',

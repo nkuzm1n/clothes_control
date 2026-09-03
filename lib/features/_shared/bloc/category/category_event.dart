@@ -37,7 +37,7 @@ class UpdateCategoryEvent extends CategoryEvent {
 }
 
 class AddNewCategoryEvent extends CategoryEvent {
-  final NewCategoryDto newCategory;
+  final CreateCategoryParams newCategory;
 
   const AddNewCategoryEvent({required this.newCategory});
 

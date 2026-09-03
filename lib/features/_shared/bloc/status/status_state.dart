@@ -3,7 +3,7 @@ part of 'status_bloc.dart';
 class StatusState extends Equatable {
   final List<Status>? list;
   final Status? status;
-  final NewStatusDto? newStatus;
+  final CreateStatusParams? newStatus;
   final dynamic error;
 
   const StatusState({

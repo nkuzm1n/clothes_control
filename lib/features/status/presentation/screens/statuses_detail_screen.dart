@@ -2,7 +2,7 @@ import 'package:clothes_control/core/di/service_locator.dart';
 import 'package:clothes_control/domain/repositories/status_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:clothes_control/data/dto/status/new_status_dto.dart';
+import 'package:clothes_control/domain/repositories/params/status/create_status_params.dart';
 import 'package:clothes_control/features/_shared/widgets/ui/colorpicker/ui_colorpicker.dart';
 import 'package:clothes_control/core/utils/extensions/hex_color.dart';
 import 'package:clothes_control/features/_shared/bloc/status/status_bloc.dart';
@@ -108,7 +108,7 @@ class StatusesDetailView extends StatelessWidget {
                       if (state.status == null) {
                         context.read<StatusBloc>().add(
                               AddNewStatusEvent(
-                                newStatus: NewStatusDto(
+                                newStatus: CreateStatusParams(
                                   name: nameController.text,
                                   color: pickedColor.toHex(),
                                 ),
@@ -118,8 +118,8 @@ class StatusesDetailView extends StatelessWidget {
                         context.read<StatusBloc>().add(
                               UpdateStatusEvent(
                                 status: state.status!.copyWith(
-                                  name: nameController.text,
-                                  color: pickedColor.toHex(),
+                                  name: state.status!.name,
+                                  color: state.status!.color,
                                 ),
                               ),
                             );
