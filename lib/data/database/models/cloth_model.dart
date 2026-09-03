@@ -6,7 +6,7 @@ part 'cloth_model.g.dart';
 @freezed
 abstract class ClothModel with _$ClothModel {
   const factory ClothModel({
-    int? id,
+    @JsonKey(includeIfNull: false) int? id,
     required String name,
     String? description,
     @JsonKey(name: 'status_id') int? statusId,

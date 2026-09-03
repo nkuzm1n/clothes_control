@@ -6,7 +6,7 @@ part 'status_model.g.dart';
 @freezed
 abstract class StatusModel with _$StatusModel {
   const factory StatusModel({
-    int? id,
+    @JsonKey(includeIfNull: false) int? id,
     required String name,
     required String color,
     @JsonKey(name: 'created_at') String? createdAt,

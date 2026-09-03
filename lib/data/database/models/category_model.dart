@@ -6,7 +6,7 @@ part 'category_model.g.dart';
 @freezed
 abstract class CategoryModel with _$CategoryModel {
   const factory CategoryModel({
-    int? id,
+    @JsonKey(includeIfNull: false) int? id,
     required String name,
     @JsonKey(name: 'created_at') String? createdAt,
     @JsonKey(name: 'updated_at') String? updatedAt,
