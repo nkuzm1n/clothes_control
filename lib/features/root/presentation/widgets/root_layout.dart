@@ -13,8 +13,7 @@ class RootLayout extends StatelessWidget {
     return BottomNavigationBar(
       currentIndex: navigationShell.currentIndex,
       type: BottomNavigationBarType.fixed,
-      selectedItemColor: Colors.blue,
-      unselectedItemColor: Colors.grey,
+      selectedItemColor: Theme.of(context).primaryColor,
       onTap: (index) => _onTap(context, index),
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.checkroom_rounded), label: 'Гардероб'),

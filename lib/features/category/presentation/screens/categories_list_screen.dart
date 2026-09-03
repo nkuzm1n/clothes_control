@@ -1,6 +1,8 @@
 import 'package:clothes_control/core/di/service_locator.dart';
 import 'package:clothes_control/domain/repositories/category_repository.dart';
 import 'package:clothes_control/features/_shared/bloc/category/category_bloc.dart';
+import 'package:clothes_control/features/_shared/widgets/layout/sliver_page_layout.dart';
+import 'package:clothes_control/features/_shared/widgets/layout/primary_sliver_app_bar.dart';
 import 'package:clothes_control/features/_shared/widgets/ui/snackbar/ui_snackbar.dart';
 import 'package:clothes_control/core/router/extensions/app_router_navigation.dart';
 import 'package:clothes_control/core/router/route_names.dart';
@@ -38,6 +40,49 @@ class CategoriesListView extends StatelessWidget {
     context.read<CategoryBloc>().add(DeleteCategoryFromListEvent(id: id));
   }
 
+  Widget _buildContent(BuildContext context, CategoryState state) {
+    if (state is LoadingCategoryListState) {
+      return const SliverFillRemaining(child: Center(child: CircularProgressIndicator()));
+    }
+    if (state is CategoryErrorState) {
+      return SliverFillRemaining(child: Center(child: Text(state.error?.message)));
+    }
+    if (state is LoadedCategoryListState) {
+      if (state.list.isEmpty) {
+        return const SliverFillRemaining(child: Center(child: Text('Нет данных')));
+      }
+
+      return SliverPadding(
+        padding: const EdgeInsets.all(16),
+        sliver: SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              final item = state.list[index];
+              return Card(
+                child: ListTile(
+                  onTap: () {
+                    _navigateToCategoryDetailScreen(context, id: item.id);
+                  },
+                  title: Text(item.name),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () {
+                      _deleteCategoryItem(context, item.id);
+                    },
+                  ),
+                  contentPadding: const EdgeInsets.only(left: 12, right: 4, top: 0, bottom: 0),
+                ),
+              );
+            },
+            childCount: state.list.length, // Количество элементов
+          ),
+        ),
+      );
+    }
+
+    return SliverToBoxAdapter(child: Container());
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<CategoryBloc, CategoryState>(
@@ -47,60 +92,18 @@ class CategoriesListView extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        if (state is LoadingCategoryListState) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (state is CategoryErrorState) {
-          return Center(child: Text(state.error?.message));
-        }
-        if (state is LoadedCategoryListState) {
-          if (state.list.isEmpty) {
-            return const Center(child: Text('Нет данных'));
-          }
-          return Stack(
-            children: [
-              AppBar(
-                title: const Text(
-                  'Категории',
-                  style: TextStyle(fontWeight: FontWeight.w700),
-                ),
-              ),
-              ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                itemCount: state.list.length,
-                itemBuilder: (context, index) {
-                  final item = state.list[index];
-                  return Card(
-                    child: ListTile(
-                      onTap: () {
-                        _navigateToCategoryDetailScreen(context, id: item.id);
-                      },
-                      title: Text(item.name),
-                      trailing: IconButton(
-                        icon: const Icon(Icons.delete),
-                        onPressed: () {
-                          _deleteCategoryItem(context, item.id);
-                        },
-                      ),
-                      contentPadding: const EdgeInsets.only(left: 12, right: 4, top: 0, bottom: 0),
-                    ),
-                  );
-                },
-              ),
-              Positioned(
-                bottom: 20,
-                right: 20,
-                child: FloatingActionButton(
-                  onPressed: () {
-                    _navigateToCategoryDetailScreen(context);
-                  },
-                  child: const Icon(Icons.add),
-                ),
-              )
-            ],
-          );
-        }
-        return Container();
+        return SliverPageLayout(
+          appBar: const PrimarySliverAppBar(
+            titleText: 'Категории',
+          ),
+          body: _buildContent(context, state),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              _navigateToCategoryDetailScreen(context);
+            },
+            child: const Icon(Icons.add),
+          ),
+        );
       },
     );
   }

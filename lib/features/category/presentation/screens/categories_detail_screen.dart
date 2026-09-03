@@ -1,6 +1,8 @@
 import 'package:clothes_control/core/di/service_locator.dart';
 import 'package:clothes_control/domain/repositories/params/category/create_category_params.dart';
 import 'package:clothes_control/domain/repositories/category_repository.dart';
+import 'package:clothes_control/features/_shared/widgets/layout/sliver_page_layout.dart';
+import 'package:clothes_control/features/_shared/widgets/layout/primary_sliver_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clothes_control/features/_shared/bloc/category/category_bloc.dart';
@@ -57,67 +59,68 @@ class _CategoriesDetailScreenState extends State<CategoriesDetailScreen> {
             onTap: () {
               FocusManager.instance.primaryFocus?.unfocus();
             },
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  AppBar(
-                    leading: IconButton(
-                      onPressed: () => context.pop(),
-                      icon: const Icon(Icons.arrow_back),
-                    ),
-                    title: Text(
-                      state.categoryName ?? 'Новая категория',
-                      style: const TextStyle(fontWeight: FontWeight.w700),
-                    ),
-                  ),
-                  Form(
-                    key: formKey,
-                    child: Column(
-                      children: [
-                        TextFormField(
-                          controller: _nameController,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Заполните поле';
-                            }
-                            return null;
-                          },
-                          decoration: const InputDecoration(
-                            labelText: 'Наименование *',
-                            floatingLabelBehavior: FloatingLabelBehavior.always,
-                          ),
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+            child: SliverPageLayout(
+              appBar: PrimarySliverAppBar(
+                leading: IconButton(
+                  onPressed: () => context.pop(),
+                  icon: const Icon(Icons.arrow_back, color: Colors.white),
+                ),
+                titleText: state.categoryName ?? 'Новая категория',
+              ),
+              body: SliverPadding(
+                padding: const EdgeInsets.all(16),
+                sliver: SliverToBoxAdapter(
+                  child: Column(
+                    spacing: 30,
+                    children: [
+                      Form(
+                        key: formKey,
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              controller: _nameController,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Заполните поле';
+                                }
+                                return null;
+                              },
+                              decoration: const InputDecoration(
+                                labelText: 'Наименование *',
+                                floatingLabelBehavior: FloatingLabelBehavior.always,
+                              ),
+                              style: const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          if (formKey.currentState?.validate() ?? false) {
+                            if (state.category == null) {
+                              bloc.add(
+                                AddNewCategoryEvent(
+                                  newCategory: CreateCategoryParams(
+                                    name: _nameController.text,
+                                  ),
+                                ),
+                              );
+                            } else {
+                              bloc.add(
+                                UpdateCategoryEvent(
+                                  category: state.category!.copyWith(
+                                    name: _nameController.text,
+                                  ),
+                                ),
+                              );
+                            }
+                          }
+                        },
+                        child: const Text('Сохранить'),
+                      ),
+                    ],
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (formKey.currentState?.validate() ?? false) {
-                        if (state.category == null) {
-                          bloc.add(
-                            AddNewCategoryEvent(
-                              newCategory: CreateCategoryParams(
-                                name: _nameController.text,
-                              ),
-                            ),
-                          );
-                        } else {
-                          bloc.add(
-                            UpdateCategoryEvent(
-                              category: state.category!.copyWith(
-                                name: _nameController.text,
-                              ),
-                            ),
-                          );
-                        }
-                      }
-                    },
-                    child: const Text('Сохранить'),
-                  ),
-                ],
+                ),
               ),
             ),
           );
