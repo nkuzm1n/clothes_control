@@ -1,12 +1,10 @@
 import 'package:clothes_control/core/di/service_locator.dart';
-import 'package:clothes_control/domain/entities/cloth.dart';
 import 'package:clothes_control/domain/repositories/category_repository.dart';
 import 'package:clothes_control/domain/repositories/clothes_repository.dart';
 import 'package:clothes_control/domain/repositories/image_repository.dart';
 import 'package:clothes_control/domain/repositories/status_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:clothes_control/domain/repositories/params/cloth/create_cloth_params.dart';
 import 'package:clothes_control/features/_shared/widgets/ui/snackbar/ui_snackbar.dart';
 import 'package:clothes_control/features/cloth/presentation/widgets/clothes_detail_form.dart';
 import 'package:clothes_control/features/cloth/presentation/bloc/clothes_detail/clothes_detail_bloc.dart';
