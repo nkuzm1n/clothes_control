@@ -10,8 +10,8 @@
 ## Architecture & Structure
 
 - **Entry:** Standard `lib/main.dart`.
-- **Layers:** App (di, router, theme), Domain (Logic), Data (Repo/API), Features (Screens and Widgets), Shared(common utils).
-- **Features:** Group by feature (screens without domain logic) (e.g., `lib/features/login/`) for scalable apps.
+- **Layers:** App (di, router, theme), Domain (Logic), Data (Repo/Database/Mappers), Features (Screens and Widgets), Core(common utils).
+- **Features:** Group by feature (screens without domain logic) (e.g., `lib/features/login/presentation`) for scalable apps.
 - **SOLID:** Strictly enforced.
 - **State Management:**
   - **Default:** Use **Riverpod** as the primary state management and DI solution (for screens).
