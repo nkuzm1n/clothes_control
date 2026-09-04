@@ -10,7 +10,7 @@ class CustomSliverLayout extends StatelessWidget {
 
   const CustomSliverLayout({
     super.key,
-    required this.sliverAppBar,
+    this.sliverAppBar,
     required this.sliverBody,
     this.floatingActionButton,
     this.floatingActionButtonBottom = 20,
