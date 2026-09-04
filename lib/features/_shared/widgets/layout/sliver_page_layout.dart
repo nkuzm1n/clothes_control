@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 
 class SliverPageLayout extends StatelessWidget {
-  final Widget _appBar;
-  final Widget _body;
-  final Widget? _floatingActionButton;
+  final Widget sliverAppBar;
+  final Widget sliverBody;
+  final Widget? floatingActionButton;
+  final double? floatingActionButtonBottom;
+  final double? floatingActionButtonRight;
+  final Widget? extraBottom;
 
   const SliverPageLayout({
     super.key,
-    required Widget appBar,
-    required Widget body,
-    Widget? floatingActionButton,
-  })  : _appBar = appBar,
-        _body = body,
-        _floatingActionButton = floatingActionButton;
+    required this.sliverAppBar,
+    required this.sliverBody,
+    this.floatingActionButton,
+    this.floatingActionButtonBottom = 20,
+    this.floatingActionButtonRight = 20,
+    this.extraBottom,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,15 +24,16 @@ class SliverPageLayout extends StatelessWidget {
       children: [
         CustomScrollView(
           slivers: [
-            _appBar,
-            _body,
+            sliverAppBar,
+            sliverBody,
           ],
         ),
-        if (_floatingActionButton != null)
+        if (extraBottom != null) extraBottom!,
+        if (floatingActionButton != null)
           Positioned(
-            bottom: 20,
-            right: 20,
-            child: _floatingActionButton,
+            bottom: floatingActionButtonBottom,
+            right: floatingActionButtonRight,
+            child: floatingActionButton!,
           )
       ],
     );

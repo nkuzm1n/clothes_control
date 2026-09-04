@@ -13,7 +13,7 @@ class PrimarySliverAppBar extends StatelessWidget {
     this.backgroundColor,
     this.titleText,
     this.titlePadding,
-    this.expandedHeight = 150,
+    this.expandedHeight,
     this.leading,
     this.actions,
   });
@@ -25,6 +25,7 @@ class PrimarySliverAppBar extends StatelessWidget {
       pinned: true,
       leading: leading,
       actions: actions,
+      actionsPadding: (actions != null) ? const EdgeInsets.symmetric(horizontal: 16) : null,
       flexibleSpace: FlexibleSpaceBar(
         title: (titleText != null)
             ? Text(

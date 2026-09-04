@@ -9,6 +9,8 @@ import 'package:clothes_control/features/_shared/widgets/ui/snackbar/ui_snackbar
 import 'package:clothes_control/features/cloth/presentation/widgets/clothes_detail_form.dart';
 import 'package:clothes_control/features/cloth/presentation/bloc/clothes_detail/clothes_detail_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:clothes_control/features/_shared/widgets/layout/sliver_page_layout.dart';
+import 'package:clothes_control/features/_shared/widgets/layout/primary_sliver_app_bar.dart';
 
 class ClothesDetailScreen extends StatelessWidget {
   final int? id;
@@ -21,47 +23,36 @@ class ClothesDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusManager.instance.primaryFocus?.unfocus();
-      },
-      child: BlocProvider(
-        create: (context) {
-          final bloc = ClothesDetailBloc(
-            clothesRepository: sl<IClothesRepository>(),
-            statusRepository: sl<IStatusRepository>(),
-            categoryRepository: sl<ICategoryRepository>(),
-            imageRepository: sl<IImageRepository>(),
-          );
-          bloc.add(
-            LoadClothesDetailEvent(id: id, statuses: const [], categories: const []),
-          );
-          return bloc;
+    return BlocProvider(
+      create: (context) => ClothesDetailBloc(
+        clothesRepository: sl<IClothesRepository>(),
+        statusRepository: sl<IStatusRepository>(),
+        categoryRepository: sl<ICategoryRepository>(),
+        imageRepository: sl<IImageRepository>(),
+      )..add(
+          LoadClothesDetailEvent(id: id, statuses: const [], categories: const []),
+        ),
+      child: BlocConsumer<ClothesDetailBloc, ClothesDetailState>(
+        listener: (context, state) async {
+          if (state is ClothesDetailDeletedState ||
+              state is ClothesDetailUpdatedState ||
+              state is ClothesDetailAddedState) {
+            _navigateBack(context);
+          }
+          if (state is ClothesDetailErrorState) {
+            await UiSnackbar.show(context, state.error?.message);
+          }
         },
-        child: BlocConsumer<ClothesDetailBloc, ClothesDetailState>(
-          listener: (context, state) async {
-            if (state is ClothesDetailDeletedState ||
-                state is ClothesDetailUpdatedState ||
-                state is ClothesDetailAddedState) {
-              _navigateBack(context);
-            }
-            if (state is ClothesDetailErrorState) {
-              await UiSnackbar.show(context, state.error?.message);
-            }
-          },
-          builder: (context, state) {
-            return Scaffold(
-              appBar: AppBar(
+        builder: (context, state) {
+          return GestureDetector(
+            onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+            child: SliverPageLayout(
+              sliverAppBar: PrimarySliverAppBar(
                 leading: IconButton(
-                  onPressed: () {
-                    _navigateBack(context);
-                  },
-                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () => _navigateBack(context),
+                  icon: const Icon(Icons.arrow_back, color: Colors.white),
                 ),
-                title: Text(
-                  state.clothName ?? 'Новая вещь',
-                  style: const TextStyle(fontWeight: FontWeight.w700),
-                ),
+                titleText: state.clothName ?? 'Новая вещь',
                 actions: [
                   if (state.cloth != null)
                     IconButton(
@@ -78,7 +69,7 @@ class ClothesDetailScreen extends StatelessWidget {
                     ),
                 ],
               ),
-              body: SingleChildScrollView(
+              sliverBody: SliverToBoxAdapter(
                 child: AbsorbPointer(
                   absorbing: state is ClothesDetailLoadingState,
                   child: Stack(
@@ -125,9 +116,9 @@ class ClothesDetailScreen extends StatelessWidget {
                   ),
                 ),
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }

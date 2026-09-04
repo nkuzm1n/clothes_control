@@ -5,6 +5,8 @@ import 'package:clothes_control/domain/entities/cloth.dart';
 import 'package:clothes_control/domain/repositories/category_repository.dart';
 import 'package:clothes_control/domain/repositories/clothes_repository.dart';
 import 'package:clothes_control/domain/repositories/status_repository.dart';
+import 'package:clothes_control/features/_shared/widgets/layout/primary_sliver_app_bar.dart';
+import 'package:clothes_control/features/_shared/widgets/layout/sliver_page_layout.dart';
 import 'package:clothes_control/features/cloth/presentation/dto/clothes_list_filters_dto.dart';
 import 'package:clothes_control/features/cloth/presentation/widgets/clothes_list_item.dart';
 import 'package:clothes_control/features/_shared/widgets/ui/dropdown_select/ui_dropdown_select.dart';
@@ -155,86 +157,129 @@ class ClothesListScreen extends StatelessWidget {
       value: bloc,
       child: BlocBuilder<ClothesListBloc, ClothesListState>(
         builder: (context, state) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(
-                  top: 0,
-                  right: 12,
-                  bottom: 12 +
-                      max(
-                        0,
-                        MediaQuery.of(context).viewInsets.bottom - kBottomNavigationBarHeight,
-                      ),
-                  left: 12,
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextField(
-                        controller: _searchInputController,
-                        decoration: InputDecoration(
-                          prefixIcon: const Icon(Icons.search),
-                          labelText: 'Поиск',
-                          floatingLabelBehavior: FloatingLabelBehavior.never,
-                          suffixIcon: !state.loading && state.filters.search != null
-                              ? IconButton(
-                                  onPressed: () {
-                                    if (_searchInputController.text.isNotEmpty) {
-                                      context
-                                          .read<ClothesListBloc>()
-                                          .add(const LoadClothesListEvent());
-                                      FocusManager.instance.primaryFocus?.unfocus();
-                                    }
-                                    _searchInputController.clear();
-                                  },
-                                  icon: const Icon(Icons.clear),
-                                )
-                              : null,
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(
-                              width: 1,
-                              style: BorderStyle.solid,
-                              color: Colors.black38,
+          return Positioned(
+            bottom: 12,
+            right: 0,
+            left: 0,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 0,
+                    right: 12,
+                    bottom: 0,
+                    // bottom: 12 +
+                    //     max(
+                    //       0,
+                    //       MediaQuery.of(context).viewInsets.bottom - kBottomNavigationBarHeight,
+                    //     ),
+                    left: 12,
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _searchInputController,
+                          decoration: InputDecoration(
+                            prefixIcon: const Icon(Icons.search),
+                            labelText: 'Поиск',
+                            floatingLabelBehavior: FloatingLabelBehavior.never,
+                            suffixIcon: !state.loading && state.filters.search != null
+                                ? IconButton(
+                                    onPressed: () {
+                                      if (_searchInputController.text.isNotEmpty) {
+                                        context
+                                            .read<ClothesListBloc>()
+                                            .add(const LoadClothesListEvent());
+                                        FocusManager.instance.primaryFocus?.unfocus();
+                                      }
+                                      _searchInputController.clear();
+                                    },
+                                    icon: const Icon(Icons.clear),
+                                  )
+                                : null,
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                width: 1,
+                                style: BorderStyle.solid,
+                                color: Colors.black38,
+                              ),
                             ),
+                            contentPadding: const EdgeInsets.all(8),
                           ),
-                          contentPadding: const EdgeInsets.all(8),
-                        ),
-                        maxLines: null,
-                        onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
-                        onChanged: (value) {
-                          context.read<ClothesListBloc>().add(
-                                LoadClothesListEvent(
-                                  filters: ClothesListFiltersDTO(
-                                    search: value,
-                                    statusId: state.filters.statusId,
-                                    categoryId: state.filters.categoryId,
+                          maxLines: null,
+                          onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
+                          onChanged: (value) {
+                            context.read<ClothesListBloc>().add(
+                                  LoadClothesListEvent(
+                                    filters: ClothesListFiltersDTO(
+                                      search: value,
+                                      statusId: state.filters.statusId,
+                                      categoryId: state.filters.categoryId,
+                                    ),
                                   ),
-                                ),
-                              );
+                                );
+                          },
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          _openFilters(context);
                         },
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        _openFilters(context);
-                      },
-                      icon: Badge(
-                        isLabelVisible: state.filtersCount > 0,
-                        label: Text('${state.filtersCount}'),
-                        child: const Icon(Icons.filter_list_sharp),
-                      ),
-                    )
-                  ],
+                        icon: Badge(
+                          isLabelVisible: state.filtersCount > 0,
+                          label: Text('${state.filtersCount}'),
+                          child: const Icon(Icons.filter_list_sharp),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
         },
       ),
+    );
+  }
+
+  Widget _buildContent(context) {
+    return BlocBuilder<ClothesListBloc, ClothesListState>(
+      builder: (context, state) {
+        if (state.loading) {
+          return const SliverFillRemaining(child: Center(child: CircularProgressIndicator()));
+        }
+        if (state.clothes.isNotEmpty) {
+          return SliverPadding(
+            padding: const EdgeInsets.all(16),
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate((context, index) {
+                final listItem = state.clothes[index];
+                return ClothesListItem(
+                  cloth: listItem.cloth,
+                  status: listItem.status,
+                  category: listItem.category,
+                  onTap: () {
+                    _openDetailsPage(context, cloth: listItem.cloth);
+                  },
+                  onDelete: () {
+                    context
+                        .read<ClothesListBloc>()
+                        .add(DeleteClothesItemEvent(itemId: listItem.cloth.id));
+                  },
+                );
+              }),
+            ),
+          );
+        }
+        if (state.error != null) {
+          return SliverFillRemaining(child: Center(child: Text(state.error!)));
+        }
+        return const SliverFillRemaining(hasScrollBody: false, child: UiTextNoData());
+      },
     );
   }
 
@@ -248,71 +293,26 @@ class ClothesListScreen extends StatelessWidget {
       )..add(const LoadClothesListEvent()),
       child: BlocBuilder<ClothesListBloc, ClothesListState>(
         builder: (context, state) {
-          return BlocBuilder<ClothesListBloc, ClothesListState>(
-            builder: (context, state) {
-              if (state.loading) {
-                return const Center(child: CircularProgressIndicator());
-              }
-              if (state.clothes.isNotEmpty) {
-                return Stack(children: [
-                  AppBar(
-                    scrolledUnderElevation: 0,
-                    title: const Text(
-                      'Мой гардероб',
-                      style: TextStyle(fontWeight: FontWeight.w700),
-                    ),
-                    actionsPadding: const EdgeInsets.only(right: 18),
-                    actions: [
-                      InkWell(
-                        onTap: () {
-                          context.pushNamedAppRoute(RouteNames.settings);
-                        },
-                        child: const Padding(
-                          padding: EdgeInsets.all(2),
-                          child: Icon(Icons.settings),
-                        ),
-                      ),
-                    ],
-                    // backgroundColor: Colors.green.shade200,
-                  ),
-                  ListView.builder(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    itemCount: state.clothes.length,
-                    itemBuilder: (context, index) {
-                      final listItem = state.clothes[index];
-                      return ClothesListItem(
-                        cloth: listItem.cloth,
-                        status: listItem.status,
-                        category: listItem.category,
-                        onTap: () {
-                          _openDetailsPage(context, cloth: listItem.cloth);
-                        },
-                        onDelete: () {
-                          context
-                              .read<ClothesListBloc>()
-                              .add(DeleteClothesItemEvent(itemId: listItem.cloth.id));
-                        },
-                      );
-                    },
-                  ),
-                  Positioned(
-                    bottom: 20,
-                    right: 20,
-                    child: FloatingActionButton(
-                      onPressed: () {
-                        _openDetailsPage(context);
-                      },
-                      child: const Icon(Icons.add),
-                    ),
-                  ),
-                  _buildBottomNavBar(context),
-                ]);
-              }
-              if (state.error != null) {
-                return Center(child: Text(state.error!));
-              }
-              return const UiTextNoData();
-            },
+          return SliverPageLayout(
+            sliverAppBar: const PrimarySliverAppBar(
+              titleText: 'Мой гардероб',
+              // actions: [
+              //   InkWell(
+              //       onTap: () {
+              //         context.pushNamedAppRoute(RouteNames.settings);
+              //       },
+              //       child: const Icon(Icons.settings, color: Colors.white)),
+              // ],
+            ),
+            sliverBody: _buildContent(context),
+            extraBottom: _buildBottomNavBar(context),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                _openDetailsPage(context);
+              },
+              child: const Icon(Icons.add),
+            ),
+            floatingActionButtonBottom: 80,
           );
         },
       ),
