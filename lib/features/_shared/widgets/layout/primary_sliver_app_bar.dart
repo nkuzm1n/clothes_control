@@ -6,6 +6,7 @@ class PrimarySliverAppBar extends StatelessWidget {
   final EdgeInsetsGeometry? titlePadding;
   final double? expandedHeight;
   final Widget? leading;
+  final List<Widget>? actions;
 
   const PrimarySliverAppBar({
     super.key,
@@ -14,6 +15,7 @@ class PrimarySliverAppBar extends StatelessWidget {
     this.titlePadding,
     this.expandedHeight = 150,
     this.leading,
+    this.actions,
   });
 
   @override
@@ -22,6 +24,7 @@ class PrimarySliverAppBar extends StatelessWidget {
       expandedHeight: expandedHeight,
       pinned: true,
       leading: leading,
+      actions: actions,
       flexibleSpace: FlexibleSpaceBar(
         title: (titleText != null)
             ? Text(
