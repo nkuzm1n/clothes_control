@@ -1,8 +1,30 @@
+import 'dart:developer';
+
 import 'package:clothes_control/app/router/router.dart';
 import 'package:clothes_control/app/di/di_config.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 Future<void> main() async {
+  ErrorWidget.builder = (details) {
+    if (kDebugMode) {
+      return ErrorWidget(details.exception);
+    } else {
+      // TODO: add custom error page
+      return ErrorWidget(details.exception);
+    }
+  };
+
+  FlutterError.onError = (FlutterErrorDetails details) {
+    log('🔴 Flutter Error: ${details.exception}');
+    FlutterError.presentError(details);
+  };
+
+  PlatformDispatcher.instance.onError = (error, stack) {
+    log('🟠 Dart Error: $error');
+    return true;
+  };
+
   WidgetsFlutterBinding.ensureInitialized();
   ServiceLocator.setup();
   runApp(const App());
