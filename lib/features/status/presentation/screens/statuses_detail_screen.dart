@@ -7,6 +7,8 @@ import 'package:clothes_control/features/_shared/widgets/ui/colorpicker/ui_color
 import 'package:clothes_control/core/utils/extensions/hex_color.dart';
 import 'package:clothes_control/features/_shared/bloc/status/status_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:clothes_control/features/_shared/widgets/layout/sliver_page_layout.dart';
+import 'package:clothes_control/features/_shared/widgets/layout/primary_sliver_app_bar.dart';
 
 class StatusesDetailScreen extends StatelessWidget {
   final int? id;
@@ -53,82 +55,70 @@ class StatusesDetailView extends StatelessWidget {
           onTap: () {
             FocusManager.instance.primaryFocus?.unfocus();
           },
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                AppBar(
-                  leading: IconButton(
-                    onPressed: () => context.pop(),
-                    icon: const Icon(Icons.arrow_back),
-                  ),
-                  title: Text(
-                    state.statusName == null ? 'Новый статус' : state.statusName!,
-                    style: const TextStyle(fontWeight: FontWeight.w700),
-                  ),
-                ),
-                Form(
-                  key: formKey,
-                  child: Column(
-                    children: <Widget>[
-                      TextFormField(
-                        controller: nameController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Заполните поле';
-                          }
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                          labelText: 'Наименование *',
-                          floatingLabelBehavior: FloatingLabelBehavior.always,
-                        ),
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 24),
-                      Row(
+          child: SliverPageLayout(
+            appBar: PrimarySliverAppBar(
+              leading: IconButton(
+                onPressed: () => context.pop(),
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
+              ),
+              titleText: state.statusName ?? 'Новый статус',
+            ),
+            body: SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  spacing: 30,
+                  children: [
+                    Form(
+                      key: formKey,
+                      child: Column(
                         children: [
-                          const Text('Цвет:'),
-                          const SizedBox(width: 24),
-                          UiColorpicker(
-                            currentColor: pickedColor,
-                            onColorChanged: (color) {
-                              pickedColor = color;
+                          TextFormField(
+                            controller: nameController,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Заполните поле';
+                              }
+                              return null;
                             },
+                            decoration: const InputDecoration(
+                              labelText: 'Наименование *',
+                              floatingLabelBehavior: FloatingLabelBehavior.always,
+                            ),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
-                    ],
-                  ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        if (formKey.currentState?.validate() ?? false) {
+                          if (state.status == null) {
+                            context.read<StatusBloc>().add(
+                                  AddNewStatusEvent(
+                                    newStatus: CreateStatusParams(
+                                      name: nameController.text,
+                                      color: pickedColor.toHex(),
+                                    ),
+                                  ),
+                                );
+                          } else {
+                            context.read<StatusBloc>().add(
+                                  UpdateStatusEvent(
+                                    status: state.status!.copyWith(
+                                      name: state.status!.name,
+                                      color: state.status!.color,
+                                    ),
+                                  ),
+                                );
+                          }
+                        }
+                      },
+                      child: const Text('Сохранить'),
+                    ),
+                  ],
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {
-                      if (state.status == null) {
-                        context.read<StatusBloc>().add(
-                              AddNewStatusEvent(
-                                newStatus: CreateStatusParams(
-                                  name: nameController.text,
-                                  color: pickedColor.toHex(),
-                                ),
-                              ),
-                            );
-                      } else {
-                        context.read<StatusBloc>().add(
-                              UpdateStatusEvent(
-                                status: state.status!.copyWith(
-                                  name: state.status!.name,
-                                  color: state.status!.color,
-                                ),
-                              ),
-                            );
-                      }
-                    }
-                  },
-                  child: const Text('Сохранить'),
-                ),
-              ],
+              ),
             ),
           ),
         );
