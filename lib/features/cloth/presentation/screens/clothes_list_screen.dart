@@ -5,8 +5,8 @@ import 'package:clothes_control/domain/entities/cloth.dart';
 import 'package:clothes_control/domain/repositories/category_repository.dart';
 import 'package:clothes_control/domain/repositories/clothes_repository.dart';
 import 'package:clothes_control/domain/repositories/status_repository.dart';
-import 'package:clothes_control/features/_shared/widgets/layout/primary_sliver_app_bar.dart';
-import 'package:clothes_control/features/_shared/widgets/layout/sliver_page_layout.dart';
+import 'package:clothes_control/features/_shared/widgets/layout/custom_sliver_app_bar.dart';
+import 'package:clothes_control/features/_shared/widgets/layout/custom_sliver_layout.dart';
 import 'package:clothes_control/features/cloth/presentation/dto/clothes_list_filters_dto.dart';
 import 'package:clothes_control/features/cloth/presentation/widgets/clothes_list_item.dart';
 import 'package:clothes_control/features/_shared/widgets/ui/dropdown_select/ui_dropdown_select.dart';
@@ -293,8 +293,8 @@ class ClothesListScreen extends StatelessWidget {
       )..add(const LoadClothesListEvent()),
       child: BlocBuilder<ClothesListBloc, ClothesListState>(
         builder: (context, state) {
-          return SliverPageLayout(
-            sliverAppBar: const PrimarySliverAppBar(
+          return CustomSliverLayout(
+            sliverAppBar: const CustomSliverAppBar(
               titleText: 'Мой гардероб',
               // actions: [
               //   InkWell(

@@ -9,8 +9,8 @@ import 'package:clothes_control/features/_shared/widgets/ui/snackbar/ui_snackbar
 import 'package:clothes_control/features/cloth/presentation/widgets/clothes_detail_form.dart';
 import 'package:clothes_control/features/cloth/presentation/bloc/clothes_detail/clothes_detail_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:clothes_control/features/_shared/widgets/layout/sliver_page_layout.dart';
-import 'package:clothes_control/features/_shared/widgets/layout/primary_sliver_app_bar.dart';
+import 'package:clothes_control/features/_shared/widgets/layout/custom_sliver_layout.dart';
+import 'package:clothes_control/features/_shared/widgets/layout/custom_sliver_app_bar.dart';
 
 class ClothesDetailScreen extends StatelessWidget {
   final int? id;
@@ -46,8 +46,8 @@ class ClothesDetailScreen extends StatelessWidget {
         builder: (context, state) {
           return GestureDetector(
             onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-            child: SliverPageLayout(
-              sliverAppBar: PrimarySliverAppBar(
+            child: CustomSliverLayout(
+              sliverAppBar: CustomSliverAppBar(
                 leading: IconButton(
                   onPressed: () => _navigateBack(context),
                   icon: const Icon(Icons.arrow_back, color: Colors.white),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class PrimarySliverAppBar extends StatelessWidget {
+class CustomSliverAppBar extends StatelessWidget {
   final Color? backgroundColor;
   final String? titleText;
   final EdgeInsetsGeometry? titlePadding;
@@ -8,7 +8,7 @@ class PrimarySliverAppBar extends StatelessWidget {
   final Widget? leading;
   final List<Widget>? actions;
 
-  const PrimarySliverAppBar({
+  const CustomSliverAppBar({
     super.key,
     this.backgroundColor,
     this.titleText,

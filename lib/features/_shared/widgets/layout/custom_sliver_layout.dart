@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class SliverPageLayout extends StatelessWidget {
-  final Widget sliverAppBar;
+class CustomSliverLayout extends StatelessWidget {
+  final Widget? sliverAppBar;
   final Widget sliverBody;
+  final Widget? extraBottom;
   final Widget? floatingActionButton;
   final double? floatingActionButtonBottom;
   final double? floatingActionButtonRight;
-  final Widget? extraBottom;
 
-  const SliverPageLayout({
+  const CustomSliverLayout({
     super.key,
     required this.sliverAppBar,
     required this.sliverBody,
@@ -24,7 +24,7 @@ class SliverPageLayout extends StatelessWidget {
       children: [
         CustomScrollView(
           slivers: [
-            sliverAppBar,
+            if (sliverAppBar != null) sliverAppBar!,
             sliverBody,
           ],
         ),

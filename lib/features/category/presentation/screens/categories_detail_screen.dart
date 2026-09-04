@@ -1,8 +1,8 @@
 import 'package:clothes_control/core/di/service_locator.dart';
 import 'package:clothes_control/domain/repositories/params/category/create_category_params.dart';
 import 'package:clothes_control/domain/repositories/category_repository.dart';
-import 'package:clothes_control/features/_shared/widgets/layout/sliver_page_layout.dart';
-import 'package:clothes_control/features/_shared/widgets/layout/primary_sliver_app_bar.dart';
+import 'package:clothes_control/features/_shared/widgets/layout/custom_sliver_layout.dart';
+import 'package:clothes_control/features/_shared/widgets/layout/custom_sliver_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clothes_control/features/_shared/bloc/category/category_bloc.dart';
@@ -59,8 +59,8 @@ class _CategoriesDetailScreenState extends State<CategoriesDetailScreen> {
             onTap: () {
               FocusManager.instance.primaryFocus?.unfocus();
             },
-            child: SliverPageLayout(
-              sliverAppBar: PrimarySliverAppBar(
+            child: CustomSliverLayout(
+              sliverAppBar: CustomSliverAppBar(
                 leading: IconButton(
                   onPressed: () => context.pop(),
                   icon: const Icon(Icons.arrow_back, color: Colors.white),

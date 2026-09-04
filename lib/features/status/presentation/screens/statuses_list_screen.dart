@@ -7,8 +7,8 @@ import 'package:clothes_control/core/utils/extensions/hex_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clothes_control/features/_shared/bloc/status/status_bloc.dart';
-import 'package:clothes_control/features/_shared/widgets/layout/sliver_page_layout.dart';
-import 'package:clothes_control/features/_shared/widgets/layout/primary_sliver_app_bar.dart';
+import 'package:clothes_control/features/_shared/widgets/layout/custom_sliver_layout.dart';
+import 'package:clothes_control/features/_shared/widgets/layout/custom_sliver_app_bar.dart';
 
 class StatusesListScreen extends StatelessWidget {
   const StatusesListScreen({super.key});
@@ -100,8 +100,8 @@ class StatusesListView extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        return SliverPageLayout(
-          sliverAppBar: const PrimarySliverAppBar(
+        return CustomSliverLayout(
+          sliverAppBar: const CustomSliverAppBar(
             titleText: 'Статусы',
           ),
           sliverBody: _buildContent(context, state),

@@ -7,8 +7,8 @@ import 'package:clothes_control/features/_shared/widgets/ui/colorpicker/ui_color
 import 'package:clothes_control/core/utils/extensions/hex_color.dart';
 import 'package:clothes_control/features/_shared/bloc/status/status_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:clothes_control/features/_shared/widgets/layout/sliver_page_layout.dart';
-import 'package:clothes_control/features/_shared/widgets/layout/primary_sliver_app_bar.dart';
+import 'package:clothes_control/features/_shared/widgets/layout/custom_sliver_layout.dart';
+import 'package:clothes_control/features/_shared/widgets/layout/custom_sliver_app_bar.dart';
 
 class StatusesDetailScreen extends StatelessWidget {
   final int? id;
@@ -55,8 +55,8 @@ class StatusesDetailView extends StatelessWidget {
           onTap: () {
             FocusManager.instance.primaryFocus?.unfocus();
           },
-          child: SliverPageLayout(
-            sliverAppBar: PrimarySliverAppBar(
+          child: CustomSliverLayout(
+            sliverAppBar: CustomSliverAppBar(
               leading: IconButton(
                 onPressed: () => context.pop(),
                 icon: const Icon(Icons.arrow_back, color: Colors.white),
