@@ -87,6 +87,19 @@ class StatusesDetailView extends StatelessWidget {
                             ),
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
+                          const SizedBox(height: 24),
+                          Row(
+                            children: [
+                              const Text('Цвет:'),
+                              const SizedBox(width: 24),
+                              UiColorpicker(
+                                currentColor: pickedColor,
+                                onColorChanged: (color) {
+                                  pickedColor = color;
+                                },
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ),
