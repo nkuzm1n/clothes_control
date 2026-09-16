@@ -294,7 +294,7 @@ class ClothesListScreen extends StatelessWidget {
       child: BlocBuilder<ClothesListBloc, ClothesListState>(
         builder: (context, state) {
           return CustomSliverLayout(
-            sliverAppBar: const CustomSliverAppBar(
+            appBar: const CustomSliverAppBar(
               titleText: 'Мой гардероб',
               // actions: [
               //   InkWell(
@@ -304,7 +304,7 @@ class ClothesListScreen extends StatelessWidget {
               //       child: const Icon(Icons.settings, color: Colors.white)),
               // ],
             ),
-            sliverBody: _buildContent(context),
+            body: _buildContent(context),
             extraBottom: _buildBottomNavBar(context),
             floatingActionButton: FloatingActionButton(
               onPressed: () {

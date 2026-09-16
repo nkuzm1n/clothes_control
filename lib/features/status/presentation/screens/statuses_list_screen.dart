@@ -101,10 +101,10 @@ class StatusesListView extends StatelessWidget {
       },
       builder: (context, state) {
         return CustomSliverLayout(
-          sliverAppBar: const CustomSliverAppBar(
+          appBar: const CustomSliverAppBar(
             titleText: 'Статусы',
           ),
-          sliverBody: _buildContent(context, state),
+          body: _buildContent(context, state),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               _navigateToStatusDetailScreen(context);

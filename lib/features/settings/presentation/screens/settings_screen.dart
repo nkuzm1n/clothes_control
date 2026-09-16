@@ -8,8 +8,8 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const CustomSliverLayout(
-      sliverAppBar: CustomSliverAppBar(titleText: 'Настройки'),
-      sliverBody: SliverFillRemaining(
+      appBar: CustomSliverAppBar(titleText: 'Настройки'),
+      body: SliverFillRemaining(
         child: Center(
           child: Text('Раздел в разработке...', style: TextStyle(fontSize: 24)),
         ),

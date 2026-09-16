@@ -56,14 +56,14 @@ class StatusesDetailView extends StatelessWidget {
             FocusManager.instance.primaryFocus?.unfocus();
           },
           child: CustomSliverLayout(
-            sliverAppBar: CustomSliverAppBar(
+            appBar: CustomSliverAppBar(
               leading: IconButton(
                 onPressed: () => context.pop(),
                 icon: const Icon(Icons.arrow_back, color: Colors.white),
               ),
               titleText: state.statusName ?? 'Новый статус',
             ),
-            sliverBody: SliverToBoxAdapter(
+            body: SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(

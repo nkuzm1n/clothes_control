@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CustomSliverLayout extends StatelessWidget {
-  final Widget? sliverAppBar;
-  final Widget sliverBody;
+  final Widget? appBar;
+  final Widget body;
   final Widget? extraBottom;
   final Widget? floatingActionButton;
   final double? floatingActionButtonBottom;
@@ -10,8 +10,8 @@ class CustomSliverLayout extends StatelessWidget {
 
   const CustomSliverLayout({
     super.key,
-    this.sliverAppBar,
-    required this.sliverBody,
+    this.appBar,
+    required this.body,
     this.floatingActionButton,
     this.floatingActionButtonBottom = 20,
     this.floatingActionButtonRight = 20,
@@ -24,8 +24,8 @@ class CustomSliverLayout extends StatelessWidget {
       children: [
         CustomScrollView(
           slivers: [
-            if (sliverAppBar != null) sliverAppBar!,
-            sliverBody,
+            if (appBar != null) appBar!,
+            body,
           ],
         ),
         if (extraBottom != null) extraBottom!,

@@ -60,14 +60,14 @@ class _CategoriesDetailScreenState extends State<CategoriesDetailScreen> {
               FocusManager.instance.primaryFocus?.unfocus();
             },
             child: CustomSliverLayout(
-              sliverAppBar: CustomSliverAppBar(
+              appBar: CustomSliverAppBar(
                 leading: IconButton(
                   onPressed: () => context.pop(),
                   icon: const Icon(Icons.arrow_back, color: Colors.white),
                 ),
                 titleText: state.categoryName ?? 'Новая категория',
               ),
-              sliverBody: SliverPadding(
+              body: SliverPadding(
                 padding: const EdgeInsets.all(16),
                 sliver: SliverToBoxAdapter(
                   child: Column(

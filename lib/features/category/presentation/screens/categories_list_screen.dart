@@ -93,10 +93,10 @@ class CategoriesListView extends StatelessWidget {
       },
       builder: (context, state) {
         return CustomSliverLayout(
-          sliverAppBar: const CustomSliverAppBar(
+          appBar: const CustomSliverAppBar(
             titleText: 'Категории',
           ),
-          sliverBody: _buildContent(context, state),
+          body: _buildContent(context, state),
           floatingActionButton: FloatingActionButton(
             onPressed: () {
               _navigateToCategoryDetailScreen(context);

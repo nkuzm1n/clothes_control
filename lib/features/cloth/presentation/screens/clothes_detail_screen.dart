@@ -47,7 +47,7 @@ class ClothesDetailScreen extends StatelessWidget {
           return GestureDetector(
             onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
             child: CustomSliverLayout(
-              sliverAppBar: CustomSliverAppBar(
+              appBar: CustomSliverAppBar(
                 leading: IconButton(
                   onPressed: () => _navigateBack(context),
                   icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -69,7 +69,7 @@ class ClothesDetailScreen extends StatelessWidget {
                     ),
                 ],
               ),
-              sliverBody: SliverToBoxAdapter(
+              body: SliverToBoxAdapter(
                 child: AbsorbPointer(
                   absorbing: state is ClothesDetailLoadingState,
                   child: Stack(
