@@ -1,14 +1,14 @@
 import 'package:clothes_control/core/di/service_locator.dart';
 import 'package:clothes_control/domain/repositories/status_repository.dart';
-import 'package:clothes_control/features/_shared/widgets/ui/snackbar/ui_snackbar.dart';
+import 'package:clothes_control/presentation/_shared/widgets/ui/snackbar/ui_snackbar.dart';
 import 'package:clothes_control/core/router/extensions/app_router_navigation.dart';
 import 'package:clothes_control/core/router/route_names.dart';
 import 'package:clothes_control/core/utils/extensions/hex_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:clothes_control/features/_shared/bloc/status/status_bloc.dart';
-import 'package:clothes_control/features/_shared/widgets/layout/custom_sliver_layout.dart';
-import 'package:clothes_control/features/_shared/widgets/layout/custom_sliver_app_bar.dart';
+import 'package:clothes_control/presentation/_shared/bloc/status/status_bloc.dart';
+import 'package:clothes_control/presentation/_shared/widgets/layout/custom_sliver_layout.dart';
+import 'package:clothes_control/presentation/_shared/widgets/layout/custom_sliver_app_bar.dart';
 
 class StatusesListScreen extends StatelessWidget {
   const StatusesListScreen({super.key});

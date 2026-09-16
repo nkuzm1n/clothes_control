@@ -5,12 +5,12 @@ import 'package:clothes_control/domain/repositories/image_repository.dart';
 import 'package:clothes_control/domain/repositories/status_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:clothes_control/features/_shared/widgets/ui/snackbar/ui_snackbar.dart';
-import 'package:clothes_control/features/cloth/presentation/widgets/clothes_detail_form.dart';
-import 'package:clothes_control/features/cloth/presentation/bloc/clothes_detail/clothes_detail_bloc.dart';
+import 'package:clothes_control/presentation/_shared/widgets/ui/snackbar/ui_snackbar.dart';
+import 'package:clothes_control/presentation/cloth/presentation/widgets/clothes_detail_form.dart';
+import 'package:clothes_control/presentation/cloth/presentation/bloc/clothes_detail/clothes_detail_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:clothes_control/features/_shared/widgets/layout/custom_sliver_layout.dart';
-import 'package:clothes_control/features/_shared/widgets/layout/custom_sliver_app_bar.dart';
+import 'package:clothes_control/presentation/_shared/widgets/layout/custom_sliver_layout.dart';
+import 'package:clothes_control/presentation/_shared/widgets/layout/custom_sliver_app_bar.dart';
 
 class ClothesDetailScreen extends StatelessWidget {
   final int? id;

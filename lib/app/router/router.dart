@@ -1,14 +1,14 @@
-import 'package:clothes_control/features/settings/presentation/screens/settings_screen.dart';
+import 'package:clothes_control/presentation/settings/presentation/screens/settings_screen.dart';
 import 'package:clothes_control/core/router/route_names.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:clothes_control/features/category/presentation/screens/categories_detail_screen.dart';
-import 'package:clothes_control/features/category/presentation/screens/categories_list_screen.dart';
-import 'package:clothes_control/features/cloth/presentation/screens/clothes_detail_screen.dart';
-import 'package:clothes_control/features/cloth/presentation/screens/clothes_list_screen.dart';
-import 'package:clothes_control/features/root/presentation/widgets/root_layout.dart';
-import 'package:clothes_control/features/status/presentation/screens/statuses_detail_screen.dart';
-import 'package:clothes_control/features/status/presentation/screens/statuses_list_screen.dart';
+import 'package:clothes_control/presentation/category/presentation/screens/categories_detail_screen.dart';
+import 'package:clothes_control/presentation/category/presentation/screens/categories_list_screen.dart';
+import 'package:clothes_control/presentation/cloth/presentation/screens/clothes_detail_screen.dart';
+import 'package:clothes_control/presentation/cloth/presentation/screens/clothes_list_screen.dart';
+import 'package:clothes_control/presentation/root/presentation/widgets/root_layout.dart';
+import 'package:clothes_control/presentation/status/presentation/screens/statuses_detail_screen.dart';
+import 'package:clothes_control/presentation/status/presentation/screens/statuses_list_screen.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
 final GlobalKey<NavigatorState> _clothesNavigatorKey =

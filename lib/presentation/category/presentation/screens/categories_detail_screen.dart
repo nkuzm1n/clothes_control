@@ -1,11 +1,11 @@
 import 'package:clothes_control/core/di/service_locator.dart';
 import 'package:clothes_control/domain/repositories/params/category/create_category_params.dart';
 import 'package:clothes_control/domain/repositories/category_repository.dart';
-import 'package:clothes_control/features/_shared/widgets/layout/custom_sliver_layout.dart';
-import 'package:clothes_control/features/_shared/widgets/layout/custom_sliver_app_bar.dart';
+import 'package:clothes_control/presentation/_shared/widgets/layout/custom_sliver_layout.dart';
+import 'package:clothes_control/presentation/_shared/widgets/layout/custom_sliver_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:clothes_control/features/_shared/bloc/category/category_bloc.dart';
+import 'package:clothes_control/presentation/_shared/bloc/category/category_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class CategoriesDetailScreen extends StatefulWidget {

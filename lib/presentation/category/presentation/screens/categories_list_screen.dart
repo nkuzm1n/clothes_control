@@ -1,9 +1,9 @@
 import 'package:clothes_control/core/di/service_locator.dart';
 import 'package:clothes_control/domain/repositories/category_repository.dart';
-import 'package:clothes_control/features/_shared/bloc/category/category_bloc.dart';
-import 'package:clothes_control/features/_shared/widgets/layout/custom_sliver_layout.dart';
-import 'package:clothes_control/features/_shared/widgets/layout/custom_sliver_app_bar.dart';
-import 'package:clothes_control/features/_shared/widgets/ui/snackbar/ui_snackbar.dart';
+import 'package:clothes_control/presentation/_shared/bloc/category/category_bloc.dart';
+import 'package:clothes_control/presentation/_shared/widgets/layout/custom_sliver_layout.dart';
+import 'package:clothes_control/presentation/_shared/widgets/layout/custom_sliver_app_bar.dart';
+import 'package:clothes_control/presentation/_shared/widgets/ui/snackbar/ui_snackbar.dart';
 import 'package:clothes_control/core/router/extensions/app_router_navigation.dart';
 import 'package:clothes_control/core/router/route_names.dart';
 import 'package:flutter/material.dart';

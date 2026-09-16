@@ -3,12 +3,12 @@ import 'package:clothes_control/domain/repositories/status_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:clothes_control/domain/repositories/params/status/create_status_params.dart';
-import 'package:clothes_control/features/_shared/widgets/ui/colorpicker/ui_colorpicker.dart';
+import 'package:clothes_control/presentation/_shared/widgets/ui/colorpicker/ui_colorpicker.dart';
 import 'package:clothes_control/core/utils/extensions/hex_color.dart';
-import 'package:clothes_control/features/_shared/bloc/status/status_bloc.dart';
+import 'package:clothes_control/presentation/_shared/bloc/status/status_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:clothes_control/features/_shared/widgets/layout/custom_sliver_layout.dart';
-import 'package:clothes_control/features/_shared/widgets/layout/custom_sliver_app_bar.dart';
+import 'package:clothes_control/presentation/_shared/widgets/layout/custom_sliver_layout.dart';
+import 'package:clothes_control/presentation/_shared/widgets/layout/custom_sliver_app_bar.dart';
 
 class StatusesDetailScreen extends StatelessWidget {
   final int? id;

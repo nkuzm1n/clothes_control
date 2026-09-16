@@ -5,18 +5,18 @@ import 'package:clothes_control/domain/entities/cloth.dart';
 import 'package:clothes_control/domain/repositories/category_repository.dart';
 import 'package:clothes_control/domain/repositories/clothes_repository.dart';
 import 'package:clothes_control/domain/repositories/status_repository.dart';
-import 'package:clothes_control/features/_shared/widgets/layout/custom_sliver_app_bar.dart';
-import 'package:clothes_control/features/_shared/widgets/layout/custom_sliver_layout.dart';
-import 'package:clothes_control/features/cloth/presentation/dto/clothes_list_filters_dto.dart';
-import 'package:clothes_control/features/cloth/presentation/widgets/clothes_list_item.dart';
-import 'package:clothes_control/features/_shared/widgets/ui/dropdown_select/ui_dropdown_select.dart';
-import 'package:clothes_control/features/_shared/widgets/ui/text/ui_text_no_data.dart';
+import 'package:clothes_control/presentation/_shared/widgets/layout/custom_sliver_app_bar.dart';
+import 'package:clothes_control/presentation/_shared/widgets/layout/custom_sliver_layout.dart';
+import 'package:clothes_control/presentation/cloth/presentation/dto/clothes_list_filters_dto.dart';
+import 'package:clothes_control/presentation/cloth/presentation/widgets/clothes_list_item.dart';
+import 'package:clothes_control/presentation/_shared/widgets/ui/dropdown_select/ui_dropdown_select.dart';
+import 'package:clothes_control/presentation/_shared/widgets/ui/text/ui_text_no_data.dart';
 import 'package:clothes_control/core/router/extensions/app_router_navigation.dart';
 import 'package:clothes_control/core/router/route_names.dart';
 import 'package:clothes_control/core/utils/extensions/hex_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:clothes_control/features/cloth/presentation/bloc/clothes_list/clothes_list_bloc.dart';
+import 'package:clothes_control/presentation/cloth/presentation/bloc/clothes_list/clothes_list_bloc.dart';
 
 class ClothesListScreen extends StatelessWidget {
   ClothesListScreen({super.key});
