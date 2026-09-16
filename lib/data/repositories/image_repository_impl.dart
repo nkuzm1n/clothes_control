@@ -1,0 +1,23 @@
+import 'dart:io';
+import 'package:clothes_control/domain/repositories/image_repository.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart';
+
+class ImageRepositoryImpl implements IImageRepository {
+  @override
+  Future<File> save(File image) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final fileName = basename(image.path);
+    final savedImage = await image.copy('${directory.path}/$fileName');
+    return savedImage;
+  }
+
+  @override
+  Future<File?> getByPath(String path) async {
+    final file = File(path);
+    if (await file.exists()) {
+      return file;
+    }
+    return null;
+  }
+}
