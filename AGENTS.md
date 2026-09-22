@@ -70,4 +70,4 @@ Use `freezed` with `json_serializable` when needed
 
 - **Build Runner:** `fvm dart run build_runner build -d`
 - **Test:** `fvm flutter test .`
-- **Analyze:** `fvm flutter analyze .`
+- **Analyze:** `fvm flutter analyze .` and `fvm dart analyze .`
