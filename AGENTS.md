@@ -10,7 +10,7 @@
 ## Architecture & Structure
 
 - **Entry:** Standard `lib/main.dart`.
-- **Layers:** Feature-first (`features/<feature_name>/{domain,data,presentation}`), Shared Domain (`shared/{domain,data,presentation}`), App (di, router, theme), Core(common utils).
+- **Layers:** Feature-first (`lib/features/<feature_name>/{domain,data,presentation}/`), Shared Domain (`lib/shared/{domain,data,presentation}/`), App (`lib/app/`, di, router, theme), Core(`lib/core/`, common utils).
 - **SOLID:** Strictly enforced.
 - **State Management:**
   - **Default:** Use **Riverpod** as the primary state management and DI solution (for screens).
@@ -42,24 +42,6 @@
 ## Data (JSON)
 
 Use `freezed` with `json_serializable` when needed
-
-```dart
-import 'package:freezed_annotation/freezed_annotation.dart';
-
-part 'person.freezed.dart';
-part 'person.g.dart';
-
-@freezed
-abstract class Person with _$Person {
-  const factory Person({
-    required String firstName,
-    required String lastName,
-    required int age,
-  }) = _Person;
-
-  factory Person.fromJson(Map<String, Object?> json) => _$PersonFromJson(json);
-}
-```
 
 ## Visual Design (Material 3)
 
