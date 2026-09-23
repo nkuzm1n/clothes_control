@@ -9,13 +9,17 @@
 
 ## Architecture & Structure
 
+- **Architecture:** Clean Architecture + Feature-First.
 - **Entry:** Standard `lib/main.dart`.
-- **Layers:** Feature-first (`lib/features/<feature_name>/{domain,data,presentation}/`), Shared Domain (`lib/shared/{domain,data,presentation}/`), App (`lib/app/`, di, router, theme), Core(`lib/core/`, common utils).
+- **Layers:**
+  - presentation → domain ← data. Domain depends on nothing except Dart.
+  - Dependencies point inward: UI doesn't know about datasources; data depends on domain (implements abstractions).
+  - Each feature is isolated. Cross-feature communication only through core/ or shared/.
 - **SOLID:** Strictly enforced.
 - **State Management:**
   - **Default:** Use **Riverpod** as the primary state management and DI solution (for screens).
   - **Pattern:** Separate UI state (ephemeral) from App state.
-  - **DI:** Use **get_it** for dependency injection (e.g., repositories and services).
+  - **DI:** Use **get_it** for dependency injection in code/di/ (e.g., repositories and services).
 
 ## Code Style & Quality
 
