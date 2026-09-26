@@ -19,7 +19,7 @@
 - **State Management:**
   - **Default:** Use **Riverpod** as the primary state management and DI solution (for screens).
   - **Pattern:** Separate UI state (ephemeral) from App state.
-  - **DI:** Use **get_it** for dependency injection in code/di/ (e.g., repositories and services).
+  - **DI:** Use **get_it** for dependency injection in app/di/ (e.g., repositories and services).
 
 ## Code Style & Quality
 
