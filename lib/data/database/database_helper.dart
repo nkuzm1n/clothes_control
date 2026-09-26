@@ -1,6 +1,6 @@
-import 'package:clothes_control/data/database/models/category_model.dart';
-import 'package:clothes_control/data/database/models/cloth_model.dart';
-import 'package:clothes_control/data/database/models/status_model.dart';
+import 'package:clothes_control/features/category/data/database/models/category_model.dart';
+import 'package:clothes_control/features/clothes/data/database/models/cloth_model.dart';
+import 'package:clothes_control/features/status/data/database/models/status_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 

@@ -1,8 +1,8 @@
-import 'package:clothes_control/domain/repositories/params/category/create_category_params.dart';
+import 'package:clothes_control/shared/domain/repositories/params/category/create_category_params.dart';
 import 'package:clothes_control/data/database/database_helper.dart';
-import 'package:clothes_control/data/mappers/category_mapper.dart';
-import 'package:clothes_control/domain/entities/category.dart';
-import 'package:clothes_control/domain/repositories/category_repository.dart';
+import 'package:clothes_control/features/category/data/mappers/category_mapper.dart';
+import 'package:clothes_control/shared/domain/entities/category.dart';
+import 'package:clothes_control/shared/domain/repositories/category_repository.dart';
 
 class CategoryRepositoryImpl implements ICategoryRepository {
   final SqliteDatabase sqliteDatabase;

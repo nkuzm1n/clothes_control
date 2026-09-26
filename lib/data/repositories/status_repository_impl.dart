@@ -1,8 +1,8 @@
-import 'package:clothes_control/domain/repositories/params/status/create_status_params.dart';
+import 'package:clothes_control/shared/domain/repositories/params/status/create_status_params.dart';
 import 'package:clothes_control/data/database/database_helper.dart';
-import 'package:clothes_control/data/mappers/status_mapper.dart';
-import 'package:clothes_control/domain/entities/status.dart';
-import 'package:clothes_control/domain/repositories/status_repository.dart';
+import 'package:clothes_control/features/status/data/mappers/status_mapper.dart';
+import 'package:clothes_control/shared/domain/entities/status.dart';
+import 'package:clothes_control/shared/domain/repositories/status_repository.dart';
 
 class StatusRepositoryImpl implements IStatusRepository {
   final SqliteDatabase sqliteDatabase;
