@@ -1,5 +1,5 @@
 import 'package:clothes_control/shared/domain/repositories/params/status/create_status_params.dart';
-import 'package:clothes_control/data/database/database_helper.dart';
+import 'package:clothes_control/shared/data/database/database_helper.dart';
 import 'package:clothes_control/features/status/data/mappers/status_mapper.dart';
 import 'package:clothes_control/shared/domain/entities/status.dart';
 import 'package:clothes_control/shared/domain/repositories/status_repository.dart';

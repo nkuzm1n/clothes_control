@@ -1,5 +1,5 @@
 import 'package:clothes_control/features/clothes/domain/repositories/params/cloth/create_cloth_params.dart';
-import 'package:clothes_control/data/database/database_helper.dart';
+import 'package:clothes_control/shared/data/database/database_helper.dart';
 import 'package:clothes_control/features/clothes/data/mappers/cloth_mapper.dart';
 import 'package:clothes_control/features/clothes/domain/entities/cloth.dart';
 import 'package:clothes_control/features/clothes/domain/repositories/clothes_repository.dart';
