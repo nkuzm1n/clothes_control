@@ -1,13 +1,13 @@
-import 'package:clothes_control/features/clothes/domain/repositories/params/cloth/create_cloth_params.dart';
-import 'package:clothes_control/shared/data/database/database_helper.dart';
+import 'package:clothes_control/features/clothes/data/datasources/cloth_datasource.dart';
 import 'package:clothes_control/features/clothes/data/mappers/cloth_mapper.dart';
 import 'package:clothes_control/features/clothes/domain/entities/cloth.dart';
+import 'package:clothes_control/features/clothes/domain/repositories/params/cloth/create_cloth_params.dart';
 import 'package:clothes_control/features/clothes/domain/repositories/clothes_repository.dart';
 
 class ClothesRepositoryImpl implements IClothesRepository {
-  final SqliteDatabase sqliteDatabase;
+  final ClothesDataSource dataSource;
 
-  ClothesRepositoryImpl({required this.sqliteDatabase});
+  ClothesRepositoryImpl({required this.dataSource});
 
   @override
   Future<List<Cloth>> getManyBy({
@@ -17,7 +17,7 @@ class ClothesRepositoryImpl implements IClothesRepository {
     String? orderBy,
     String? direction,
   }) async {
-    final result = await sqliteDatabase.getClothesList(
+    final result = await dataSource.getAll(
       name: name,
       statusId: statusId,
       categoryId: categoryId,
@@ -29,22 +29,22 @@ class ClothesRepositoryImpl implements IClothesRepository {
 
   @override
   Future<Cloth?> getOneById(int itemId) async {
-    final result = await sqliteDatabase.getCloth(itemId);
-    return result != null ? ClothMapper.fromModel(result) : null;
-  }
-
-  @override
-  Future<int> createOne(CreateClothParams createParams) async {
-    return await sqliteDatabase.insertCloth(ClothMapper.createParamsToModel(createParams));
+    final model = await dataSource.getById(itemId);
+    return model == null ? null : ClothMapper.fromModel(model);
   }
 
   @override
   Future<void> deleteOne(int itemId) async {
-    await sqliteDatabase.deleteClothById(itemId);
+    await dataSource.deleteById(itemId);
   }
 
   @override
   Future<int> updateOne(Cloth cloth) async {
-    return await sqliteDatabase.updateCloth(ClothMapper.toModel(cloth));
+    return await dataSource.update(ClothMapper.toModel(cloth));
+  }
+
+  @override
+  Future<int> createOne(CreateClothParams createParams) async {
+    return await dataSource.create(ClothMapper.createParamsToModel(createParams));
   }
 }

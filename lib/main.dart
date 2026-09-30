@@ -26,7 +26,7 @@ Future<void> main() async {
   };
 
   WidgetsFlutterBinding.ensureInitialized();
-  ServiceLocator.setup();
+  await ServiceLocator.setup();
   runApp(const App());
 }
 
